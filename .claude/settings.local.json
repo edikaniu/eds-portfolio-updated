@@ -16,7 +16,13 @@
       "Bash(export MSYS_NO_PATHCONV=1)",
       "Bash(powershell:*)",
       "Bash(MSYS_NO_PATHCONV=1 git status)",
-      "Bash(MSYS_NO_PATHCONV=1 git remote -v)"
+      "Bash(MSYS_NO_PATHCONV=1 git remote -v)",
+      "Bash(vercel:*)",
+      "Bash(npm:*)",
+      "Bash(cat:*)",
+      "Bash(pkill:*)",
+      "Bash(taskkill:*)",
+      "Bash(npx prisma:*)"
     ],
     "deny": [],
     "ask": [],

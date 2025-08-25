@@ -150,6 +150,8 @@ class GoogleAnalytics {
     fid?: number
     ttfb?: number
   }) {
+    if (!this.initialized || !this.gtag) return
+    
     Object.entries(metrics).forEach(([metric, value]) => {
       if (value !== undefined) {
         this.gtag('event', 'web_vital', {

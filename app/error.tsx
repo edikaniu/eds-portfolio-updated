@@ -15,7 +15,7 @@ export default function Error({
 }) {
   useEffect(() => {
     // Log the error using centralized error handling
-    logger.error('Application error occurred', {
+    logger.error('Application error occurred', error, {
       message: error.message,
       stack: error.stack,
       digest: error.digest,
