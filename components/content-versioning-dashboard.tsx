@@ -27,7 +27,7 @@ import {
   Download,
   Upload,
   RotateCcw,
-  Compare,
+  GitBranch as Compare,
   Calendar,
   User,
   FileText,

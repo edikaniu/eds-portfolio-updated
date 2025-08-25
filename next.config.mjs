@@ -14,10 +14,10 @@ const nextConfig = {
   // Bundle analysis and optimization
   experimental: {
     optimizePackageImports: ['@/components', '@/lib', 'lucide-react'],
-    bundlePagesRouterDependencies: true,
-    serverComponentsExternalPackages: ['@prisma/client', 'bcrypt'],
-    instrumentationHook: true,
   },
+  
+  // External packages for server components
+  serverExternalPackages: ['@prisma/client', 'bcrypt'],
   
   // Webpack optimizations
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {

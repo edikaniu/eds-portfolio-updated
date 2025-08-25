@@ -22,7 +22,10 @@
       "Bash(cat:*)",
       "Bash(pkill:*)",
       "Bash(taskkill:*)",
-      "Bash(npx prisma:*)"
+      "Bash(npx prisma:*)",
+      "Bash(npx tsx:*)",
+      "Bash(./setup-missing-env.bat)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": [],

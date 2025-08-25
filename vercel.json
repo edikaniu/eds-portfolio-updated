@@ -60,14 +60,6 @@
   ],
   "crons": [
     {
-      "path": "/api/cron/publish-posts",
-      "schedule": "*/5 * * * *"
-    },
-    {
-      "path": "/api/cron/maintenance?task=cache",
-      "schedule": "0 */6 * * *"
-    },
-    {
       "path": "/api/cron/maintenance?task=backup",
       "schedule": "0 2 * * *"
     }
