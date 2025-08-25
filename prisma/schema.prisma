@@ -1,0 +1,320 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model AdminUser {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("admin")
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("admin_users")
+}
+
+model ContentSection {
+  id          String   @id @default(cuid())
+  sectionName String   @unique
+  content     String
+  metadata    String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("content_sections")
+}
+
+model CaseStudy {
+  id              String   @id @default(cuid())
+  title           String
+  slug            String   @unique
+  subtitle        String
+  description     String
+  fullDescription String
+  image           String?
+  metrics         String
+  results         String
+  tools           String
+  category        String
+  color           String
+  challenge       String
+  solution        String
+  timeline        String
+  icon            String?
+  isActive        Boolean  @default(true)
+  order           Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("case_studies")
+}
+
+model ExperienceEntry {
+  id           String   @id @default(cuid())
+  title        String
+  company      String
+  period       String
+  type         String
+  category     String
+  achievements String
+  metrics      String?
+  icon         String?
+  color        String?
+  order        Int      @default(0)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("experience_entries")
+}
+
+model SkillCategory {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  color       String
+  skills      String
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("skill_categories")
+}
+
+model Tool {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  logoUrl     String?
+  category    String?
+  color       String?
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("tools")
+}
+
+model MediaFile {
+  id        String   @id @default(cuid())
+  filename  String
+  url       String
+  altText   String?
+  type      String
+  size      Int?
+  mimeType  String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("media_files")
+}
+
+model ChatbotKnowledge {
+  id         String   @id @default(cuid())
+  title      String
+  content    String
+  sourceType String
+  sourceFile String?
+  category   String
+  tags       String?
+  priority   Int      @default(0)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("chatbot_knowledge")
+}
+
+model ChatbotQuestion {
+  id              String   @id @default(cuid())
+  questionText    String
+  icon            String
+  category        String
+  responseMapping String?
+  order           Int      @default(0)
+  isActive        Boolean  @default(true)
+  usageCount      Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("chatbot_questions")
+}
+
+model ChatbotConversation {
+  id                 String   @id @default(cuid())
+  sessionId          String?
+  question           String
+  response           String
+  responseSource     String
+  aiUsed             Boolean  @default(false)
+  satisfactionRating Int?
+  responseTime       Int?
+  createdAt          DateTime @default(now())
+
+  @@map("chatbot_conversations")
+}
+
+model ChatbotSettings {
+  id              String   @id @default(cuid())
+  openaiApiKey    String?
+  modelName       String   @default("gpt-3.5-turbo")
+  temperature     Float    @default(0.7)
+  maxTokens       Int      @default(1000)
+  costLimit       Float    @default(100.0)
+  fallbackEnabled Boolean  @default(true)
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("chatbot_settings")
+}
+
+model NavigationItem {
+  id        String   @id @default(cuid())
+  title     String
+  href      String
+  isSection Boolean  @default(false)
+  icon      String?
+  order     Int      @default(0)
+  parentId  String?
+  isVisible Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("navigation_items")
+}
+
+model SocialLink {
+  id            String   @id @default(cuid())
+  platformName  String
+  url           String
+  icon          String?
+  customIconUrl String?
+  isVisible     Boolean  @default(true)
+  order         Int      @default(0)
+  clickCount    Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("social_links")
+}
+
+model FooterSection {
+  id           String   @id @default(cuid())
+  sectionTitle String
+  content      String
+  order        Int      @default(0)
+  isVisible    Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("footer_sections")
+}
+
+model ContactInfo {
+  id        String   @id @default(cuid())
+  type      String
+  label     String
+  value     String
+  isVisible Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("contact_info")
+}
+
+model SiteSettings {
+  id               String   @id @default(cuid())
+  siteName         String
+  siteDescription  String?
+  contactEmail     String
+  adminEmail       String
+  maintenanceMode  Boolean  @default(false)
+  analyticsEnabled Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@map("site_settings")
+}
+
+model BlogPost {
+  id              String    @id @default(cuid())
+  title           String
+  slug            String    @unique
+  content         String
+  excerpt         String?
+  imageUrl        String?
+  category        String?
+  tags            String?
+  author          String?
+  metaTitle       String?
+  metaDescription String?
+  published       Boolean   @default(false)
+  publishedAt     DateTime?
+  metadata        String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@map("blog_posts")
+}
+
+model Project {
+  id           String   @id @default(cuid())
+  title        String
+  slug         String   @unique
+  description  String
+  image        String?
+  technologies String
+  githubUrl    String?
+  liveUrl      String?
+  category     String?
+  order        Int      @default(0)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("projects")
+}
+
+model ContentVersion {
+  id          String   @id @default(cuid())
+  contentType String
+  contentId   String
+  version     Int
+  title       String
+  content     String
+  metadata    String?
+  changeLog   String?
+  checksum    String
+  createdBy   String
+  createdAt   DateTime @default(now())
+
+  @@map("content_versions")
+}
+
+model BackupManifest {
+  id               String   @id @default(cuid())
+  backupType       String
+  itemsCount       Int
+  totalSize        Int
+  checksum         String
+  compressionRatio Float?
+  backupLocation   String?
+  metadata         String?
+  createdBy        String
+  createdAt        DateTime @default(now())
+
+  @@map("backup_manifests")
+}

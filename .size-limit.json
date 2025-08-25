@@ -1,0 +1,61 @@
+[
+  {
+    "name": "Client bundle (main)",
+    "path": ".next/static/chunks/pages/index.js",
+    "limit": "250 KB",
+    "webpack": false
+  },
+  {
+    "name": "Client bundle (blog)",
+    "path": ".next/static/chunks/pages/blog.js",
+    "limit": "200 KB",
+    "webpack": false
+  },
+  {
+    "name": "Client bundle (projects)",
+    "path": ".next/static/chunks/pages/projects.js",
+    "limit": "200 KB",
+    "webpack": false
+  },
+  {
+    "name": "Client bundle (case studies)",
+    "path": ".next/static/chunks/pages/case-studies.js",
+    "limit": "200 KB",
+    "webpack": false
+  },
+  {
+    "name": "Admin bundle",
+    "path": ".next/static/chunks/pages/admin/**/*.js",
+    "limit": "300 KB",
+    "webpack": false
+  },
+  {
+    "name": "Vendor chunks",
+    "path": ".next/static/chunks/vendors*.js",
+    "limit": "400 KB",
+    "webpack": false
+  },
+  {
+    "name": "Framework chunk",
+    "path": ".next/static/chunks/framework*.js",
+    "limit": "200 KB",
+    "webpack": false
+  },
+  {
+    "name": "Main CSS",
+    "path": ".next/static/css/*.css",
+    "limit": "50 KB"
+  },
+  {
+    "name": "Total Initial Bundle",
+    "path": [
+      ".next/static/chunks/pages/_app.js",
+      ".next/static/chunks/pages/index.js",
+      ".next/static/chunks/main*.js",
+      ".next/static/chunks/webpack*.js",
+      ".next/static/chunks/framework*.js",
+      ".next/static/css/*.css"
+    ],
+    "limit": "500 KB"
+  }
+]

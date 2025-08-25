@@ -1,0 +1,478 @@
+/**
+ * Analytics utilities for Google Analytics and custom tracking
+ * Handles event tracking, conversion tracking, and privacy-compliant analytics
+ */
+
+import { logger } from './logger'
+
+// Analytics configuration
+export const ANALYTICS_CONFIG = {
+  googleAnalyticsId: process.env.NEXT_PUBLIC_GA_TRACKING_ID || '',
+  debug: process.env.NODE_ENV === 'development',
+  enableTracking: process.env.NODE_ENV === 'production' || process.env.ENABLE_ANALYTICS === 'true',
+  privacyCompliant: true,
+  cookieConsent: true,
+} as const
+
+// Event tracking types
+export interface AnalyticsEvent {
+  action: string
+  category: string
+  label?: string
+  value?: number
+  custom_parameters?: Record<string, any>
+}
+
+export interface ConversionEvent {
+  event_name: string
+  currency?: string
+  value?: number
+  transaction_id?: string
+  items?: Array<{
+    item_id: string
+    item_name: string
+    item_category: string
+    quantity: number
+    price: number
+  }>
+}
+
+// Google Analytics 4 wrapper
+class GoogleAnalytics {
+  private initialized = false
+  private gtag: any = null
+
+  constructor() {
+    if (typeof window !== 'undefined') {
+      this.initialize()
+    }
+  }
+
+  private async initialize() {
+    if (this.initialized || !ANALYTICS_CONFIG.enableTracking || !ANALYTICS_CONFIG.googleAnalyticsId) {
+      return
+    }
+
+    try {
+      // Load GA4 script
+      const script = document.createElement('script')
+      script.src = `https://www.googletagmanager.com/gtag/js?id=${ANALYTICS_CONFIG.googleAnalyticsId}`
+      script.async = true
+      document.head.appendChild(script)
+
+      // Initialize gtag
+      window.dataLayer = window.dataLayer || []
+      this.gtag = function() {
+        window.dataLayer.push(arguments)
+      }
+
+      this.gtag('js', new Date())
+      this.gtag('config', ANALYTICS_CONFIG.googleAnalyticsId, {
+        debug_mode: ANALYTICS_CONFIG.debug,
+        send_page_view: true,
+        anonymize_ip: ANALYTICS_CONFIG.privacyCompliant,
+        allow_google_signals: !ANALYTICS_CONFIG.privacyCompliant,
+        cookie_flags: 'max-age=31536000;secure;samesite=strict', // 1 year
+      })
+
+      this.initialized = true
+      logger.info('Google Analytics initialized', { id: ANALYTICS_CONFIG.googleAnalyticsId })
+    } catch (error) {
+      logger.error('Failed to initialize Google Analytics', error)
+    }
+  }
+
+  // Track page views
+  trackPageView(url: string, title?: string) {
+    if (!this.initialized || !this.gtag) return
+
+    this.gtag('config', ANALYTICS_CONFIG.googleAnalyticsId, {
+      page_location: url,
+      page_title: title,
+    })
+
+    if (ANALYTICS_CONFIG.debug) {
+      console.log('📊 Page view tracked:', { url, title })
+    }
+  }
+
+  // Track custom events
+  trackEvent(event: AnalyticsEvent) {
+    if (!this.initialized || !this.gtag) return
+
+    this.gtag('event', event.action, {
+      event_category: event.category,
+      event_label: event.label,
+      value: event.value,
+      ...event.custom_parameters,
+    })
+
+    if (ANALYTICS_CONFIG.debug) {
+      console.log('📊 Event tracked:', event)
+    }
+  }
+
+  // Track conversions
+  trackConversion(conversion: ConversionEvent) {
+    if (!this.initialized || !this.gtag) return
+
+    this.gtag('event', conversion.event_name, {
+      currency: conversion.currency || 'USD',
+      value: conversion.value,
+      transaction_id: conversion.transaction_id,
+      items: conversion.items,
+    })
+
+    if (ANALYTICS_CONFIG.debug) {
+      console.log('📊 Conversion tracked:', conversion)
+    }
+  }
+
+  // Track user engagement
+  trackEngagement(engagementTime: number, scrollDepth: number) {
+    this.trackEvent({
+      action: 'user_engagement',
+      category: 'engagement',
+      label: 'session_engagement',
+      value: engagementTime,
+      custom_parameters: {
+        engagement_time_msec: engagementTime,
+        scroll_depth: scrollDepth,
+      },
+    })
+  }
+
+  // Track performance metrics
+  trackPerformance(metrics: {
+    fcp?: number
+    lcp?: number
+    cls?: number
+    fid?: number
+    ttfb?: number
+  }) {
+    Object.entries(metrics).forEach(([metric, value]) => {
+      if (value !== undefined) {
+        this.gtag('event', 'web_vital', {
+          event_category: 'performance',
+          event_label: metric.toUpperCase(),
+          value: Math.round(value),
+          custom_metric: true,
+        })
+      }
+    })
+  }
+
+  // Check if analytics is enabled and user has consented
+  isEnabled(): boolean {
+    return this.initialized && ANALYTICS_CONFIG.enableTracking
+  }
+}
+
+// Singleton instance
+let analytics: GoogleAnalytics | null = null
+
+export function getAnalytics(): GoogleAnalytics {
+  if (!analytics && typeof window !== 'undefined') {
+    analytics = new GoogleAnalytics()
+  }
+  return analytics!
+}
+
+// Convenience functions for common tracking scenarios
+export const trackPageView = (url: string, title?: string) => {
+  getAnalytics()?.trackPageView(url, title)
+}
+
+export const trackEvent = (event: AnalyticsEvent) => {
+  getAnalytics()?.trackEvent(event)
+}
+
+export const trackConversion = (conversion: ConversionEvent) => {
+  getAnalytics()?.trackConversion(conversion)
+}
+
+// Portfolio-specific tracking functions
+export const trackProjectView = (projectId: string, projectTitle: string) => {
+  trackEvent({
+    action: 'view_project',
+    category: 'portfolio',
+    label: projectTitle,
+    custom_parameters: {
+      project_id: projectId,
+      content_type: 'project',
+    },
+  })
+}
+
+export const trackBlogPostView = (postId: string, postTitle: string, category?: string) => {
+  trackEvent({
+    action: 'view_blog_post',
+    category: 'content',
+    label: postTitle,
+    custom_parameters: {
+      post_id: postId,
+      content_type: 'blog_post',
+      post_category: category,
+    },
+  })
+}
+
+export const trackCaseStudyView = (studyId: string, studyTitle: string, industry?: string) => {
+  trackEvent({
+    action: 'view_case_study',
+    category: 'portfolio',
+    label: studyTitle,
+    custom_parameters: {
+      study_id: studyId,
+      content_type: 'case_study',
+      industry,
+    },
+  })
+}
+
+export const trackContactFormSubmission = (formType: string = 'main') => {
+  trackEvent({
+    action: 'form_submit',
+    category: 'engagement',
+    label: 'contact_form',
+    custom_parameters: {
+      form_type: formType,
+    },
+  })
+  
+  // Track as conversion
+  trackConversion({
+    event_name: 'generate_lead',
+    value: 1,
+    custom_parameters: {
+      form_type: formType,
+    },
+  })
+}
+
+export const trackDownload = (fileName: string, fileType: string) => {
+  trackEvent({
+    action: 'file_download',
+    category: 'engagement',
+    label: fileName,
+    custom_parameters: {
+      file_type: fileType,
+      file_name: fileName,
+    },
+  })
+}
+
+export const trackExternalLinkClick = (url: string, linkText?: string) => {
+  trackEvent({
+    action: 'click_external_link',
+    category: 'engagement',
+    label: linkText || url,
+    custom_parameters: {
+      link_url: url,
+      outbound: true,
+    },
+  })
+}
+
+export const trackSearch = (searchTerm: string, resultsCount: number) => {
+  trackEvent({
+    action: 'search',
+    category: 'engagement',
+    label: searchTerm,
+    value: resultsCount,
+    custom_parameters: {
+      search_term: searchTerm,
+      results_count: resultsCount,
+    },
+  })
+}
+
+export const trackSocialShare = (platform: string, contentType: string, contentId: string) => {
+  trackEvent({
+    action: 'share',
+    category: 'social',
+    label: platform,
+    custom_parameters: {
+      social_platform: platform,
+      content_type: contentType,
+      content_id: contentId,
+    },
+  })
+}
+
+export const trackNewsletterSignup = (source: string = 'unknown') => {
+  trackEvent({
+    action: 'newsletter_signup',
+    category: 'engagement',
+    label: source,
+    custom_parameters: {
+      signup_source: source,
+    },
+  })
+  
+  // Track as conversion
+  trackConversion({
+    event_name: 'sign_up',
+    value: 1,
+    custom_parameters: {
+      method: 'newsletter',
+      source,
+    },
+  })
+}
+
+export const trackThemeChange = (theme: string, previous: string) => {
+  trackEvent({
+    action: 'theme_change',
+    category: 'customization',
+    label: `${previous}_to_${theme}`,
+    custom_parameters: {
+      new_theme: theme,
+      previous_theme: previous,
+    },
+  })
+}
+
+export const trackErrorOccurred = (errorType: string, errorMessage: string, page: string) => {
+  trackEvent({
+    action: 'error_occurred',
+    category: 'error',
+    label: errorType,
+    custom_parameters: {
+      error_type: errorType,
+      error_message: errorMessage.substring(0, 100), // Limit length
+      page_path: page,
+    },
+  })
+}
+
+// Enhanced e-commerce tracking for portfolio services
+export const trackServiceInterest = (serviceType: string, source: string) => {
+  trackEvent({
+    action: 'service_interest',
+    category: 'business',
+    label: serviceType,
+    custom_parameters: {
+      service_type: serviceType,
+      interest_source: source,
+    },
+  })
+}
+
+export const trackPortfolioEngagement = (engagementType: string, duration?: number) => {
+  trackEvent({
+    action: 'portfolio_engagement',
+    category: 'engagement',
+    label: engagementType,
+    value: duration,
+    custom_parameters: {
+      engagement_type: engagementType,
+      duration_seconds: duration,
+    },
+  })
+}
+
+// Privacy and consent management
+export class AnalyticsConsent {
+  private static CONSENT_KEY = 'analytics_consent'
+  private static consentGiven = false
+
+  static hasConsent(): boolean {
+    if (typeof window === 'undefined') return false
+    
+    const consent = localStorage.getItem(this.CONSENT_KEY)
+    return consent === 'granted'
+  }
+
+  static grantConsent() {
+    if (typeof window === 'undefined') return
+    
+    localStorage.setItem(this.CONSENT_KEY, 'granted')
+    this.consentGiven = true
+    
+    // Initialize analytics after consent
+    getAnalytics()
+    
+    trackEvent({
+      action: 'consent_granted',
+      category: 'privacy',
+      label: 'analytics_consent',
+    })
+  }
+
+  static revokeConsent() {
+    if (typeof window === 'undefined') return
+    
+    localStorage.setItem(this.CONSENT_KEY, 'denied')
+    this.consentGiven = false
+    
+    // Disable analytics
+    if (analytics) {
+      trackEvent({
+        action: 'consent_revoked',
+        category: 'privacy',
+        label: 'analytics_consent',
+      })
+    }
+  }
+
+  static shouldShowConsentBanner(): boolean {
+    if (typeof window === 'undefined') return false
+    
+    const consent = localStorage.getItem(this.CONSENT_KEY)
+    return consent === null // Show banner if no decision made
+  }
+}
+
+// React hooks for analytics
+export function useAnalytics() {
+  if (typeof window === 'undefined') {
+    return {
+      trackEvent: () => {},
+      trackPageView: () => {},
+      trackConversion: () => {},
+      isEnabled: () => false,
+    }
+  }
+
+  const analyticsInstance = getAnalytics()
+  
+  return {
+    trackEvent: (event: AnalyticsEvent) => analyticsInstance?.trackEvent(event),
+    trackPageView: (url: string, title?: string) => analyticsInstance?.trackPageView(url, title),
+    trackConversion: (conversion: ConversionEvent) => analyticsInstance?.trackConversion(conversion),
+    isEnabled: () => analyticsInstance?.isEnabled() ?? false,
+  }
+}
+
+// Web Vitals tracking integration
+export function trackWebVitals() {
+  if (typeof window === 'undefined') return
+
+  // Track Core Web Vitals when they become available
+  const observer = new PerformanceObserver((list) => {
+    for (const entry of list.getEntries()) {
+      const analytics = getAnalytics()
+      const metricName = entry.name.replace(/-/g, '_')
+      
+      analytics?.trackPerformance({
+        [metricName]: entry.startTime || entry.value,
+      })
+    }
+  })
+
+  try {
+    observer.observe({ entryTypes: ['paint', 'navigation', 'measure'] })
+  } catch (error) {
+    logger.error('Failed to observe performance entries', error)
+  }
+}
+
+// Initialize analytics and web vitals tracking on page load
+if (typeof window !== 'undefined') {
+  window.addEventListener('load', () => {
+    trackWebVitals()
+  })
+}
+
+export default getAnalytics

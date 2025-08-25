@@ -1,0 +1,25 @@
+flowchart TD
+    Home[Home Page] --> ProjectsNav[Click Projects]
+    Home --> CaseStudiesNav[Click Case Studies]
+    Home --> BlogNav[Click Blog]
+    Home --> ContactNav[Click Contact]
+    ProjectsNav --> ProjectsLoading[Projects Loading]
+    ProjectsLoading --> ProjectsIndex[Projects Index]
+    ProjectsIndex -->|Select Project| ProjectLoading[Project Loading]
+    ProjectLoading --> ProjectDetail[Project Detail]
+    ProjectLoading -->|Invalid ID| NotFound404[404 Page]
+    CaseStudiesNav --> CaseStudiesLoading[Case Studies Loading]
+    CaseStudiesLoading --> CaseStudiesIndex[Case Studies Index]
+    CaseStudiesIndex -->|Select Case Study| CaseStudyLoading[Case Study Loading]
+    CaseStudyLoading --> CaseStudyDetail[Case Study Detail]
+    CaseStudyLoading -->|Invalid ID| NotFound404
+    BlogNav --> BlogLoading[Blog Loading]
+    BlogLoading --> BlogIndex[Blog Index]
+    BlogIndex -->|Select Article| ArticleLoading[Article Loading]
+    ArticleLoading --> ArticleDetail[Article Detail]
+    ArticleLoading -->|Invalid ID| NotFound404
+    ContactNav --> ContactPage[Contact Page]
+    ContactPage -->|Submit Form| ContactSubmitting[Form Submitting]
+    ContactSubmitting -->|Success| ContactSuccess[Success Message]
+    ContactSubmitting -->|Error| ContactError[Error Message]
+    NotFound404 --> Home

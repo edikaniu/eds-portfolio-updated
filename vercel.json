@@ -1,0 +1,75 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "framework": "nextjs",
+  "installCommand": "npm install --legacy-peer-deps",
+  "devCommand": "npm run dev",
+  "regions": ["iad1"],
+  "functions": {
+    "app/api/**/*.ts": {
+      "maxDuration": 30
+    },
+    "app/api/backup/**/*.ts": {
+      "maxDuration": 300
+    },
+    "app/api/cron/**/*.ts": {
+      "maxDuration": 300
+    }
+  },
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/health",
+      "destination": "/api/health"
+    },
+    {
+      "source": "/health/detailed",
+      "destination": "/api/health/detailed"
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron/publish-posts",
+      "schedule": "*/5 * * * *"
+    },
+    {
+      "path": "/api/cron/maintenance?task=cache",
+      "schedule": "0 */6 * * *"
+    },
+    {
+      "path": "/api/cron/maintenance?task=backup",
+      "schedule": "0 2 * * *"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/admin/
+Disallow: /_next/
+Disallow: /.*
+
+# Sitemap
+Sitemap: https://edikanudoibuot.com/sitemap.xml

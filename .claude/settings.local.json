@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(task-manager list-tasks:*)",
+      "Bash(npm run type-check:*)",
+      "Bash(chmod:*)",
+      "Bash(node:*)",
+      "Read(/C:\\c\\Users\\EdikanUdoibuot\\Vibe Coding/**)",
+      "Bash(git add:*)",
+      "Bash(npm install:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:api.github.com)",
+      "Bash(git --version)",
+      "Bash(echo $0)",
+      "Bash(MSYS_NO_PATHCONV=1 git --version)",
+      "Bash(export MSYS_NO_PATHCONV=1)",
+      "Bash(powershell:*)",
+      "Bash(MSYS_NO_PATHCONV=1 git status)",
+      "Bash(MSYS_NO_PATHCONV=1 git remote -v)"
+    ],
+    "deny": [],
+    "ask": [],
+    "additionalDirectories": [
+      "C:\\c\\Users\\EdikanUdoibuot\\Vibe Coding"
+    ]
+  }
+}

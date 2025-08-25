@@ -1,0 +1,32 @@
+{
+  "metrics": [
+    {
+      "id": "experience",
+      "label": "Years Experience",
+      "value": 5,
+      "suffix": "+",
+      "description": "Years of professional software development"
+    },
+    {
+      "id": "projects",
+      "label": "Projects Completed",
+      "value": 50,
+      "suffix": "+",
+      "description": "Successful projects delivered"
+    },
+    {
+      "id": "technologies",
+      "label": "Technologies Mastered",
+      "value": 25,
+      "suffix": "+",
+      "description": "Programming languages and frameworks"
+    },
+    {
+      "id": "satisfaction",
+      "label": "Client Satisfaction",
+      "value": 98,
+      "suffix": "%",
+      "description": "Average client satisfaction rate"
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "timeline": [
+    {
+      "id": "2024-present",
+      "year": "2024 - Present",
+      "title": "Senior Full-Stack Developer",
+      "company": "Tech Innovation Hub",
+      "location": "Remote",
+      "description": "Leading development of enterprise-scale web applications using modern tech stack.",
+      "highlights": [
+        "Built and deployed 5+ high-traffic applications serving 100K+ users",
+        "Mentored junior developers and established coding best practices",
+        "Implemented CI/CD pipelines reducing deployment time by 70%",
+        "Led migration from legacy systems to modern cloud architecture"
+      ],
+      "technologies": ["React", "Node.js", "TypeScript", "AWS", "Docker", "PostgreSQL"],
+      "expanded": false
+    },
+    {
+      "id": "2022-2024",
+      "year": "2022 - 2024",
+      "title": "Full-Stack Developer",
+      "company": "Digital Solutions Inc",
+      "location": "New York, NY",
+      "description": "Developed and maintained complex web applications for various client projects.",
+      "highlights": [
+        "Delivered 20+ client projects on time and within budget",
+        "Improved application performance by 40% through optimization",
+        "Collaborated with cross-functional teams in Agile environment",
+        "Implemented responsive designs ensuring cross-browser compatibility"
+      ],
+      "technologies": ["JavaScript", "Python", "Django", "React", "MySQL", "Git"],
+      "expanded": false
+    },
+    {
+      "id": "2020-2022",
+      "year": "2020 - 2022",
+      "title": "Frontend Developer",
+      "company": "Creative Web Agency",
+      "location": "San Francisco, CA",
+      "description": "Specialized in creating engaging user interfaces and optimizing user experience.",
+      "highlights": [
+        "Developed mobile-first responsive websites for 30+ clients",
+        "Reduced page load times by 60% through image and code optimization",
+        "Created reusable component library used across multiple projects",
+        "Collaborated with designers to implement pixel-perfect designs"
+      ],
+      "technologies": ["HTML5", "CSS3", "JavaScript", "SASS", "Bootstrap", "jQuery"],
+      "expanded": false
+    },
+    {
+      "id": "2018-2020",
+      "year": "2018 - 2020",
+      "title": "Computer Science Degree",
+      "company": "University of Technology",
+      "location": "Boston, MA",
+      "description": "Bachelor of Science in Computer Science with focus on software engineering.",
+      "highlights": [
+        "Graduated Summa Cum Laude with 3.9 GPA",
+        "Led student programming club with 100+ members",
+        "Completed senior capstone project on machine learning",
+        "Participated in multiple hackathons winning 2nd place twice"
+      ],
+      "technologies": ["Java", "C++", "Python", "Data Structures", "Algorithms", "Database Design"],
+      "expanded": false
+    }
+  ]
+}

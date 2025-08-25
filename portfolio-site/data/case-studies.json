@@ -1,0 +1,30 @@
+{
+  "caseStudies": [
+    {
+      "slug": "project-1",
+      "title": "E-Commerce Platform Redesign",
+      "description": "Complete redesign and development of a high-traffic e-commerce platform serving over 100,000 monthly users.",
+      "tags": ["React", "Node.js", "MongoDB", "Stripe API"],
+      "technologies": ["React", "Node.js", "Express", "MongoDB", "Stripe", "JWT", "Tailwind CSS", "AWS"],
+      "image": "/placeholder.jpg",
+      "date": "2024",
+      "challenge": "The existing e-commerce platform was outdated, slow, and had poor user experience. The client needed a modern, fast, and scalable solution that could handle increased traffic during peak seasons while providing a seamless shopping experience.",
+      "solution": "Developed a modern React frontend with server-side rendering for SEO optimization, built a robust Node.js/Express API with MongoDB for data persistence, integrated Stripe for secure payments, and implemented a responsive design that works flawlessly across all devices.",
+      "results": "Achieved 40% increase in conversion rates, 60% improvement in page load times, 25% reduction in bounce rate, and successfully handled Black Friday traffic with zero downtime. The new platform now processes over $2M in monthly transactions.",
+      "content": "The project involved a complete overhaul of the existing e-commerce platform. Key features implemented include:<br><br><strong>Frontend Development:</strong><br>• Modern React application with TypeScript for type safety<br>• Server-side rendering using Next.js for improved SEO<br>• Responsive design using Tailwind CSS<br>• Progressive Web App (PWA) capabilities<br>• Real-time inventory updates<br><br><strong>Backend Development:</strong><br>• RESTful API built with Node.js and Express<br>• MongoDB database with optimized schema design<br>• JWT-based authentication and authorization<br>• Integration with Stripe for payment processing<br>• Order management and inventory tracking systems<br><br><strong>Performance Optimizations:</strong><br>• Image optimization and lazy loading<br>• Code splitting and dynamic imports<br>• CDN integration for static assets<br>• Database query optimization<br>• Caching strategies for frequently accessed data<br><br><strong>Security Implementation:</strong><br>• Input validation and sanitization<br>• HTTPS encryption for all communications<br>• Secure payment processing with PCI compliance<br>• Rate limiting and DDoS protection"
+    },
+    {
+      "slug": "project-2",
+      "title": "Real-Time Collaboration App",
+      "description": "A comprehensive real-time collaboration platform for remote teams with video calling, document sharing, and project management features.",
+      "tags": ["React Native", "Socket.io", "WebRTC", "Firebase"],
+      "technologies": ["React Native", "Firebase", "Socket.io", "WebRTC", "Redux", "Expo", "TypeScript"],
+      "image": "/placeholder.jpg",
+      "date": "2024",
+      "challenge": "Remote teams were struggling with fragmented communication tools and needed a unified platform that could handle real-time collaboration, video conferencing, file sharing, and project management all in one place.",
+      "solution": "Built a cross-platform mobile application using React Native with real-time messaging via Socket.io, integrated WebRTC for video calling, Firebase for cloud storage and authentication, and implemented an intuitive project management system with task tracking.",
+      "results": "Successfully launched to 10,000+ active users within 3 months, achieved 4.8-star rating on app stores, reduced team communication overhead by 50%, and increased project completion rates by 35% for client organizations.",
+      "content": "This comprehensive collaboration platform was designed to streamline remote team workflows:<br><br><strong>Real-Time Features:</strong><br>• Instant messaging with typing indicators and read receipts<br>• Group chat rooms with thread support<br>• Real-time document collaboration similar to Google Docs<br>• Live cursor tracking for collaborative editing<br>• Push notifications for important updates<br><br><strong>Video Conferencing:</strong><br>• High-quality video calls using WebRTC technology<br>• Screen sharing capabilities<br>• Recording functionality for meeting playback<br>• Virtual backgrounds and noise cancellation<br>• Support for up to 50 participants per call<br><br><strong>Project Management:</strong><br>• Kanban boards for visual task management<br>• Gantt charts for project timeline visualization<br>• Time tracking and productivity analytics<br>• File sharing with version control<br>• Integration with popular development tools<br><br><strong>Mobile Optimization:</strong><br>• Native performance across iOS and Android<br>• Offline mode for critical features<br>• Biometric authentication for enhanced security<br>• Background processing for notifications<br>• Optimized battery usage and data consumption"
+    }
+  ]
+}
