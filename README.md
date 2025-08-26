@@ -2,17 +2,32 @@
 
 *Professional portfolio showcasing 7+ years of marketing expertise and AI-driven growth strategies with comprehensive admin management system*
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/edikanius-projects/v0-ed-s-portfolio)
+[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/edikanius-projects/portfolio-main)
 [![Built with Next.js](https://img.shields.io/badge/Built%20with-Next.js%2015-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Enabled-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
-[![Admin Portal](https://img.shields.io/badge/Admin-Portal%20Enabled-green?style=for-the-badge&logo=settings)](https://github.com/edikanius/portfolio)
+[![Admin Portal](https://img.shields.io/badge/Admin-Portal-red?style=for-the-badge&logo=alert-circle&label=BROKEN)](https://github.com/edikaniu/eds-portfolio-updated)
+
+## 🚨 CRITICAL STATUS ALERT
+
+⚠️ **ADMIN AUTHENTICATION SYSTEM IS CURRENTLY BROKEN**  
+⚠️ **ADMIN PORTAL IS INACCESSIBLE**  
+⚠️ **AUTHENTICATION DEBUGGING IN PROGRESS**  
 
 ## 🚀 Overview
 
-A modern, responsive portfolio website with **complete content management system** featuring an admin portal for dynamic content updates. Built with Next.js 15, TypeScript, Tailwind CSS, and Prisma ORM with SQLite database.
+A modern, responsive portfolio website with **complete content management system** featuring an admin portal for dynamic content updates. Built with Next.js 15, TypeScript, Tailwind CSS, and Prisma ORM with PostgreSQL database.
 
-**Live Site**: [https://edikanudoibuot.com](https://edikanudoibuot.com)  
-**Admin Portal**: [https://edikanudoibuot.com/admin](https://edikanudoibuot.com/admin)
+**Live Site**: [https://portfolio-main-ten-xi.vercel.app](https://portfolio-main-ten-xi.vercel.app)  
+**Admin Portal**: [https://portfolio-main-ten-xi.vercel.app/admin](https://portfolio-main-ten-xi.vercel.app/admin) ❌ **BROKEN**  
+
+### 🔥 Current Issues
+- **Admin login redirects to login page** (infinite loop)
+- **JWT token cookies not being set properly** 
+- **All admin functionality inaccessible**
+- **Debug tools created but also non-functional**
+
+📋 **Status Documentation**: See `ADMIN_AUTH_STATUS.md` for detailed issue analysis  
+📋 **TODO List**: See `TODO.md` for pending fixes and enhancements
 
 ## ✨ Key Features
 
