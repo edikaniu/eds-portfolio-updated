@@ -37,7 +37,8 @@
       "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Add admin user setup endpoint for database initialization\")",
       "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Exempt admin setup endpoint from CSRF validation\")",
       "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Add debug endpoint for admin authentication testing\")",
-      "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Add test-auth to CSRF exemptions\")"
+      "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Add test-auth to CSRF exemptions\")",
+      "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Add password reset endpoint for admin debugging\")"
     ],
     "deny": [],
     "ask": [],
