@@ -21,31 +21,39 @@ export default function AdminLoginPage() {
     setError('')
 
     try {
-      // Get CSRF token from cookie
-      const csrfToken = document.cookie
-        .split('; ')
-        .find(row => row.startsWith('csrf-token='))
-        ?.split('=')[1]
+      console.log('Attempting login with:', { email })
 
       const response = await fetch('/api/admin/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-CSRF-Token': csrfToken || '',
         },
         body: JSON.stringify({ email, password }),
       })
 
+      console.log('Login response status:', response.status)
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+      }
+
       const data = await response.json()
+      console.log('Login response data:', data)
 
       if (data.success) {
-        router.push('/admin/dashboard')
-        router.refresh()
+        console.log('Login successful, redirecting to dashboard...')
+        // Give a short delay to ensure cookie is set
+        setTimeout(() => {
+          router.push('/admin/dashboard')
+          router.refresh()
+        }, 100)
       } else {
+        console.error('Login failed:', data.message)
         setError(data.message || 'Login failed')
       }
     } catch (error) {
-      setError('Network error. Please try again.')
+      console.error('Login error:', error)
+      setError(error instanceof Error ? error.message : 'Network error. Please try again.')
     } finally {
       setIsLoading(false)
     }
