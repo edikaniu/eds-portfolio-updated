@@ -35,8 +35,7 @@ export async function GET(request: NextRequest) {
     } catch (dbError) {
       healthChecks.checks.database = {
         status: 'unhealthy',
-        responseTime: Date.now() - startTime,
-        error: dbError instanceof Error ? dbError.message : 'Database connection failed'
+        responseTime: Date.now() - startTime
       }
       healthChecks.status = 'unhealthy'
     }
@@ -49,9 +48,7 @@ export async function GET(request: NextRequest) {
     healthChecks.checks.memory = {
       status: memoryUsageMB > 400 ? 'warning' : 'healthy', // Warning at 400MB
       usage: memoryUsageMB,
-      limit: memoryLimitMB,
-      rss: Math.round(memoryUsage.rss / 1024 / 1024),
-      external: Math.round(memoryUsage.external / 1024 / 1024)
+      limit: memoryLimitMB
     }
 
     const responseTime = Date.now() - startTime

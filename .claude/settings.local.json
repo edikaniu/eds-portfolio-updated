@@ -25,12 +25,16 @@
       "Bash(npx prisma:*)",
       "Bash(npx tsx:*)",
       "Bash(./setup-missing-env.bat)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(sed:*)",
+      "Bash(MSYS_NO_PATHCONV=1 git add .)"
     ],
     "deny": [],
     "ask": [],
     "additionalDirectories": [
-      "C:\\c\\Users\\EdikanUdoibuot\\Vibe Coding"
+      "C:\\c\\Users\\EdikanUdoibuot\\Vibe Coding",
+      "C:\\Users\\EdikanUdoibuot\\Vibe Coding"
     ]
   }
 }

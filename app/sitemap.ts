@@ -38,7 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const [blogPosts, projects, caseStudies] = await Promise.all([
       // Published blog posts
       prisma.blogPost.findMany({
-        where: { isDraft: false },
+        where: { published: true },
         select: {
           slug: true,
           updatedAt: true,
@@ -49,7 +49,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
       // Published projects
       prisma.project.findMany({
-        where: { isDraft: false },
+        where: { isActive: true },
         select: {
           slug: true,
           updatedAt: true,
@@ -60,7 +60,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
       // Published case studies
       prisma.caseStudy.findMany({
-        where: { isDraft: false },
+        where: { isActive: true },
         select: {
           slug: true,
           updatedAt: true,

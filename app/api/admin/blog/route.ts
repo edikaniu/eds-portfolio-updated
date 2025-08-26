@@ -8,12 +8,12 @@ const BlogPostSchema = z.object({
   slug: z.string().min(1, 'Slug is required'),
   content: z.string().min(1, 'Content is required'),
   excerpt: z.string().optional(),
-  featuredImage: z.string().url().optional().or(z.literal('')),
+  imageUrl: z.string().url().optional().or(z.literal('')),
   category: z.string().optional(),
   tags: z.string().optional(),
   metaTitle: z.string().optional(),
   metaDescription: z.string().optional(),
-  isDraft: z.boolean().default(true),
+  published: z.boolean().default(false),
   publishedAt: z.string().datetime().optional()
 })
 
@@ -100,13 +100,13 @@ export const POST = withAdminAuth(async (request: NextRequest, user: any) => {
         slug: data.slug,
         content: data.content,
         excerpt: data.excerpt || null,
-        featuredImage: data.featuredImage || null,
+        imageUrl: data.imageUrl || null,
         category: data.category || null,
         tags: data.tags || null,
         metaTitle: data.metaTitle || null,
         metaDescription: data.metaDescription || null,
-        isDraft: data.isDraft,
-        publishedAt: data.isDraft ? null : new Date()
+        published: data.published,
+        publishedAt: data.published ? new Date() : null
       }
     })
 
@@ -171,7 +171,7 @@ export const PUT = withAdminAuth(async (request: NextRequest, user: any) => {
     // Get current post to check if it was previously a draft
     const currentPost = await prisma.blogPost.findUnique({
       where: { id },
-      select: { isDraft: true, publishedAt: true }
+      select: { published: true, publishedAt: true }
     })
 
     const blogPost = await prisma.blogPost.update({
@@ -179,8 +179,8 @@ export const PUT = withAdminAuth(async (request: NextRequest, user: any) => {
       data: {
         ...data,
         // Only set publishedAt if we're publishing for the first time
-        publishedAt: data.isDraft === false 
-          ? (currentPost?.isDraft ? new Date() : currentPost?.publishedAt) 
+        publishedAt: data.published === true 
+          ? (currentPost?.published ? currentPost?.publishedAt : new Date()) 
           : null,
         updatedAt: new Date()
       }

@@ -46,7 +46,7 @@ export async function middleware(request: NextRequest) {
   const response = NextResponse.next()
 
   // Get client identifier for rate limiting
-  const clientId = request.ip || request.headers.get('x-forwarded-for') || 'unknown'
+  const clientId = request.headers.get('x-forwarded-for') || 'unknown'
 
   // Apply rate limiting
   const rateLimit = getRateLimit(pathname)
@@ -102,8 +102,8 @@ export async function middleware(request: NextRequest) {
       }
 
       // Token is valid, allow access
-      response.headers.set('X-User-ID', payload.sub)
-      response.headers.set('X-User-Role', payload.role)
+      response.headers.set('X-User-ID', payload.id || 'unknown')
+      response.headers.set('X-User-Role', payload.role || 'admin')
     } catch (error) {
       console.error('Token verification failed:', error)
       const response = NextResponse.redirect(new URL('/admin/login', request.url))

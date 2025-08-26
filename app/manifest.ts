@@ -49,19 +49,19 @@ export default function manifest(): MetadataRoute.Manifest {
         src: '/icons/icon-192x192.png',
         sizes: '192x192',
         type: 'image/png',
-        purpose: 'maskable any'
+        purpose: 'any'
       },
       {
         src: '/icons/icon-384x384.png',
         sizes: '384x384',
         type: 'image/png',
-        purpose: 'maskable any'
+        purpose: 'any'
       },
       {
         src: '/icons/icon-512x512.png',
         sizes: '512x512',
         type: 'image/png',
-        purpose: 'maskable any'
+        purpose: 'any'
       }
     ],
     screenshots: [
@@ -133,9 +133,6 @@ export default function manifest(): MetadataRoute.Manifest {
       }
     ],
     related_applications: [],
-    prefer_related_applications: false,
-    edge_side_panel: {
-      preferred_width: 400
-    }
+    prefer_related_applications: false
   }
 }

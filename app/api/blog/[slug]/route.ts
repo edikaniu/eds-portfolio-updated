@@ -12,7 +12,7 @@ export async function GET(
     const blogPost = await prisma.blogPost.findFirst({
       where: {
         slug: slug,
-        isDraft: false, // Only published posts
+        published: true, // Only published posts
       },
       select: {
         id: true,
@@ -20,7 +20,7 @@ export async function GET(
         slug: true,
         content: true,
         excerpt: true,
-        featuredImage: true,
+        imageUrl: true,
         category: true,
         tags: true,
         publishedAt: true,
@@ -46,7 +46,7 @@ export async function GET(
       date: blogPost.publishedAt?.toISOString().split('T')[0] || blogPost.createdAt.toISOString().split('T')[0],
       readTime: Math.max(1, Math.ceil(blogPost.content.split(' ').length / 200)) + " min read", // Estimate reading time
       category: blogPost.category || 'Uncategorized',
-      image: blogPost.featuredImage || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=400&fit=crop&crop=center",
+      image: blogPost.imageUrl || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=400&fit=crop&crop=center",
       author: "Edikan Udoibuot",
       metaTitle: blogPost.metaTitle,
       metaDescription: blogPost.metaDescription,

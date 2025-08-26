@@ -54,8 +54,8 @@ export class ErrorBoundary extends Component<Props, State> {
     logger.error('Error Boundary caught error', errorDetails)
 
     // Report to external error tracking service if available
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('event', 'exception', {
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', 'exception', {
         description: error.message,
         fatal: true,
         error_id: this.state.errorId

@@ -4,10 +4,7 @@ import { Inter, Space_Grotesk } from "next/font/google"
 import { Analytics } from '@vercel/analytics/next'
 import { ThemeProvider } from "@/components/theme-provider"
 import { StructuredData } from "@/components/structured-data"
-import { PWAInstallPrompt } from "@/components/pwa-install"
-import { PerformanceMonitor } from "@/components/performance-monitor"
-import { PerformanceReporter } from "@/components/performance-reporter"
-import { CookieConsent } from "@/components/cookie-consent"
+
 import { ErrorBoundary } from "@/components/error-boundary"
 import { generatePersonSchema, generateWebsiteSchema, generateOrganizationSchema } from "@/lib/structured-data"
 import { ClientErrorSetup } from "@/components/client-error-setup"
@@ -80,10 +77,7 @@ export default function RootLayout({
           <ErrorBoundary>
             <ClientErrorSetup />
             {children}
-            <PWAInstallPrompt />
-            <PerformanceMonitor />
-            <PerformanceReporter />
-            <CookieConsent />
+            
             <Analytics />
           </ErrorBoundary>
         </ThemeProvider>

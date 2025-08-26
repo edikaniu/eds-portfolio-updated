@@ -54,7 +54,7 @@ export function rateLimit(config: RateLimitConfig) {
 function getIdentifier(request: NextRequest): string {
   // Use IP address as identifier
   const forwarded = request.headers.get('x-forwarded-for')
-  const ip = forwarded ? forwarded.split(',')[0] : request.ip
+  const ip = forwarded ? forwarded.split(',')[0] : 'unknown'
   return ip || 'unknown'
 }
 
