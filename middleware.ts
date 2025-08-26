@@ -87,27 +87,36 @@ export async function middleware(request: NextRequest) {
 
   // Admin authentication middleware - simplified session-based
   if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
+    console.log('🛡️ MIDDLEWARE DEBUG - Admin route accessed:', pathname)
+    
     const sessionToken = request.cookies.get('admin-session')?.value
+    console.log('🍪 MIDDLEWARE - Session token found:', !!sessionToken, 'Length:', sessionToken?.length || 0)
 
     if (!sessionToken) {
+      console.log('❌ MIDDLEWARE - No session, redirecting to login')
       // No session, redirect to login
       return NextResponse.redirect(new URL('/admin/login', request.url))
     }
 
     try {
+      console.log('🔍 MIDDLEWARE - Verifying session token...')
       const user = verifySessionToken(sessionToken)
+      console.log('✅ MIDDLEWARE - Token verification:', !!user ? 'SUCCESS' : 'FAILED')
+      
       if (!user || user.role !== 'admin') {
+        console.log('❌ MIDDLEWARE - Invalid session or not admin, redirecting')
         // Invalid session or not admin, redirect to login
         const response = NextResponse.redirect(new URL('/admin/login', request.url))
         response.cookies.delete('admin-session')
         return response
       }
 
+      console.log('✅ MIDDLEWARE - Access granted for:', user.email)
       // Session is valid, allow access
       response.headers.set('X-User-ID', user.id)
       response.headers.set('X-User-Role', user.role)
     } catch (error) {
-      console.error('Session verification failed:', error)
+      console.error('❌ MIDDLEWARE - Session verification failed:', error)
       const response = NextResponse.redirect(new URL('/admin/login', request.url))
       response.cookies.delete('admin-session')
       return response

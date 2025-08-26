@@ -60,7 +60,11 @@
       "Bash(MSYS_NO_PATHCONV=1 git add middleware.ts)",
       "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Add test endpoint to CSRF exemptions\")",
       "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Change test endpoint to GET to avoid CSRF\")",
-      "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Temporarily disable admin auth middleware for testing\")"
+      "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Temporarily disable admin auth middleware for testing\")",
+      "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Implement simplified authentication system for quick deployment\n\n- Created simple environment variable-based authentication\n- Replaced complex JWT system with base64 session tokens\n- Updated all auth endpoints to use simplified approach\n- Modified middleware for session-based authentication  \n- No database dependencies for authentication\n- Uses admin credentials from environment variables\n- Ready for immediate testing and deployment\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")",
+      "Bash(MSYS_NO_PATHCONV=1 git add app/api/admin/debug-credentials/route.ts)",
+      "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Add debug endpoint to check admin credentials\")",
+      "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Add comprehensive debugging to auth cookie flow\n\n- Added detailed logging to login endpoint cookie setting\n- Added middleware debugging for session token verification\n- Added auth/me endpoint debugging for cookie reading\n- Will help identify where the cookie flow is breaking\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")"
     ],
     "deny": [],
     "ask": [],

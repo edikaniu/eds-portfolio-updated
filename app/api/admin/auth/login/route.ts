@@ -54,6 +54,21 @@ export async function POST(request: NextRequest) {
 
     // Set HTTP-only cookie with session token
     const isProduction = process.env.NODE_ENV === 'production'
+    
+    // Debug logging
+    console.log('🍪 COOKIE DEBUG - Setting admin-session cookie:', {
+      tokenLength: sessionToken.length,
+      tokenPreview: sessionToken.substring(0, 30) + '...',
+      isProduction,
+      cookieSettings: {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: 'lax',
+        path: '/',
+        maxAge: 7 * 24 * 60 * 60,
+      }
+    })
+    
     response.cookies.set('admin-session', sessionToken, {
       httpOnly: true,
       secure: isProduction,
@@ -62,6 +77,7 @@ export async function POST(request: NextRequest) {
       maxAge: 7 * 24 * 60 * 60, // 7 days
     })
 
+    console.log('✅ LOGIN SUCCESS - Cookie should be set')
     return response
 
   } catch (error) {
