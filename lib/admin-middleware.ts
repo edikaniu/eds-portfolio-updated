@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { verifyToken } from './auth'
+import { verifySessionToken } from './simple-auth'
 
 export function withAdminAuth(handler: (request: NextRequest, user: any) => Promise<NextResponse>) {
   return async (request: NextRequest) => {
     try {
-      const token = request.cookies.get('admin-token')?.value
+      const token = request.cookies.get('admin-session')?.value
 
       if (!token) {
         return NextResponse.json(
@@ -16,7 +16,7 @@ export function withAdminAuth(handler: (request: NextRequest, user: any) => Prom
         )
       }
 
-      const user = verifyToken(token)
+      const user = verifySessionToken(token)
       if (!user) {
         return NextResponse.json(
           { 
