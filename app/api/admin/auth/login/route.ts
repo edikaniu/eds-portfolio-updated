@@ -9,10 +9,15 @@ const LoginSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    console.log('🔥 LOGIN ENDPOINT HIT - Starting authentication process')
+    
     const body = await request.json()
+    console.log('📝 Request body received:', { email: body.email, hasPassword: !!body.password })
+    
     const validationResult = LoginSchema.safeParse(body)
 
     if (!validationResult.success) {
+      console.log('❌ Validation failed:', validationResult.error.errors)
       return NextResponse.json(
         { 
           success: false, 
@@ -24,9 +29,14 @@ export async function POST(request: NextRequest) {
     }
 
     const { email, password } = validationResult.data
+    console.log('✅ Validation passed, checking credentials...')
 
     // Validate credentials using environment variables
-    if (!validateCredentials(email, password)) {
+    const isValid = validateCredentials(email, password)
+    console.log('🔐 Credential check result:', isValid)
+    
+    if (!isValid) {
+      console.log('❌ Invalid credentials provided')
       return NextResponse.json(
         { 
           success: false, 
@@ -36,9 +46,17 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    console.log('🎯 Credentials valid! Creating session...')
+    
     // Create user session
     const user = createUserSession()
     const sessionToken = generateSessionToken(user)
+    
+    console.log('🔑 Session created:', {
+      userId: user.id,
+      userEmail: user.email,
+      tokenLength: sessionToken.length
+    })
 
     // Create response with session token in cookie
     const response = NextResponse.json({
@@ -54,20 +72,7 @@ export async function POST(request: NextRequest) {
 
     // Set HTTP-only cookie with session token
     const isProduction = process.env.NODE_ENV === 'production'
-    
-    // Debug logging
-    console.log('🍪 COOKIE DEBUG - Setting admin-session cookie:', {
-      tokenLength: sessionToken.length,
-      tokenPreview: sessionToken.substring(0, 30) + '...',
-      isProduction,
-      cookieSettings: {
-        httpOnly: true,
-        secure: isProduction,
-        sameSite: 'lax',
-        path: '/',
-        maxAge: 7 * 24 * 60 * 60,
-      }
-    })
+    console.log('🍪 Setting cookie - Production mode:', isProduction)
     
     response.cookies.set('admin-session', sessionToken, {
       httpOnly: true,
@@ -77,11 +82,11 @@ export async function POST(request: NextRequest) {
       maxAge: 7 * 24 * 60 * 60, // 7 days
     })
 
-    console.log('✅ LOGIN SUCCESS - Cookie should be set')
+    console.log('✅ LOGIN COMPLETE - Session cookie set successfully')
     return response
 
   } catch (error) {
-    console.error('Login error:', error)
+    console.error('💥 LOGIN ERROR:', error)
     return NextResponse.json(
       { 
         success: false, 

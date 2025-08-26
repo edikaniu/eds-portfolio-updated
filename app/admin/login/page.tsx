@@ -66,11 +66,7 @@ export default function AdminLoginPage() {
     setError('')
 
     try {
-      console.log('Attempting login with:', { 
-        email, 
-        hasCsrfToken: !!csrfToken,
-        csrfTokenLength: csrfToken.length 
-      })
+      console.log('🚀 STARTING LOGIN ATTEMPT:', { email })
 
       const response = await fetch('/api/admin/auth/login', {
         method: 'POST',
