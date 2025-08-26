@@ -1,7 +1,7 @@
 // Simplified authentication system for quick deployment
 export const ADMIN_CREDENTIALS = {
-  email: process.env.ADMIN_EMAIL || 'admin@edikanudoibuot.com',
-  password: process.env.ADMIN_PASSWORD || 'admin123456'
+  email: (process.env.ADMIN_EMAIL || 'admin@edikanudoibuot.com').trim(),
+  password: (process.env.ADMIN_PASSWORD || 'admin123456').trim()
 }
 
 export interface SimpleUser {
