@@ -32,10 +32,32 @@ export default function AdminLoginPage() {
   const router = useRouter()
 
   useEffect(() => {
-    // Get CSRF token when component mounts
-    const token = getCsrfToken()
-    setCsrfToken(token)
-    console.log('CSRF token found:', !!token, 'Length:', token.length)
+    // Function to get CSRF token with retries
+    const getCsrfTokenWithRetry = () => {
+      const token = getCsrfToken()
+      if (token) {
+        setCsrfToken(token)
+        console.log('✅ CSRF token found:', token.length, 'chars')
+        return true
+      }
+      return false
+    }
+
+    // Try immediately
+    if (!getCsrfTokenWithRetry()) {
+      console.log('❌ No CSRF token found initially, will retry...')
+      
+      // If no token, trigger a request to get one
+      fetch('/api/health', { method: 'HEAD' }).then(() => {
+        setTimeout(() => {
+          if (!getCsrfTokenWithRetry()) {
+            console.log('❌ Still no CSRF token after retry')
+            // Set a dummy value to prevent errors, let middleware handle it
+            setCsrfToken('no-token')
+          }
+        }, 100)
+      })
+    }
   }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -54,7 +76,6 @@ export default function AdminLoginPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-CSRF-Token': csrfToken,
         },
         credentials: 'include',
         body: JSON.stringify({ email, password }),

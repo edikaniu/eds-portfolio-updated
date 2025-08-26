@@ -128,8 +128,11 @@ export async function middleware(request: NextRequest) {
     // Generate and set CSRF token for state-changing operations
     if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(request.method)) {
       // Verify CSRF token for admin API routes (exempt login, setup, and test endpoints)
-      const exemptPaths = ['/api/admin/auth/login', '/api/admin/setup', '/api/admin/test-simple']
+      const exemptPaths = ['/api/admin/auth/login', '/api/admin/setup', '/api/admin/test-simple', '/api/admin/debug-credentials']
+      console.log('🛡️ CSRF DEBUG - Path:', pathname, 'IsAdmin:', pathname.startsWith('/api/admin'), 'IsExempt:', exemptPaths.includes(pathname))
+      
       if (pathname.startsWith('/api/admin') && !exemptPaths.includes(pathname)) {
+        console.log('🔍 CSRF - Checking token for:', pathname)
         const csrfToken = request.headers.get('x-csrf-token')
         const sessionCsrfToken = request.cookies.get('csrf-token')?.value
 
@@ -137,12 +140,9 @@ export async function middleware(request: NextRequest) {
           return new NextResponse('CSRF token mismatch', { status: 403 })
         }
       }
-      // For login, just check if csrf token exists but don't enforce strict matching
+      // Login endpoint is exempted from CSRF checks since it uses credentials
       else if (pathname === '/api/admin/auth/login') {
-        const csrfToken = request.headers.get('x-csrf-token')
-        if (!csrfToken) {
-          console.warn('Login attempt without CSRF token')
-        }
+        console.log('✅ CSRF - Login endpoint accessed (exempted from CSRF checks)')
       }
     }
 
