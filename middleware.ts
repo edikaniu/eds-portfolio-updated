@@ -168,7 +168,7 @@ export async function middleware(request: NextRequest) {
       try {
         const payload = verifyToken(token)
         if (payload && payload.role === 'admin') {
-          return NextResponse.redirect(new URL('/admin', request.url))
+          return NextResponse.redirect(new URL('/admin/dashboard', request.url))
         }
       } catch {
         // Token is invalid, continue to login page
