@@ -85,9 +85,8 @@ export async function middleware(request: NextRequest) {
     "frame-ancestors 'none';"
   )
 
-  // TEMPORARILY DISABLED - Admin authentication middleware
-  // This is disabled for debugging purposes to isolate the login issue
-  if (false && pathname.startsWith('/admin') && pathname !== '/admin/login' && pathname !== '/admin/debug') {
+  // Admin authentication middleware - re-enabled
+  if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
     const token = request.cookies.get('admin-token')?.value
 
     if (!token) {
@@ -99,11 +98,6 @@ export async function middleware(request: NextRequest) {
       const payload = verifyToken(token)
       if (!payload || payload.role !== 'admin') {
         // Invalid token or not admin, redirect to login
-        console.error('Middleware auth failed:', { 
-          hasPayload: !!payload, 
-          role: payload?.role, 
-          tokenLength: token?.length 
-        })
         const response = NextResponse.redirect(new URL('/admin/login', request.url))
         response.cookies.delete('admin-token')
         return response
@@ -124,8 +118,8 @@ export async function middleware(request: NextRequest) {
   if (pathname.startsWith('/api')) {
     // Generate and set CSRF token for state-changing operations
     if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(request.method)) {
-      // Verify CSRF token for admin API routes (but be more lenient for login and setup)
-      const exemptPaths = ['/api/admin/auth/login', '/api/admin/setup', '/api/admin/test-auth', '/api/admin/reset-password', '/api/admin/debug-auth']
+      // Verify CSRF token for admin API routes (exempt login and setup)
+      const exemptPaths = ['/api/admin/auth/login', '/api/admin/setup']
       if (pathname.startsWith('/api/admin') && !exemptPaths.includes(pathname)) {
         const csrfToken = request.headers.get('x-csrf-token')
         const sessionCsrfToken = request.cookies.get('csrf-token')?.value
@@ -162,9 +156,8 @@ export async function middleware(request: NextRequest) {
     })
   }
 
-  // TEMPORARILY DISABLED - Login page redirect check
-  // This is disabled for debugging purposes to isolate the login issue
-  if (false && pathname === '/admin/login') {
+  // Login page redirect check - redirect authenticated users to dashboard
+  if (pathname === '/admin/login') {
     const token = request.cookies.get('admin-token')?.value
     if (token) {
       try {

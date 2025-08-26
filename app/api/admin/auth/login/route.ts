@@ -9,10 +9,14 @@ const LoginSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    console.log('Login attempt starting...')
     const body = await request.json()
+    console.log('Body parsed:', { email: body.email, hasPassword: !!body.password })
+    
     const validationResult = LoginSchema.safeParse(body)
 
     if (!validationResult.success) {
+      console.log('Validation failed:', validationResult.error.errors)
       return NextResponse.json(
         { 
           success: false, 
@@ -24,9 +28,12 @@ export async function POST(request: NextRequest) {
     }
 
     const { email, password } = validationResult.data
+    console.log('Validation passed, attempting authentication...')
 
     // Authenticate admin user
     const adminUser = await authenticateAdmin(email, password)
+    console.log('Authentication result:', !!adminUser)
+    
     if (!adminUser) {
       return NextResponse.json(
         { 
@@ -37,8 +44,10 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    console.log('Generating JWT token...')
     // Generate JWT token
     const token = generateToken(adminUser)
+    console.log('Token generated, length:', token.length)
 
     // Create response with token in cookie
     const response = NextResponse.json({
@@ -49,50 +58,33 @@ export async function POST(request: NextRequest) {
         email: adminUser.email,
         name: adminUser.name,
         role: adminUser.role
-      },
-      debug: {
-        tokenGenerated: true,
-        cookieWillBeSet: true,
-        environment: process.env.NODE_ENV
       }
     })
 
-    // Set HTTP-only cookie with token using both methods
-    response.cookies.set('admin-token', token, {
+    // Set HTTP-only cookie with token - optimized for Vercel
+    const isProduction = process.env.NODE_ENV === 'production'
+    console.log('Setting cookie, production mode:', isProduction)
+    const cookieOptions = {
       httpOnly: true,
-      secure: true, // Always use secure in production (Vercel uses HTTPS)
-      sameSite: 'lax',
+      secure: isProduction, // Only secure in production HTTPS
+      sameSite: 'lax' as const,
       path: '/',
-      maxAge: 7 * 24 * 60 * 60, // 7 days
-      domain: undefined // Let browser determine the domain
-    })
+      maxAge: 7 * 24 * 60 * 60, // 7 days in seconds
+    }
     
-    // Backup: Also set via Set-Cookie header
-    const cookieValue = `admin-token=${token}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${7 * 24 * 60 * 60}`
-    response.headers.set('Set-Cookie', cookieValue)
-    
-    // Debug: Log cookie setting attempt
-    console.log('🍪 Setting admin-token cookie:', {
-      tokenLength: token.length,
-      tokenPreview: `${token.substring(0, 20)}...`,
-      cookieSettings: {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'lax',
-        path: '/',
-        maxAge: 7 * 24 * 60 * 60
-      },
-      setCookieHeader: cookieValue
-    })
+    response.cookies.set('admin-token', token, cookieOptions)
+    console.log('Cookie set successfully')
 
     return response
 
   } catch (error) {
-    console.error('Login error:', error)
+    console.error('Login error details:', error)
+    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace')
     return NextResponse.json(
       { 
         success: false, 
-        message: 'Internal server error' 
+        message: 'Internal server error',
+        debug: process.env.NODE_ENV === 'development' ? error instanceof Error ? error.message : String(error) : undefined
       },
       { status: 500 }
     )
