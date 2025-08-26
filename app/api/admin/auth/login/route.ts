@@ -70,34 +70,31 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    // Set HTTP-only cookie with session token - FIXED FOR VERCEL HTTPS
+    // Environment detection
     const isProduction = process.env.NODE_ENV === 'production'
     const isVercel = !!process.env.VERCEL
     
     console.log('🍪 Setting cookie - Environment:', {
       isProduction,
       isVercel,
-      url: process.env.VERCEL_URL || 'local'
+      nodeEnv: process.env.NODE_ENV,
+      vercelUrl: process.env.VERCEL_URL || 'local'
     })
     
-    // Fixed cookie configuration for Vercel HTTPS
+    // FIXED: Proper cookie configuration for Vercel deployment
     const cookieConfig = {
       httpOnly: true,
-      secure: true, // Always true for Vercel (HTTPS)
-      sameSite: 'lax' as const,
+      secure: isProduction, // Only secure in production (not always true)
+      sameSite: 'strict' as const, // Changed from lax to strict for better auth security
       path: '/',
       maxAge: 7 * 24 * 60 * 60, // 7 days
-      // Don't set domain - let browser handle it
     }
     
+    // Use only Next.js cookie setting (remove duplicate Set-Cookie header)
     response.cookies.set('admin-session', sessionToken, cookieConfig)
     
-    // Also set via Set-Cookie header for compatibility
-    const cookieValue = `admin-session=${sessionToken}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${7 * 24 * 60 * 60}`
-    response.headers.set('Set-Cookie', cookieValue)
-    
     console.log('🍪 Cookie configuration:', cookieConfig)
-    console.log('🍪 Set-Cookie header:', cookieValue)
+    console.log('🍪 Session token length:', sessionToken.length)
 
     console.log('✅ LOGIN COMPLETE - Session cookie set successfully')
     return response

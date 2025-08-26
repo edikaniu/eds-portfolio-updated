@@ -8,57 +8,12 @@ import { Label } from '@/components/ui/label'
 import { Card } from '@/components/ui/card'
 import { AlertCircle, Lock, Mail } from 'lucide-react'
 
-// Helper function to get CSRF token from cookie
-function getCsrfToken(): string {
-  const name = 'csrf-token='
-  const decodedCookie = decodeURIComponent(document.cookie)
-  const cookies = decodedCookie.split(';')
-  
-  for (let cookie of cookies) {
-    let c = cookie.trim()
-    if (c.indexOf(name) === 0) {
-      return c.substring(name.length, c.length)
-    }
-  }
-  return ''
-}
-
 export default function AdminLoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
-  const [csrfToken, setCsrfToken] = useState('')
   const router = useRouter()
-
-  useEffect(() => {
-    // Function to get CSRF token with retries
-    const getCsrfTokenWithRetry = () => {
-      const token = getCsrfToken()
-      if (token) {
-        setCsrfToken(token)
-        console.log('✅ CSRF token found:', token.length, 'chars')
-        return true
-      }
-      return false
-    }
-
-    // Try immediately
-    if (!getCsrfTokenWithRetry()) {
-      console.log('❌ No CSRF token found initially, will retry...')
-      
-      // If no token, trigger a request to get one
-      fetch('/api/health', { method: 'HEAD' }).then(() => {
-        setTimeout(() => {
-          if (!getCsrfTokenWithRetry()) {
-            console.log('❌ Still no CSRF token after retry')
-            // Set a dummy value to prevent errors, let middleware handle it
-            setCsrfToken('no-token')
-          }
-        }, 100)
-      })
-    }
-  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -90,30 +45,10 @@ export default function AdminLoginPage() {
         console.log('✅ Login API call successful!')
         console.log('📋 Login response:', data)
         
-        // Check if cookies are being set
-        console.log('🍪 All cookies BEFORE redirect:', document.cookie)
-        
-        // Wait a moment for cookies to be set, then check again
-        setTimeout(() => {
-          console.log('🍪 All cookies AFTER 100ms delay:', document.cookie)
-          
-          // Check specifically for our admin-session cookie
-          const hasAdminCookie = document.cookie.includes('admin-session')
-          console.log('🔍 Admin session cookie found:', hasAdminCookie)
-          
-          if (hasAdminCookie) {
-            console.log('✅ Cookie verified! Redirecting to dashboard...')
-            // Use window.location.href for reliable redirect
-            window.location.href = '/admin/dashboard'
-          } else {
-            console.log('❌ No admin session cookie found - checking manually...')
-            // Try again after another delay
-            setTimeout(() => {
-              console.log('🍪 Final cookie check:', document.cookie)
-              window.location.href = '/admin/dashboard'
-            }, 1000)
-          }
-        }, 100)
+        // FIXED: Use router.push for proper Next.js navigation
+        // The cookie should be set immediately by the server response
+        console.log('🚀 Redirecting to dashboard using Next.js router...')
+        router.push('/admin/dashboard')
       } else {
         console.error('❌ Login failed:', data.message)
         setError(data.message || 'Login failed')

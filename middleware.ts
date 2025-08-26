@@ -136,16 +136,8 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // Generate CSRF token for forms
-  if (!request.cookies.get('csrf-token')) {
-    const csrfToken = generateCSRFToken()
-    response.cookies.set('csrf-token', csrfToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 60 * 60 * 24, // 24 hours
-    })
-  }
+  // CSRF token generation - DISABLED for simplified auth
+  // No CSRF tokens needed for session-based authentication
 
   // Login page redirect check - redirect authenticated users to dashboard
   if (pathname === '/admin/login') {

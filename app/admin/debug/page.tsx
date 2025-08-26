@@ -22,7 +22,7 @@ export default function AdminDebugPage() {
       console.log('Debug info:', data)
     } catch (error) {
       console.error('Debug check failed:', error)
-      setDebugInfo({ error: error.message })
+      setDebugInfo({ error: error instanceof Error ? error.message : 'Unknown error' })
     } finally {
       setLoading(false)
     }
@@ -38,7 +38,7 @@ export default function AdminDebugPage() {
       alert(`Me endpoint: ${JSON.stringify(data, null, 2)}`)
     } catch (error) {
       console.error('Me endpoint failed:', error)
-      alert(`Me endpoint error: ${error.message}`)
+      alert(`Me endpoint error: ${error instanceof Error ? error.message : 'Unknown error'}`)
     }
   }
 
