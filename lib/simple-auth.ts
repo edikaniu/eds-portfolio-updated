@@ -1,7 +1,8 @@
 // Simplified authentication system for quick deployment
+// Cache bust: 2025-08-26T18:45:00Z - Force rebuild to apply .trim() fix
 export const ADMIN_CREDENTIALS = {
-  email: (process.env.ADMIN_EMAIL || 'admin@edikanudoibuot.com').trim(),
-  password: (process.env.ADMIN_PASSWORD || 'admin123456').trim()
+  email: (process.env.ADMIN_EMAIL || 'admin@edikanudoibuot.com').replace(/[\r\n\t]/g, '').trim(),
+  password: (process.env.ADMIN_PASSWORD || 'admin123456').replace(/[\r\n\t]/g, '').trim()
 }
 
 export interface SimpleUser {
