@@ -57,13 +57,32 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    // Set HTTP-only cookie with token
+    // Set HTTP-only cookie with token using both methods
     response.cookies.set('admin-token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: true, // Always use secure in production (Vercel uses HTTPS)
       sameSite: 'lax',
       path: '/',
-      maxAge: 7 * 24 * 60 * 60 // 7 days
+      maxAge: 7 * 24 * 60 * 60, // 7 days
+      domain: undefined // Let browser determine the domain
+    })
+    
+    // Backup: Also set via Set-Cookie header
+    const cookieValue = `admin-token=${token}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${7 * 24 * 60 * 60}`
+    response.headers.set('Set-Cookie', cookieValue)
+    
+    // Debug: Log cookie setting attempt
+    console.log('🍪 Setting admin-token cookie:', {
+      tokenLength: token.length,
+      tokenPreview: `${token.substring(0, 20)}...`,
+      cookieSettings: {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'lax',
+        path: '/',
+        maxAge: 7 * 24 * 60 * 60
+      },
+      setCookieHeader: cookieValue
     })
 
     return response
