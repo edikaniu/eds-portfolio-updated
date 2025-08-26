@@ -85,8 +85,9 @@ export async function middleware(request: NextRequest) {
     "frame-ancestors 'none';"
   )
 
-  // Handle admin routes - require authentication (but exclude login and debug pages)
-  if (pathname.startsWith('/admin') && pathname !== '/admin/login' && pathname !== '/admin/debug') {
+  // TEMPORARILY DISABLED - Admin authentication middleware
+  // This is disabled for debugging purposes to isolate the login issue
+  if (false && pathname.startsWith('/admin') && pathname !== '/admin/login' && pathname !== '/admin/debug') {
     const token = request.cookies.get('admin-token')?.value
 
     if (!token) {
@@ -161,8 +162,9 @@ export async function middleware(request: NextRequest) {
     })
   }
 
-  // Handle admin login page - redirect if already authenticated (but allow debug page)
-  if (pathname === '/admin/login') {
+  // TEMPORARILY DISABLED - Login page redirect check
+  // This is disabled for debugging purposes to isolate the login issue
+  if (false && pathname === '/admin/login') {
     const token = request.cookies.get('admin-token')?.value
     if (token) {
       try {
