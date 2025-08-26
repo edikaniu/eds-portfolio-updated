@@ -1,27 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { verifyToken } from '@/lib/auth'
+import { verifySessionToken } from '@/lib/simple-auth'
 
 export async function GET(request: NextRequest) {
   try {
-    const token = request.cookies.get('admin-token')?.value
+    const sessionToken = request.cookies.get('admin-session')?.value
 
-    if (!token) {
+    if (!sessionToken) {
       return NextResponse.json(
         { 
           success: false, 
-          message: 'No authentication token found'
+          message: 'No authentication session found'
         },
         { status: 401 }
       )
     }
 
-    const user = verifyToken(token)
+    const user = verifySessionToken(sessionToken)
 
     if (!user) {
       return NextResponse.json(
         { 
           success: false, 
-          message: 'Invalid or expired token'
+          message: 'Invalid or expired session'
         },
         { status: 401 }
       )

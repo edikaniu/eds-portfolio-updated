@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
-import { authenticateAdmin, generateToken } from '@/lib/auth'
+import { validateCredentials, createUserSession, generateSessionToken } from '@/lib/simple-auth'
 
 const LoginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -9,14 +9,10 @@ const LoginSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('Login attempt starting...')
     const body = await request.json()
-    console.log('Body parsed:', { email: body.email, hasPassword: !!body.password })
-    
     const validationResult = LoginSchema.safeParse(body)
 
     if (!validationResult.success) {
-      console.log('Validation failed:', validationResult.error.errors)
       return NextResponse.json(
         { 
           success: false, 
@@ -28,13 +24,9 @@ export async function POST(request: NextRequest) {
     }
 
     const { email, password } = validationResult.data
-    console.log('Validation passed, attempting authentication...')
 
-    // Authenticate admin user
-    const adminUser = await authenticateAdmin(email, password)
-    console.log('Authentication result:', !!adminUser)
-    
-    if (!adminUser) {
+    // Validate credentials using environment variables
+    if (!validateCredentials(email, password)) {
       return NextResponse.json(
         { 
           success: false, 
@@ -44,47 +36,40 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    console.log('Generating JWT token...')
-    // Generate JWT token
-    const token = generateToken(adminUser)
-    console.log('Token generated, length:', token.length)
+    // Create user session
+    const user = createUserSession()
+    const sessionToken = generateSessionToken(user)
 
-    // Create response with token in cookie
+    // Create response with session token in cookie
     const response = NextResponse.json({
       success: true,
       message: 'Login successful',
       user: {
-        id: adminUser.id,
-        email: adminUser.email,
-        name: adminUser.name,
-        role: adminUser.role
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role
       }
     })
 
-    // Set HTTP-only cookie with token - optimized for Vercel
+    // Set HTTP-only cookie with session token
     const isProduction = process.env.NODE_ENV === 'production'
-    console.log('Setting cookie, production mode:', isProduction)
-    const cookieOptions = {
+    response.cookies.set('admin-session', sessionToken, {
       httpOnly: true,
-      secure: isProduction, // Only secure in production HTTPS
-      sameSite: 'lax' as const,
+      secure: isProduction,
+      sameSite: 'lax',
       path: '/',
-      maxAge: 7 * 24 * 60 * 60, // 7 days in seconds
-    }
-    
-    response.cookies.set('admin-token', token, cookieOptions)
-    console.log('Cookie set successfully')
+      maxAge: 7 * 24 * 60 * 60, // 7 days
+    })
 
     return response
 
   } catch (error) {
-    console.error('Login error details:', error)
-    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace')
+    console.error('Login error:', error)
     return NextResponse.json(
       { 
         success: false, 
-        message: 'Internal server error',
-        debug: process.env.NODE_ENV === 'development' ? error instanceof Error ? error.message : String(error) : undefined
+        message: 'Internal server error'
       },
       { status: 500 }
     )

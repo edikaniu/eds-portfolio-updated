@@ -53,7 +53,14 @@
       "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Add comprehensive debugging to auth/me endpoint\n\n- Added detailed logging for cookies, token, and verification process\n- Will help identify if token is missing or verification is failing\n- Debug logs will show in Vercel function logs for troubleshooting\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")",
       "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Fix login cookie setting issues with enhanced debugging\n\n- Made cookie secure setting explicit for production HTTPS\n- Added backup Set-Cookie header method for compatibility\n- Added comprehensive debug logging for cookie setting process\n- This should resolve the ''No authentication token found'' issue\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")",
       "WebFetch(domain:portfolio-main-ten-xi.vercel.app)",
-      "WebFetch(domain:portfolio-main-ten-xi.vercel.app)"
+      "WebFetch(domain:portfolio-main-ten-xi.vercel.app)",
+      "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Fix admin authentication system and re-enable security\n\n- Optimized cookie configuration for Vercel deployment\n- Re-enabled middleware authentication after debugging\n- Cleaned up debug logging from auth endpoints  \n- Added temporary debug logging to identify login issues\n- Removed debug endpoints from CSRF exemptions\n- Authentication middleware now properly protects admin routes\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")",
+      "Bash(MSYS_NO_PATHCONV=1 git add app/api/admin/test-simple/route.ts)",
+      "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Add simple auth test endpoint for debugging\")",
+      "Bash(MSYS_NO_PATHCONV=1 git add middleware.ts)",
+      "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Add test endpoint to CSRF exemptions\")",
+      "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Change test endpoint to GET to avoid CSRF\")",
+      "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Temporarily disable admin auth middleware for testing\")"
     ],
     "deny": [],
     "ask": [],

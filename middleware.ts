@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { verifyToken } from '@/lib/auth'
+import { verifySessionToken } from '@/lib/simple-auth'
 
 // Rate limiting store (in production, use Redis or database)
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>()
@@ -85,31 +85,31 @@ export async function middleware(request: NextRequest) {
     "frame-ancestors 'none';"
   )
 
-  // Admin authentication middleware - temporarily disabled for testing
-  if (false && pathname.startsWith('/admin') && pathname !== '/admin/login') {
-    const token = request.cookies.get('admin-token')?.value
+  // Admin authentication middleware - simplified session-based
+  if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
+    const sessionToken = request.cookies.get('admin-session')?.value
 
-    if (!token) {
-      // No token, redirect to login
+    if (!sessionToken) {
+      // No session, redirect to login
       return NextResponse.redirect(new URL('/admin/login', request.url))
     }
 
     try {
-      const payload = verifyToken(token)
-      if (!payload || payload.role !== 'admin') {
-        // Invalid token or not admin, redirect to login
+      const user = verifySessionToken(sessionToken)
+      if (!user || user.role !== 'admin') {
+        // Invalid session or not admin, redirect to login
         const response = NextResponse.redirect(new URL('/admin/login', request.url))
-        response.cookies.delete('admin-token')
+        response.cookies.delete('admin-session')
         return response
       }
 
-      // Token is valid, allow access
-      response.headers.set('X-User-ID', payload.id || 'unknown')
-      response.headers.set('X-User-Role', payload.role || 'admin')
+      // Session is valid, allow access
+      response.headers.set('X-User-ID', user.id)
+      response.headers.set('X-User-Role', user.role)
     } catch (error) {
-      console.error('Token verification failed:', error)
+      console.error('Session verification failed:', error)
       const response = NextResponse.redirect(new URL('/admin/login', request.url))
-      response.cookies.delete('admin-token')
+      response.cookies.delete('admin-session')
       return response
     }
   }
@@ -158,15 +158,15 @@ export async function middleware(request: NextRequest) {
 
   // Login page redirect check - redirect authenticated users to dashboard
   if (pathname === '/admin/login') {
-    const token = request.cookies.get('admin-token')?.value
-    if (token) {
+    const sessionToken = request.cookies.get('admin-session')?.value
+    if (sessionToken) {
       try {
-        const payload = verifyToken(token)
-        if (payload && payload.role === 'admin') {
+        const user = verifySessionToken(sessionToken)
+        if (user && user.role === 'admin') {
           return NextResponse.redirect(new URL('/admin/dashboard', request.url))
         }
       } catch {
-        // Token is invalid, continue to login page
+        // Session is invalid, continue to login page
       }
     }
   }
