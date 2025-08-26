@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -8,12 +8,35 @@ import { Label } from '@/components/ui/label'
 import { Card } from '@/components/ui/card'
 import { AlertCircle, Lock, Mail } from 'lucide-react'
 
+// Helper function to get CSRF token from cookie
+function getCsrfToken(): string {
+  const name = 'csrf-token='
+  const decodedCookie = decodeURIComponent(document.cookie)
+  const cookies = decodedCookie.split(';')
+  
+  for (let cookie of cookies) {
+    let c = cookie.trim()
+    if (c.indexOf(name) === 0) {
+      return c.substring(name.length, c.length)
+    }
+  }
+  return ''
+}
+
 export default function AdminLoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+  const [csrfToken, setCsrfToken] = useState('')
   const router = useRouter()
+
+  useEffect(() => {
+    // Get CSRF token when component mounts
+    const token = getCsrfToken()
+    setCsrfToken(token)
+    console.log('CSRF token found:', !!token, 'Length:', token.length)
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -21,13 +44,19 @@ export default function AdminLoginPage() {
     setError('')
 
     try {
-      console.log('Attempting login with:', { email })
+      console.log('Attempting login with:', { 
+        email, 
+        hasCsrfToken: !!csrfToken,
+        csrfTokenLength: csrfToken.length 
+      })
 
       const response = await fetch('/api/admin/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'X-CSRF-Token': csrfToken,
         },
+        credentials: 'include',
         body: JSON.stringify({ email, password }),
       })
 
