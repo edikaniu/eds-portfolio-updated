@@ -70,17 +70,34 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    // Set HTTP-only cookie with session token
+    // Set HTTP-only cookie with session token - FIXED FOR VERCEL HTTPS
     const isProduction = process.env.NODE_ENV === 'production'
-    console.log('🍪 Setting cookie - Production mode:', isProduction)
+    const isVercel = !!process.env.VERCEL
     
-    response.cookies.set('admin-session', sessionToken, {
+    console.log('🍪 Setting cookie - Environment:', {
+      isProduction,
+      isVercel,
+      url: process.env.VERCEL_URL || 'local'
+    })
+    
+    // Fixed cookie configuration for Vercel HTTPS
+    const cookieConfig = {
       httpOnly: true,
-      secure: isProduction,
-      sameSite: 'lax',
+      secure: true, // Always true for Vercel (HTTPS)
+      sameSite: 'lax' as const,
       path: '/',
       maxAge: 7 * 24 * 60 * 60, // 7 days
-    })
+      // Don't set domain - let browser handle it
+    }
+    
+    response.cookies.set('admin-session', sessionToken, cookieConfig)
+    
+    // Also set via Set-Cookie header for compatibility
+    const cookieValue = `admin-session=${sessionToken}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${7 * 24 * 60 * 60}`
+    response.headers.set('Set-Cookie', cookieValue)
+    
+    console.log('🍪 Cookie configuration:', cookieConfig)
+    console.log('🍪 Set-Cookie header:', cookieValue)
 
     console.log('✅ LOGIN COMPLETE - Session cookie set successfully')
     return response

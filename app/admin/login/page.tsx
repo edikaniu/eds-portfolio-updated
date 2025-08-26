@@ -87,17 +87,35 @@ export default function AdminLoginPage() {
       console.log('Login response data:', data)
 
       if (data.success) {
-        console.log('Login successful, redirecting to dashboard...')
-        console.log('Checking cookies after login...')
-        console.log('All cookies:', document.cookie)
+        console.log('✅ Login API call successful!')
+        console.log('📋 Login response:', data)
         
-        // Give a longer delay to ensure cookie is set properly
+        // Check if cookies are being set
+        console.log('🍪 All cookies BEFORE redirect:', document.cookie)
+        
+        // Wait a moment for cookies to be set, then check again
         setTimeout(() => {
-          console.log('Initiating redirect to dashboard...')
-          window.location.href = '/admin/dashboard'
-        }, 500)
+          console.log('🍪 All cookies AFTER 100ms delay:', document.cookie)
+          
+          // Check specifically for our admin-session cookie
+          const hasAdminCookie = document.cookie.includes('admin-session')
+          console.log('🔍 Admin session cookie found:', hasAdminCookie)
+          
+          if (hasAdminCookie) {
+            console.log('✅ Cookie verified! Redirecting to dashboard...')
+            // Use window.location.href for reliable redirect
+            window.location.href = '/admin/dashboard'
+          } else {
+            console.log('❌ No admin session cookie found - checking manually...')
+            // Try again after another delay
+            setTimeout(() => {
+              console.log('🍪 Final cookie check:', document.cookie)
+              window.location.href = '/admin/dashboard'
+            }, 1000)
+          }
+        }, 100)
       } else {
-        console.error('Login failed:', data.message)
+        console.error('❌ Login failed:', data.message)
         setError(data.message || 'Login failed')
       }
     } catch (error) {
