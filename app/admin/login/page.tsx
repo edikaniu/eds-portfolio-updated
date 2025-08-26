@@ -42,11 +42,14 @@ export default function AdminLoginPage() {
 
       if (data.success) {
         console.log('Login successful, redirecting to dashboard...')
-        // Give a short delay to ensure cookie is set
+        console.log('Checking cookies after login...')
+        console.log('All cookies:', document.cookie)
+        
+        // Give a longer delay to ensure cookie is set properly
         setTimeout(() => {
-          router.push('/admin/dashboard')
-          router.refresh()
-        }, 100)
+          console.log('Initiating redirect to dashboard...')
+          window.location.href = '/admin/dashboard'
+        }, 500)
       } else {
         console.error('Login failed:', data.message)
         setError(data.message || 'Login failed')

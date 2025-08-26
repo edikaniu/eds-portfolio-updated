@@ -39,7 +39,8 @@
       "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Add debug endpoint for admin authentication testing\")",
       "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Add test-auth to CSRF exemptions\")",
       "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Add password reset endpoint for admin debugging\")",
-      "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Improve admin login form with better error handling and debugging\")"
+      "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Improve admin login form with better error handling and debugging\")",
+      "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Fix login redirect and cookie setting issues\n\n- Changed redirect from router.push to window.location.href for reliability\n- Added explicit cookie path setting\n- Increased redirect delay to ensure cookie is set\n- Added debug logging for cookie troubleshooting\")"
     ],
     "deny": [],
     "ask": [],
