@@ -28,7 +28,11 @@
       "Bash(git commit:*)",
       "Bash(git push:*)",
       "Bash(sed:*)",
-      "Bash(MSYS_NO_PATHCONV=1 git add .)"
+      "Bash(MSYS_NO_PATHCONV=1 git add .)",
+      "Bash(MSYS_NO_PATHCONV=1 git commit -m \"$(cat <<''EOF''\nFix TypeScript build errors for quick deployment\n\n- Disabled problematic admin components causing build failures\n- Created minimal stubs for complex systems (analytics, backup, etc)\n- Fixed schema mismatches and type errors\n- Removed performance API and DOM related issues\n- Successfully builds with Next.js 15 and React 19\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(MSYS_NO_PATHCONV=1 git push)",
+      "Bash(curl:*)",
+      "Bash(MSYS_NO_PATHCONV=1 git add -A)"
     ],
     "deny": [],
     "ask": [],

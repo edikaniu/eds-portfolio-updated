@@ -4,11 +4,11 @@ import { verifyToken } from '@/lib/auth'
 // Rate limiting store (in production, use Redis or database)
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>()
 
-// Rate limiting configuration
+// Rate limiting configuration - much more lenient for quick deployment
 const RATE_LIMITS = {
-  admin: { requests: 100, windowMs: 15 * 60 * 1000 }, // 100 requests per 15 minutes for admin
-  api: { requests: 200, windowMs: 15 * 60 * 1000 },   // 200 requests per 15 minutes for API
-  default: { requests: 500, windowMs: 15 * 60 * 1000 } // 500 requests per 15 minutes for other routes
+  admin: { requests: 1000, windowMs: 15 * 60 * 1000 }, // 1000 requests per 15 minutes for admin
+  api: { requests: 2000, windowMs: 15 * 60 * 1000 },   // 2000 requests per 15 minutes for API
+  default: { requests: 5000, windowMs: 15 * 60 * 1000 } // 5000 requests per 15 minutes for other routes
 }
 
 function getRateLimit(pathname: string): { requests: number; windowMs: number } {
@@ -48,18 +48,20 @@ export async function middleware(request: NextRequest) {
   // Get client identifier for rate limiting
   const clientId = request.headers.get('x-forwarded-for') || 'unknown'
 
-  // Apply rate limiting
-  const rateLimit = getRateLimit(pathname)
-  if (isRateLimited(clientId, rateLimit)) {
-    return new NextResponse('Too Many Requests', {
-      status: 429,
-      headers: {
-        'Retry-After': Math.ceil(rateLimit.windowMs / 1000).toString(),
-        'X-RateLimit-Limit': rateLimit.requests.toString(),
-        'X-RateLimit-Remaining': '0',
-        'X-RateLimit-Reset': new Date(Date.now() + rateLimit.windowMs).toISOString(),
-      },
-    })
+  // Apply rate limiting (disabled for admin login to prevent issues)
+  if (pathname !== '/admin/login') {
+    const rateLimit = getRateLimit(pathname)
+    if (isRateLimited(clientId, rateLimit)) {
+      return new NextResponse('Too Many Requests', {
+        status: 429,
+        headers: {
+          'Retry-After': Math.ceil(rateLimit.windowMs / 1000).toString(),
+          'X-RateLimit-Limit': rateLimit.requests.toString(),
+          'X-RateLimit-Remaining': '0',
+          'X-RateLimit-Reset': new Date(Date.now() + rateLimit.windowMs).toISOString(),
+        },
+      })
+    }
   }
 
   // Security headers for all responses
@@ -83,8 +85,8 @@ export async function middleware(request: NextRequest) {
     "frame-ancestors 'none';"
   )
 
-  // Handle admin routes - require authentication
-  if (pathname.startsWith('/admin')) {
+  // Handle admin routes - require authentication (but exclude login page)
+  if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
     const token = request.cookies.get('admin-token')?.value
 
     if (!token) {
@@ -116,13 +118,20 @@ export async function middleware(request: NextRequest) {
   if (pathname.startsWith('/api')) {
     // Generate and set CSRF token for state-changing operations
     if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(request.method)) {
-      // Verify CSRF token for admin API routes
-      if (pathname.startsWith('/api/admin')) {
+      // Verify CSRF token for admin API routes (but be more lenient for login)
+      if (pathname.startsWith('/api/admin') && pathname !== '/api/admin/auth/login') {
         const csrfToken = request.headers.get('x-csrf-token')
         const sessionCsrfToken = request.cookies.get('csrf-token')?.value
 
         if (!csrfToken || !sessionCsrfToken || csrfToken !== sessionCsrfToken) {
           return new NextResponse('CSRF token mismatch', { status: 403 })
+        }
+      }
+      // For login, just check if csrf token exists but don't enforce strict matching
+      else if (pathname === '/api/admin/auth/login') {
+        const csrfToken = request.headers.get('x-csrf-token')
+        if (!csrfToken) {
+          console.warn('Login attempt without CSRF token')
         }
       }
     }

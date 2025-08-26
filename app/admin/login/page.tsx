@@ -21,10 +21,17 @@ export default function AdminLoginPage() {
     setError('')
 
     try {
+      // Get CSRF token from cookie
+      const csrfToken = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('csrf-token='))
+        ?.split('=')[1]
+
       const response = await fetch('/api/admin/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'X-CSRF-Token': csrfToken || '',
         },
         body: JSON.stringify({ email, password }),
       })
