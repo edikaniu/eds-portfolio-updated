@@ -44,7 +44,8 @@
       "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Fix JWT token verification payload mismatch\n\n- Added missing ''id'' and ''name'' fields to JWT token payload in generateToken\n- Ensures proper token verification in middleware authentication\n- Resolves redirect loop issue where users were sent back to login page\n- JWT payload now includes: userId, id, email, name, role for consistency\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")",
       "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Fix async/sync mismatch in middleware verifyToken calls\n\n- Removed incorrect ''await'' keywords from synchronous verifyToken() calls\n- Fixed lines 98 and 164 in middleware.ts where await was used with sync function\n- This resolves the redirect loop issue where users were sent back to login\n- Token verification now works correctly in middleware authentication checks\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")",
       "Bash(grep:*)",
-      "Read(/C:\\c\\Users\\EdikanUdoibuot\\Vibe Coding/**)"
+      "Read(/C:\\c\\Users\\EdikanUdoibuot\\Vibe Coding/**)",
+      "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Fix critical JWT token field mismatch causing login redirect loop\n\n- Fixed verifyToken to use decoded.id first, fallback to decoded.userId\n- Resolves field inconsistency between token generation and verification\n- Added error logging to token verification for debugging\n- Added detailed middleware auth failure logging\n- This should definitively resolve the admin login redirect issue\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")"
     ],
     "deny": [],
     "ask": [],
