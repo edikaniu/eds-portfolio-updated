@@ -119,7 +119,7 @@ export async function middleware(request: NextRequest) {
     // Generate and set CSRF token for state-changing operations
     if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(request.method)) {
       // Verify CSRF token for admin API routes (but be more lenient for login and setup)
-      const exemptPaths = ['/api/admin/auth/login', '/api/admin/setup']
+      const exemptPaths = ['/api/admin/auth/login', '/api/admin/setup', '/api/admin/test-auth']
       if (pathname.startsWith('/api/admin') && !exemptPaths.includes(pathname)) {
         const csrfToken = request.headers.get('x-csrf-token')
         const sessionCsrfToken = request.cookies.get('csrf-token')?.value
