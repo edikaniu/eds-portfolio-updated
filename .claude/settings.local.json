@@ -35,7 +35,8 @@
       "Bash(MSYS_NO_PATHCONV=1 git add -A)",
       "Bash(MSYS_NO_PATHCONV=1 git commit -m \"$(cat <<''EOF''\nFix admin login accessibility and rate limiting issues\n\n- Increased rate limits to prevent \"Too Many Requests\" errors\n- Excluded admin login page from authentication middleware\n- Disabled rate limiting for login page specifically\n- Added CSRF token handling for admin login form\n- Made CSRF validation more lenient for login endpoint\n- Fixed redirect loop issues in middleware\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
       "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Add admin user setup endpoint for database initialization\")",
-      "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Exempt admin setup endpoint from CSRF validation\")"
+      "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Exempt admin setup endpoint from CSRF validation\")",
+      "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Add debug endpoint for admin authentication testing\")"
     ],
     "deny": [],
     "ask": [],
