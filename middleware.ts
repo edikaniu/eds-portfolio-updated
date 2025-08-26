@@ -95,7 +95,7 @@ export async function middleware(request: NextRequest) {
     }
 
     try {
-      const payload = await verifyToken(token)
+      const payload = verifyToken(token)
       if (!payload || payload.role !== 'admin') {
         // Invalid token or not admin, redirect to login
         const response = NextResponse.redirect(new URL('/admin/login', request.url))
@@ -161,7 +161,7 @@ export async function middleware(request: NextRequest) {
     const token = request.cookies.get('admin-token')?.value
     if (token) {
       try {
-        const payload = await verifyToken(token)
+        const payload = verifyToken(token)
         if (payload && payload.role === 'admin') {
           return NextResponse.redirect(new URL('/admin', request.url))
         }

@@ -40,7 +40,8 @@
       "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Add test-auth to CSRF exemptions\")",
       "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Add password reset endpoint for admin debugging\")",
       "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Improve admin login form with better error handling and debugging\")",
-      "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Fix login redirect and cookie setting issues\n\n- Changed redirect from router.push to window.location.href for reliability\n- Added explicit cookie path setting\n- Increased redirect delay to ensure cookie is set\n- Added debug logging for cookie troubleshooting\")"
+      "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Fix login redirect and cookie setting issues\n\n- Changed redirect from router.push to window.location.href for reliability\n- Added explicit cookie path setting\n- Increased redirect delay to ensure cookie is set\n- Added debug logging for cookie troubleshooting\")",
+      "Bash(MSYS_NO_PATHCONV=1 git commit -m \"Fix JWT token verification payload mismatch\n\n- Added missing ''id'' and ''name'' fields to JWT token payload in generateToken\n- Ensures proper token verification in middleware authentication\n- Resolves redirect loop issue where users were sent back to login page\n- JWT payload now includes: userId, id, email, name, role for consistency\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")"
     ],
     "deny": [],
     "ask": [],
