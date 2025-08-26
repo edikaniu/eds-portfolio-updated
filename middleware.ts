@@ -98,6 +98,11 @@ export async function middleware(request: NextRequest) {
       const payload = verifyToken(token)
       if (!payload || payload.role !== 'admin') {
         // Invalid token or not admin, redirect to login
+        console.error('Middleware auth failed:', { 
+          hasPayload: !!payload, 
+          role: payload?.role, 
+          tokenLength: token?.length 
+        })
         const response = NextResponse.redirect(new URL('/admin/login', request.url))
         response.cookies.delete('admin-token')
         return response

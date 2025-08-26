@@ -42,12 +42,13 @@ export function verifyToken(token: string): AdminUser | null {
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as any
     return {
-      id: decoded.userId,
+      id: decoded.id || decoded.userId,
       email: decoded.email,
       name: decoded.name || '',
       role: decoded.role
     }
   } catch (error) {
+    console.error('Token verification error:', error)
     return null
   }
 }
