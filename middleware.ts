@@ -123,9 +123,10 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // Handle API routes - CSRF TEMPORARILY DISABLED FOR AUTHENTICATION DEBUGGING
+  // Handle API routes - CSRF COMPLETELY DISABLED FOR AUTHENTICATION DEBUGGING
+  // Cache bust timestamp: ${new Date().toISOString()}
   if (pathname.startsWith('/api')) {
-    console.log('🔧 API REQUEST:', request.method, pathname, '- CSRF DISABLED FOR DEBUGGING')
+    console.log('🔧 API REQUEST:', request.method, pathname, '- CSRF COMPLETELY DISABLED, NO WARNINGS SHOULD APPEAR')
     
     // Set CORS headers for API routes if needed
     if (pathname.startsWith('/api/public')) {
