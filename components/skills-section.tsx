@@ -133,17 +133,22 @@ export function SkillsSection() {
           fetch('/api/stats')
         ])
 
+        let skillsLoaded = false
+        let toolsLoaded = false
+
         if (skillsRes.ok) {
           const skillsData = await skillsRes.json()
-          if (skillsData.success) {
-            setSkillCategories(skillsData.data || [])
+          if (skillsData.success && skillsData.data && skillsData.data.length > 0) {
+            setSkillCategories(skillsData.data)
+            skillsLoaded = true
           }
         }
 
         if (toolsRes.ok) {
           const toolsData = await toolsRes.json()
-          if (toolsData.success) {
-            setTools(toolsData.data || [])
+          if (toolsData.success && toolsData.data && toolsData.data.length > 0) {
+            setTools(toolsData.data)
+            toolsLoaded = true
           }
         }
 
@@ -157,8 +162,224 @@ export function SkillsSection() {
             })
           }
         }
+
+        // Load fallback data if APIs failed or returned empty data
+        if (!skillsLoaded) {
+          setSkillCategories([
+            {
+              id: '1',
+              title: 'Strategic Leadership',
+              description: 'Leading cross-functional teams and driving organizational growth',
+              color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              skills: [
+                { name: 'Cross-functional Team Leadership', proficiency: 95 },
+                { name: 'Stakeholder Management', proficiency: 92 },
+                { name: 'Budget Management', proficiency: 88 },
+                { name: 'Retention Strategy', proficiency: 90 }
+              ],
+              order: 1,
+              isActive: true
+            },
+            {
+              id: '2',
+              title: 'AI & Marketing Automation',
+              description: 'Leveraging AI and automation for enhanced marketing performance',
+              color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+              skills: [
+                { name: 'Generative AI', proficiency: 94 },
+                { name: 'ChatGPT, Claude, etc', proficiency: 96 },
+                { name: 'Marketing Automation', proficiency: 91 },
+                { name: 'Prompt Engineering', proficiency: 93 }
+              ],
+              order: 2,
+              isActive: true
+            },
+            {
+              id: '3',
+              title: 'Brand & Communications',
+              description: 'Strategic brand positioning and integrated communications',
+              color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+              skills: [
+                { name: 'Brand Strategy', proficiency: 89 },
+                { name: 'Public Relations', proficiency: 87 },
+                { name: 'Content Strategy', proficiency: 92 },
+                { name: 'Crisis Communication', proficiency: 85 }
+              ],
+              order: 3,
+              isActive: true
+            },
+            {
+              id: '4',
+              title: 'Growth Marketing',
+              description: 'Data-driven growth strategies and customer acquisition',
+              color: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+              skills: [
+                { name: 'Growth Marketing', proficiency: 94 },
+                { name: 'GTM Strategy', proficiency: 91 },
+                { name: 'Customer Acquisition', proficiency: 93 },
+                { name: 'Product Positioning', proficiency: 88 }
+              ],
+              order: 4,
+              isActive: true
+            },
+            {
+              id: '5',
+              title: 'Analytics & Performance',
+              description: 'Data analysis, performance tracking, and optimization',
+              color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+              skills: [
+                { name: 'Marketing Analytics', proficiency: 90 },
+                { name: 'Performance Tracking', proficiency: 92 },
+                { name: 'A/B Testing', proficiency: 89 },
+                { name: 'Data Visualization', proficiency: 86 }
+              ],
+              order: 5,
+              isActive: true
+            },
+            {
+              id: '6',
+              title: 'Campaign Management',
+              description: 'End-to-end campaign planning, execution and optimization',
+              color: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+              skills: [
+                { name: 'Integrated Marketing Campaigns', proficiency: 94 },
+                { name: 'Partnership Development', proficiency: 87 },
+                { name: 'Event Marketing', proficiency: 85 },
+                { name: 'CRM', proficiency: 88 }
+              ],
+              order: 6,
+              isActive: true
+            }
+          ])
+        }
+
+        if (!toolsLoaded) {
+          setTools([
+            { id: '1', name: 'HubSpot', description: 'CRM and Marketing Automation', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/hubspot.svg', category: 'Marketing', color: '#ff7a59', order: 1, isActive: true },
+            { id: '2', name: 'Google Analytics', description: 'Web Analytics', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/googleanalytics.svg', category: 'Analytics', color: '#e37400', order: 2, isActive: true },
+            { id: '3', name: 'Meta Ads', description: 'Social Media Advertising', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/meta.svg', category: 'Advertising', color: '#0866ff', order: 3, isActive: true },
+            { id: '4', name: 'LinkedIn Ads', description: 'Professional Network Advertising', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/linkedin.svg', category: 'Advertising', color: '#0a66c2', order: 4, isActive: true },
+            { id: '5', name: 'Google Ads', description: 'Search and Display Advertising', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/googleads.svg', category: 'Advertising', color: '#4285f4', order: 5, isActive: true },
+            { id: '6', name: 'Mailchimp', description: 'Email Marketing Platform', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/mailchimp.svg', category: 'Email Marketing', color: '#ffe01b', order: 6, isActive: true },
+            { id: '7', name: 'Salesforce', description: 'Customer Relationship Management', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/salesforce.svg', category: 'CRM', color: '#00a1e0', order: 7, isActive: true },
+            { id: '8', name: 'Canva', description: 'Graphic Design Platform', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/canva.svg', category: 'Design', color: '#00c4cc', order: 8, isActive: true },
+            { id: '9', name: 'Figma', description: 'Design and Prototyping', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/figma.svg', category: 'Design', color: '#f24e1e', order: 9, isActive: true },
+            { id: '10', name: 'Slack', description: 'Team Communication', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/slack.svg', category: 'Communication', color: '#4a154b', order: 10, isActive: true },
+            { id: '11', name: 'Zapier', description: 'Workflow Automation', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/zapier.svg', category: 'Automation', color: '#ff4a00', order: 11, isActive: true },
+            { id: '12', name: 'WordPress', description: 'Content Management System', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/wordpress.svg', category: 'CMS', color: '#21759b', order: 12, isActive: true },
+            { id: '13', name: 'Hotjar', description: 'User Behavior Analytics', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/hotjar.svg', category: 'Analytics', color: '#fd3a5c', order: 13, isActive: true },
+            { id: '14', name: 'Typeform', description: 'Online Form Builder', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/typeform.svg', category: 'Forms', color: '#262627', order: 14, isActive: true },
+            { id: '15', name: 'Buffer', description: 'Social Media Management', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/buffer.svg', category: 'Social Media', color: '#168eea', order: 15, isActive: true },
+            { id: '16', name: 'Airtable', description: 'Cloud Collaboration Platform', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/airtable.svg', category: 'Productivity', color: '#18bfff', order: 16, isActive: true }
+          ])
+        }
       } catch (error) {
         console.error('Error fetching skills data:', error)
+        // Load comprehensive fallback data
+        setSkillCategories([
+          {
+            id: '1',
+            title: 'Strategic Leadership',
+            description: 'Leading cross-functional teams and driving organizational growth',
+            color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            skills: [
+              { name: 'Cross-functional Team Leadership', proficiency: 95 },
+              { name: 'Stakeholder Management', proficiency: 92 },
+              { name: 'Budget Management', proficiency: 88 },
+              { name: 'Retention Strategy', proficiency: 90 }
+            ],
+            order: 1,
+            isActive: true
+          },
+          {
+            id: '2',
+            title: 'AI & Marketing Automation',
+            description: 'Leveraging AI and automation for enhanced marketing performance',
+            color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+            skills: [
+              { name: 'Generative AI', proficiency: 94 },
+              { name: 'ChatGPT, Claude, etc', proficiency: 96 },
+              { name: 'Marketing Automation', proficiency: 91 },
+              { name: 'Prompt Engineering', proficiency: 93 }
+            ],
+            order: 2,
+            isActive: true
+          },
+          {
+            id: '3',
+            title: 'Brand & Communications',
+            description: 'Strategic brand positioning and integrated communications',
+            color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+            skills: [
+              { name: 'Brand Strategy', proficiency: 89 },
+              { name: 'Public Relations', proficiency: 87 },
+              { name: 'Content Strategy', proficiency: 92 },
+              { name: 'Crisis Communication', proficiency: 85 }
+            ],
+            order: 3,
+            isActive: true
+          },
+          {
+            id: '4',
+            title: 'Growth Marketing',
+            description: 'Data-driven growth strategies and customer acquisition',
+            color: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+            skills: [
+              { name: 'Growth Marketing', proficiency: 94 },
+              { name: 'GTM Strategy', proficiency: 91 },
+              { name: 'Customer Acquisition', proficiency: 93 },
+              { name: 'Product Positioning', proficiency: 88 }
+            ],
+            order: 4,
+            isActive: true
+          },
+          {
+            id: '5',
+            title: 'Analytics & Performance',
+            description: 'Data analysis, performance tracking, and optimization',
+            color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+            skills: [
+              { name: 'Marketing Analytics', proficiency: 90 },
+              { name: 'Performance Tracking', proficiency: 92 },
+              { name: 'A/B Testing', proficiency: 89 },
+              { name: 'Data Visualization', proficiency: 86 }
+            ],
+            order: 5,
+            isActive: true
+          },
+          {
+            id: '6',
+            title: 'Campaign Management',
+            description: 'End-to-end campaign planning, execution and optimization',
+            color: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+            skills: [
+              { name: 'Integrated Marketing Campaigns', proficiency: 94 },
+              { name: 'Partnership Development', proficiency: 87 },
+              { name: 'Event Marketing', proficiency: 85 },
+              { name: 'CRM', proficiency: 88 }
+            ],
+            order: 6,
+            isActive: true
+          }
+        ])
+        setTools([
+          { id: '1', name: 'HubSpot', description: 'CRM and Marketing Automation', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/hubspot.svg', category: 'Marketing', color: '#ff7a59', order: 1, isActive: true },
+          { id: '2', name: 'Google Analytics', description: 'Web Analytics', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/googleanalytics.svg', category: 'Analytics', color: '#e37400', order: 2, isActive: true },
+          { id: '3', name: 'Meta Ads', description: 'Social Media Advertising', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/meta.svg', category: 'Advertising', color: '#0866ff', order: 3, isActive: true },
+          { id: '4', name: 'LinkedIn Ads', description: 'Professional Network Advertising', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/linkedin.svg', category: 'Advertising', color: '#0a66c2', order: 4, isActive: true },
+          { id: '5', name: 'Google Ads', description: 'Search and Display Advertising', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/googleads.svg', category: 'Advertising', color: '#4285f4', order: 5, isActive: true },
+          { id: '6', name: 'Mailchimp', description: 'Email Marketing Platform', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/mailchimp.svg', category: 'Email Marketing', color: '#ffe01b', order: 6, isActive: true },
+          { id: '7', name: 'Salesforce', description: 'Customer Relationship Management', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/salesforce.svg', category: 'CRM', color: '#00a1e0', order: 7, isActive: true },
+          { id: '8', name: 'Canva', description: 'Graphic Design Platform', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/canva.svg', category: 'Design', color: '#00c4cc', order: 8, isActive: true },
+          { id: '9', name: 'Figma', description: 'Design and Prototyping', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/figma.svg', category: 'Design', color: '#f24e1e', order: 9, isActive: true },
+          { id: '10', name: 'Slack', description: 'Team Communication', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/slack.svg', category: 'Communication', color: '#4a154b', order: 10, isActive: true },
+          { id: '11', name: 'Zapier', description: 'Workflow Automation', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/zapier.svg', category: 'Automation', color: '#ff4a00', order: 11, isActive: true },
+          { id: '12', name: 'WordPress', description: 'Content Management System', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/wordpress.svg', category: 'CMS', color: '#21759b', order: 12, isActive: true },
+          { id: '13', name: 'Hotjar', description: 'User Behavior Analytics', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/hotjar.svg', category: 'Analytics', color: '#fd3a5c', order: 13, isActive: true },
+          { id: '14', name: 'Typeform', description: 'Online Form Builder', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/typeform.svg', category: 'Forms', color: '#262627', order: 14, isActive: true },
+          { id: '15', name: 'Buffer', description: 'Social Media Management', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/buffer.svg', category: 'Social Media', color: '#168eea', order: 15, isActive: true },
+          { id: '16', name: 'Airtable', description: 'Cloud Collaboration Platform', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/airtable.svg', category: 'Productivity', color: '#18bfff', order: 16, isActive: true }
+        ])
       } finally {
         setIsLoading(false)
       }

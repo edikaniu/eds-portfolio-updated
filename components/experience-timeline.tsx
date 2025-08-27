@@ -32,7 +32,7 @@ const getExperienceIcon = (iconName: string | null) => {
   return iconMap[iconName || 'calendar'] || <Calendar className="h-4 w-4" />
 }
 
-const experiences = [
+const fallbackExperiences = [
   {
     id: "suretree-marketing-manager",
     title: "Marketing Manager",
@@ -47,8 +47,9 @@ const experiences = [
       "Increased conversion rates by 30% through performance tracking and optimization",
     ],
     metrics: "20% Productivity Boost",
-    icon: <Zap className="h-4 w-4" />,
+    icon: "zap",
     color: "from-primary to-blue-600",
+    order: 1
   },
   {
     id: "household-david-communications",
@@ -63,8 +64,9 @@ const experiences = [
       "Grew social audience by 70,000+ followers in 6 months through engagement optimization",
     ],
     metrics: "80% Brand Growth",
-    icon: <TrendingUp className="h-4 w-4" />,
+    icon: "trending-up",
     color: "from-accent to-purple-600",
+    order: 2
   },
   {
     id: "freelance-marketing-strategist",
@@ -80,8 +82,9 @@ const experiences = [
       "Coordinated with product and engineering teams for seamless marketing execution",
     ],
     metrics: "Multi-Channel Growth",
-    icon: <Target className="h-4 w-4" />,
+    icon: "target",
     color: "from-green-500 to-emerald-600",
+    order: 3
   },
   {
     id: "miva-copywriter",
@@ -97,8 +100,9 @@ const experiences = [
       "Monitored trends and audience behavior to optimize campaign execution",
     ],
     metrics: "50K+ Followers",
-    icon: <TrendingUp className="h-4 w-4" />,
+    icon: "trending-up",
     color: "from-blue-500 to-indigo-600",
+    order: 4
   },
   {
     id: "unilag-bsc",
@@ -114,8 +118,9 @@ const experiences = [
       "Managed campaign budgets while reducing customer acquisition costs (CAC)",
     ],
     metrics: "733% Email Growth",
-    icon: <Zap className="h-4 w-4" />,
+    icon: "zap",
     color: "from-orange-500 to-red-500",
+    order: 5
   },
   {
     id: "unilag-msc",
@@ -131,8 +136,9 @@ const experiences = [
       "Provided strategic marketing consulting to B2B and B2C clients",
     ],
     metrics: "5X ROAS",
-    icon: <Target className="h-4 w-4" />,
+    icon: "target",
     color: "from-purple-500 to-pink-600",
+    order: 6
   },
   {
     id: "digital-strategist",
@@ -148,8 +154,9 @@ const experiences = [
       "Developed brand communications and content strategies for audience engagement",
     ],
     metrics: "500K+ Reach",
-    icon: <TrendingUp className="h-4 w-4" />,
+    icon: "trending-up",
     color: "from-cyan-500 to-blue-600",
+    order: 7
   },
   {
     id: "senior-digital-executive",
@@ -165,8 +172,9 @@ const experiences = [
       "Improved email open rates by 40% and click-through rates by 30%",
     ],
     metrics: "100X ROAS",
-    icon: <Zap className="h-4 w-4" />,
+    icon: "zap",
     color: "from-yellow-500 to-orange-600",
+    order: 8
   },
   {
     id: "digital-marketing-strategist",
@@ -182,8 +190,9 @@ const experiences = [
       "Maximized ROI and brand impact through strategic planning",
     ],
     metrics: "Strategic Growth",
-    icon: <Target className="h-4 w-4" />,
+    icon: "target",
     color: "from-teal-500 to-green-600",
+    order: 9
   },
   {
     id: "masters-sales-marketing",
@@ -198,8 +207,9 @@ const experiences = [
       "International business perspective and global market analysis",
     ],
     metrics: "In Progress",
-    icon: <GraduationCap className="h-4 w-4" />,
+    icon: "graduation-cap",
     color: "from-primary to-blue-600",
+    order: 10
   },
   {
     id: "product-marketing-diploma",
@@ -214,8 +224,9 @@ const experiences = [
       "Developed expertise in product-led growth methodologies",
     ],
     metrics: "Product Marketing",
-    icon: <GraduationCap className="h-4 w-4" />,
+    icon: "graduation-cap",
     color: "from-green-500 to-emerald-600",
+    order: 11
   },
   {
     id: "blockchain-certificate",
@@ -230,8 +241,9 @@ const experiences = [
       "Completed capstone project on blockchain in marketing",
     ],
     metrics: "Blockchain Expert",
-    icon: <GraduationCap className="h-4 w-4" />,
+    icon: "graduation-cap",
     color: "from-blue-500 to-indigo-600",
+    order: 12
   },
   {
     id: "engineering-degree",
@@ -246,8 +258,9 @@ const experiences = [
       "Graduated with focus on systems optimization",
     ],
     metrics: "Engineering Foundation",
-    icon: <GraduationCap className="h-4 w-4" />,
+    icon: "graduation-cap",
     color: "from-gray-500 to-slate-600",
+    order: 13
   },
 ]
 
@@ -263,11 +276,16 @@ export function ExperienceTimeline() {
         const response = await fetch('/api/experience')
         const data = await response.json()
         
-        if (data.success) {
-          setExperiences(data.data || [])
+        if (data.success && data.data && data.data.length > 0) {
+          setExperiences(data.data)
+        } else {
+          // Load fallback experience data
+          setExperiences(fallbackExperiences)
         }
       } catch (error) {
         console.error('Error fetching experience data:', error)
+        // Load fallback experience data
+        setExperiences(fallbackExperiences)
       } finally {
         setIsLoading(false)
       }

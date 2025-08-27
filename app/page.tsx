@@ -103,6 +103,46 @@ async function getProjects() {
         technologies: ['React', 'D3.js', 'Node.js', 'Google Analytics API', 'Chart.js'],
         image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=250&fit=crop&crop=center',
         status: 'Live'
+      },
+      {
+        id: '3',
+        slug: 'email-campaign-optimizer',
+        title: 'Email Campaign Optimizer',
+        description: 'AI-powered email optimization tool that improves open rates and click-through rates using machine learning.',
+        type: 'tool',
+        technologies: ['Python', 'Flask', 'TensorFlow', 'SendGrid API', 'React'],
+        image: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400&h=250&fit=crop&crop=center',
+        status: 'Live'
+      },
+      {
+        id: '4',
+        slug: 'social-media-scheduler',
+        title: 'Social Media Scheduler',
+        description: 'Advanced social media scheduling platform with AI-powered content suggestions and analytics.',
+        type: 'workflow',
+        technologies: ['Vue.js', 'Laravel', 'Redis', 'Twitter API', 'Instagram API'],
+        image: 'https://images.unsplash.com/photo-1611926653458-09294b3142bf?w=400&h=250&fit=crop&crop=center',
+        status: 'In Development'
+      },
+      {
+        id: '5',
+        slug: 'conversion-funnel-analyzer',
+        title: 'Conversion Funnel Analyzer',
+        description: 'Data visualization tool for analyzing customer conversion funnels and identifying optimization opportunities.',
+        type: 'tool',
+        technologies: ['React', 'TypeScript', 'D3.js', 'Node.js', 'MongoDB'],
+        image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=250&fit=crop&crop=center',
+        status: 'Live'
+      },
+      {
+        id: '6',
+        slug: 'lead-scoring-engine',
+        title: 'Lead Scoring Engine',
+        description: 'Machine learning-powered lead scoring system that predicts conversion probability for marketing qualified leads.',
+        type: 'workflow',
+        technologies: ['Python', 'Scikit-learn', 'FastAPI', 'PostgreSQL', 'React'],
+        image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=250&fit=crop&crop=center',
+        status: 'Live'
       }
     ]
   }
