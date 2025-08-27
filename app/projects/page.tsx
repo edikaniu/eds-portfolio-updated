@@ -11,7 +11,8 @@ import {
   ArrowRight, 
   Github,
   ExternalLink,
-  Filter
+  Filter,
+  Target
 } from 'lucide-react'
 import { Navigation } from '@/components/navigation'
 import { Footer } from '@/components/footer'
@@ -21,7 +22,7 @@ interface Project {
   slug: string
   title: string
   description: string
-  type: 'tool' | 'workflow'
+  type: 'tool' | 'workflow' | 'campaign'
   technologies: string[]
   image: string
   githubUrl?: string
@@ -53,58 +54,194 @@ async function getProjects(searchParams: { [key: string]: string | string[] | un
     return data.success ? { projects: data.data, pagination: data.pagination } : { projects: [], pagination: null }
   } catch (error) {
     console.error('Error fetching projects:', error)
-    // Return fallback projects
+    // Return fallback projects with pagination
+    const allProjects = [
+      {
+        id: '1',
+        slug: 'ai-marketing-automation-suite',
+        title: 'AI Marketing Automation Suite',
+        description: 'Comprehensive marketing automation platform leveraging AI for personalized campaigns and lead nurturing.',
+        type: 'workflow',
+        technologies: ['Next.js', 'TypeScript', 'OpenAI API', 'HubSpot API', 'PostgreSQL'],
+        image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=250&fit=crop&crop=center',
+        status: 'Live',
+        githubUrl: 'https://github.com/example/ai-marketing-suite',
+        liveUrl: 'https://ai-marketing-suite.demo.com'
+      },
+      {
+        id: '2',
+        slug: 'growth-analytics-dashboard',
+        title: 'Growth Analytics Dashboard',
+        description: 'Real-time dashboard for tracking marketing performance across multiple channels and campaigns.',
+        type: 'tool',
+        technologies: ['React', 'D3.js', 'Node.js', 'Google Analytics API', 'Chart.js'],
+        image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=250&fit=crop&crop=center',
+        status: 'Live',
+        githubUrl: 'https://github.com/example/growth-dashboard',
+        liveUrl: 'https://growth-dashboard.demo.com'
+      },
+      {
+        id: '3',
+        slug: 'email-campaign-optimizer',
+        title: 'Email Campaign Optimizer',
+        description: 'AI-powered email optimization tool that improves open rates and click-through rates.',
+        type: 'tool',
+        technologies: ['Python', 'Flask', 'TensorFlow', 'SendGrid API', 'React'],
+        image: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400&h=250&fit=crop&crop=center',
+        status: 'Live',
+        githubUrl: 'https://github.com/example/email-optimizer',
+        liveUrl: 'https://email-optimizer.demo.com'
+      },
+      {
+        id: '4',
+        slug: 'social-media-scheduler',
+        title: 'Social Media Scheduler',
+        description: 'Advanced social media scheduling and analytics platform with AI-powered content suggestions.',
+        type: 'workflow',
+        technologies: ['Vue.js', 'Laravel', 'Redis', 'Twitter API', 'Instagram API'],
+        image: 'https://images.unsplash.com/photo-1611926653458-09294b3142bf?w=400&h=250&fit=crop&crop=center',
+        status: 'In Development',
+        githubUrl: 'https://github.com/example/social-scheduler'
+      },
+      {
+        id: '5',
+        slug: 'saas-growth-campaign',
+        title: 'SaaS Growth Campaign',
+        description: 'Multi-channel growth campaign that scaled a B2B SaaS from 100 to 10,000 users through strategic acquisition.',
+        type: 'campaign',
+        technologies: ['Google Ads', 'Facebook Ads', 'LinkedIn Ads', 'HubSpot', 'Mixpanel', 'Intercom'],
+        image: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=400&h=250&fit=crop&crop=center',
+        status: 'Completed',
+        category: 'B2B SaaS'
+      },
+      {
+        id: '6',
+        slug: 'content-automation-workflow',
+        title: 'Content Automation Workflow',
+        description: 'Automated content creation and distribution system that generates and publishes 100+ pieces monthly.',
+        type: 'workflow',
+        technologies: ['OpenAI API', 'Zapier', 'WordPress', 'Buffer', 'Canva API'],
+        image: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=400&h=250&fit=crop&crop=center',
+        status: 'Live',
+        githubUrl: 'https://github.com/example/content-automation',
+        liveUrl: 'https://content-automation.demo.com'
+      },
+      {
+        id: '7',
+        slug: 'lead-scoring-engine',
+        title: 'Lead Scoring Engine',
+        description: 'Machine learning-powered lead scoring system that identifies high-value prospects automatically.',
+        type: 'tool',
+        technologies: ['Python', 'Scikit-learn', 'FastAPI', 'PostgreSQL', 'React'],
+        image: 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=400&h=250&fit=crop&crop=center',
+        status: 'Live',
+        githubUrl: 'https://github.com/example/lead-scoring',
+        liveUrl: 'https://lead-scoring.demo.com'
+      },
+      {
+        id: '8',
+        slug: 'ecommerce-retention-campaign',
+        title: 'E-commerce Retention Campaign',
+        description: 'Customer retention campaign that increased repeat purchase rate by 300% through personalized experiences.',
+        type: 'campaign',
+        technologies: ['Klaviyo', 'Shopify', 'Google Analytics', 'Facebook Pixel', 'Hotjar'],
+        image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=250&fit=crop&crop=center',
+        status: 'Completed',
+        category: 'E-commerce'
+      },
+      {
+        id: '9',
+        slug: 'referral-program-system',
+        title: 'Referral Program System',
+        description: 'Complete referral program platform with tracking, rewards, and analytics for viral growth.',
+        type: 'workflow',
+        technologies: ['Next.js', 'Stripe API', 'Firebase', 'SendGrid', 'React'],
+        image: 'https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=400&h=250&fit=crop&crop=center',
+        status: 'Live',
+        githubUrl: 'https://github.com/example/referral-system',
+        liveUrl: 'https://referral-system.demo.com'
+      },
+      {
+        id: '10',
+        slug: 'conversion-tracking-tool',
+        title: 'Conversion Tracking Tool',
+        description: 'Advanced conversion tracking and attribution tool for multi-channel marketing campaigns.',
+        type: 'tool',
+        technologies: ['JavaScript', 'Google Tag Manager', 'BigQuery', 'Data Studio', 'Node.js'],
+        image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=250&fit=crop&crop=center',
+        status: 'Live',
+        githubUrl: 'https://github.com/example/conversion-tracking',
+        liveUrl: 'https://conversion-tracking.demo.com'
+      },
+      {
+        id: '11',
+        slug: 'influencer-outreach-campaign',
+        title: 'Influencer Outreach Campaign',
+        description: 'Strategic influencer partnership campaign that generated 2M+ impressions and 50K+ new followers.',
+        type: 'campaign',
+        technologies: ['BuzzSumo', 'Pitchbox', 'Airtable', 'Instagram API', 'TikTok API'],
+        image: 'https://images.unsplash.com/photo-1611926653458-09294b3142bf?w=400&h=250&fit=crop&crop=center',
+        status: 'Completed',
+        category: 'Influencer Marketing'
+      },
+      {
+        id: '12',
+        slug: 'marketing-attribution-dashboard',
+        title: 'Marketing Attribution Dashboard',
+        description: 'Comprehensive attribution dashboard that tracks customer journey across all touchpoints.',
+        type: 'tool',
+        technologies: ['React', 'D3.js', 'Python', 'Google Analytics API', 'Facebook API'],
+        image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=250&fit=crop&crop=center',
+        status: 'Live',
+        githubUrl: 'https://github.com/example/attribution-dashboard',
+        liveUrl: 'https://attribution-dashboard.demo.com'
+      },
+      {
+        id: '13',
+        slug: 'ab-testing-framework',
+        title: 'A/B Testing Framework',
+        description: 'Complete A/B testing framework for running experiments on websites and mobile apps.',
+        type: 'workflow',
+        technologies: ['JavaScript', 'React', 'Node.js', 'MongoDB', 'Statistics'],
+        image: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=400&h=250&fit=crop&crop=center',
+        status: 'Live',
+        githubUrl: 'https://github.com/example/ab-testing',
+        liveUrl: 'https://ab-testing.demo.com'
+      },
+      {
+        id: '14',
+        slug: 'brand-awareness-campaign',
+        title: 'Brand Awareness Campaign',
+        description: 'Integrated brand awareness campaign that increased brand recognition by 400% in target market.',
+        type: 'campaign',
+        technologies: ['Google Ads', 'Facebook Ads', 'YouTube Ads', 'Brand24', 'Google Trends'],
+        image: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=400&h=250&fit=crop&crop=center',
+        status: 'Completed',
+        category: 'Brand Marketing'
+      }
+    ]
+
+    // Filter projects by category if specified
+    let filteredProjects = allProjects
+    if (category && category !== 'all') {
+      filteredProjects = allProjects.filter(project => project.type === category)
+    }
+
+    // Implement pagination (9 projects per page)
+    const limit = 9
+    const currentPage = parseInt(page) || 1
+    const offset = (currentPage - 1) * limit
+    const paginatedProjects = filteredProjects.slice(offset, offset + limit)
+    const totalPages = Math.ceil(filteredProjects.length / limit)
+
     return { 
-      projects: [
-        {
-          id: '1',
-          slug: 'ai-marketing-automation-suite',
-          title: 'AI Marketing Automation Suite',
-          description: 'Comprehensive marketing automation platform leveraging AI for personalized campaigns and lead nurturing.',
-          type: 'workflow',
-          technologies: ['Next.js', 'TypeScript', 'OpenAI API', 'HubSpot API', 'PostgreSQL'],
-          image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=250&fit=crop&crop=center',
-          status: 'Live',
-          githubUrl: 'https://github.com/example/ai-marketing-suite',
-          liveUrl: 'https://ai-marketing-suite.demo.com'
-        },
-        {
-          id: '2',
-          slug: 'growth-analytics-dashboard',
-          title: 'Growth Analytics Dashboard',
-          description: 'Real-time dashboard for tracking marketing performance across multiple channels and campaigns.',
-          type: 'tool',
-          technologies: ['React', 'D3.js', 'Node.js', 'Google Analytics API', 'Chart.js'],
-          image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=250&fit=crop&crop=center',
-          status: 'Live',
-          githubUrl: 'https://github.com/example/growth-dashboard',
-          liveUrl: 'https://growth-dashboard.demo.com'
-        },
-        {
-          id: '3',
-          slug: 'email-campaign-optimizer',
-          title: 'Email Campaign Optimizer',
-          description: 'AI-powered email optimization tool that improves open rates and click-through rates.',
-          type: 'tool',
-          technologies: ['Python', 'Flask', 'TensorFlow', 'SendGrid API', 'React'],
-          image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=250&fit=crop&crop=center',
-          status: 'Live',
-          githubUrl: 'https://github.com/example/email-optimizer',
-          liveUrl: 'https://email-optimizer.demo.com'
-        },
-        {
-          id: '4',
-          slug: 'social-media-scheduler',
-          title: 'Social Media Scheduler',
-          description: 'Advanced social media scheduling and analytics platform with AI-powered content suggestions.',
-          type: 'workflow',
-          technologies: ['Vue.js', 'Laravel', 'Redis', 'Twitter API', 'Instagram API'],
-          image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=250&fit=crop&crop=center',
-          status: 'In Development',
-          githubUrl: 'https://github.com/example/social-scheduler'
-        }
-      ], 
-      pagination: { page: 1, limit: 50, total: 4, pages: 1 } 
+      projects: paginatedProjects, 
+      pagination: { 
+        page: currentPage, 
+        limit: limit, 
+        total: filteredProjects.length, 
+        pages: totalPages 
+      } 
     }
   }
 }
@@ -141,7 +278,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
           </div>
 
           {/* Filter Buttons */}
-          <div className="flex justify-center gap-4 mb-12">
+          <div className="flex flex-wrap justify-center gap-4 mb-12">
             <Link href="/projects">
               <Button
                 variant={!resolvedSearchParams.category ? "default" : "outline"}
@@ -168,6 +305,15 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
                 Workflows
               </Button>
             </Link>
+            <Link href="/projects?category=campaign">
+              <Button
+                variant={resolvedSearchParams.category === 'campaign' ? "default" : "outline"}
+                className="px-6"
+              >
+                <Target className="w-4 h-4 mr-2" />
+                Campaigns
+              </Button>
+            </Link>
           </div>
 
           {/* Projects Grid */}
@@ -182,14 +328,18 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                     <div className="absolute top-4 left-4">
-                      <Badge variant={project.type === "tool" ? "default" : "secondary"}>
+                      <Badge variant={project.type === "tool" ? "default" : project.type === "workflow" ? "secondary" : "destructive"}>
                         {project.type === "tool" ? (
                           <>
                             <Wrench className="w-3 h-3 mr-1" /> Tool
                           </>
-                        ) : (
+                        ) : project.type === "workflow" ? (
                           <>
                             <Workflow className="w-3 h-3 mr-1" /> Workflow
+                          </>
+                        ) : (
+                          <>
+                            <Target className="w-3 h-3 mr-1" /> Campaign
                           </>
                         )}
                       </Badge>
@@ -279,7 +429,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
           {pagination && pagination.pages > 1 && (
             <div className="flex justify-center items-center space-x-4">
               {currentPage > 1 && (
-                <Link href={`/projects?page=${currentPage - 1}`}>
+                <Link href={`/projects?page=${currentPage - 1}${resolvedSearchParams.category ? `&category=${resolvedSearchParams.category}` : ''}`}>
                   <Button variant="outline">
                     Previous
                   </Button>
@@ -293,7 +443,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
               </div>
               
               {currentPage < pagination.pages && (
-                <Link href={`/projects?page=${currentPage + 1}`}>
+                <Link href={`/projects?page=${currentPage + 1}${resolvedSearchParams.category ? `&category=${resolvedSearchParams.category}` : ''}`}>
                   <Button variant="outline">
                     Next
                   </Button>
