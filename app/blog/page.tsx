@@ -5,6 +5,8 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { CalendarDays, Clock, Search, ArrowRight } from 'lucide-react'
+import { Navigation } from '@/components/navigation'
+import { Footer } from '@/components/footer'
 
 interface BlogPost {
   id: string
@@ -133,7 +135,10 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const currentPage = typeof resolvedSearchParams.page === 'string' ? parseInt(resolvedSearchParams.page) : 1
 
   return (
-    <div className="min-h-screen bg-background py-24">
+    <div className="min-h-screen bg-background">
+      <Navigation />
+      
+      <div className="py-24 mt-16">
       <div className="container mx-auto px-6 lg:px-12 xl:px-16">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
@@ -256,6 +261,9 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
           )}
         </div>
       </div>
+      </div>
+      
+      <Footer />
     </div>
   )
 }

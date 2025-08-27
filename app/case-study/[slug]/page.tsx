@@ -15,6 +15,8 @@ import {
   ExternalLink
 } from 'lucide-react'
 import { ShareButton } from '@/components/blog/share-button'
+import { Navigation } from '@/components/navigation'
+import { Footer } from '@/components/footer'
 
 interface CaseStudy {
   id: string
@@ -113,8 +115,10 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
   
   return (
     <div className="min-h-screen bg-background">
+      <Navigation />
+      
       {/* Hero Section */}
-      <div className="py-12 bg-gradient-to-b from-muted/30 to-background">
+      <div className="py-12 bg-gradient-to-b from-muted/30 to-background mt-16">
         <div className="container mx-auto px-6 lg:px-12 xl:px-16">
           <div className="max-w-6xl mx-auto">
             <Link href="/#case-studies">
@@ -364,6 +368,8 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
           </div>
         </div>
       </div>
+      
+      <Footer />
     </div>
   )
 }

@@ -10,6 +10,8 @@ import {
   ArrowLeft
 } from 'lucide-react'
 import { ShareButton } from '@/components/blog/share-button'
+import { Navigation } from '@/components/navigation'
+import { Footer } from '@/components/footer'
 
 interface BlogPost {
   id: string
@@ -98,8 +100,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   
   return (
     <div className="min-h-screen bg-background">
+      <Navigation />
+      
       {/* Header */}
-      <div className="py-12 bg-gradient-to-b from-muted/30 to-background">
+      <div className="py-12 bg-gradient-to-b from-muted/30 to-background mt-16">
         <div className="container mx-auto px-6 lg:px-12 xl:px-16">
           <div className="max-w-4xl mx-auto">
             <Link href="/blog">
@@ -203,6 +207,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </div>
         </div>
       </div>
+      
+      <Footer />
     </div>
   )
 }
