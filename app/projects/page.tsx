@@ -61,12 +61,13 @@ export const metadata: Metadata = {
 }
 
 interface ProjectsPageProps {
-  searchParams: { [key: string]: string | string[] | undefined }
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
 export default async function ProjectsPage({ searchParams }: ProjectsPageProps) {
-  const { projects, pagination } = await getProjects(searchParams)
-  const currentPage = typeof searchParams.page === 'string' ? parseInt(searchParams.page) : 1
+  const resolvedSearchParams = await searchParams
+  const { projects, pagination } = await getProjects(resolvedSearchParams)
+  const currentPage = typeof resolvedSearchParams.page === 'string' ? parseInt(resolvedSearchParams.page) : 1
 
   return (
     <div className="min-h-screen bg-background py-24">
@@ -86,7 +87,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
           <div className="flex justify-center gap-4 mb-12">
             <Link href="/projects">
               <Button
-                variant={!searchParams.category ? "default" : "outline"}
+                variant={!resolvedSearchParams.category ? "default" : "outline"}
                 className="px-6"
               >
                 All Projects
@@ -94,7 +95,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
             </Link>
             <Link href="/projects?category=tool">
               <Button
-                variant={searchParams.category === 'tool' ? "default" : "outline"}
+                variant={resolvedSearchParams.category === 'tool' ? "default" : "outline"}
                 className="px-6"
               >
                 <Wrench className="w-4 h-4 mr-2" />
@@ -103,7 +104,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
             </Link>
             <Link href="/projects?category=workflow">
               <Button
-                variant={searchParams.category === 'workflow' ? "default" : "outline"}
+                variant={resolvedSearchParams.category === 'workflow' ? "default" : "outline"}
                 className="px-6"
               >
                 <Workflow className="w-4 h-4 mr-2" />

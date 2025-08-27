@@ -16,7 +16,7 @@ export const metadata = homeMetadata
 // Function to fetch blog posts from the API
 async function getBlogPosts() {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3002'}/api/blog?limit=6`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/blog?limit=6`, {
       next: { revalidate: 300 } // Revalidate every 5 minutes
     })
     
@@ -35,7 +35,7 @@ async function getBlogPosts() {
 // Function to fetch projects from the API
 async function getProjects() {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3002'}/api/projects?limit=6`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/projects?limit=6`, {
       next: { revalidate: 300 } // Revalidate every 5 minutes
     })
     
