@@ -1,68 +1,82 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { withCache, blogCacheConfig } from '@/lib/cache/cache-middleware'
-import { queryOptimizer } from '@/lib/cache/query-optimizer'
-import { performanceMonitor } from '@/lib/performance/performance-monitor'
 
 // GET - Fetch published blog posts for frontend
-export const GET = withCache(blogCacheConfig)(async function getBlogPosts(request: NextRequest) {
-  const timer = performanceMonitor.startTimer('blog_api_request')
-  
+export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '10')
-    const featured = searchParams.get('featured') === 'true'
     const category = searchParams.get('category') || undefined
     const search = searchParams.get('search') || undefined
 
-    // Use optimized query
-    const result = await queryOptimizer.getBlogPosts({
-      page,
-      limit,
-      featured: featured ? true : undefined,
-      category,
-      search
+    const where: any = {
+      published: true
+    }
+    
+    if (category) {
+      where.category = {
+        contains: category,
+        mode: 'insensitive'
+      }
+    }
+    
+    if (search) {
+      where.OR = [
+        { title: { contains: search, mode: 'insensitive' } },
+        { excerpt: { contains: search, mode: 'insensitive' } },
+        { content: { contains: search, mode: 'insensitive' } }
+      ]
+    }
+
+    const blogPosts = await prisma.blogPost.findMany({
+      where,
+      orderBy: [
+        { publishedAt: 'desc' },
+        { createdAt: 'desc' }
+      ],
+      skip: (page - 1) * limit,
+      take: limit
     })
 
-    const blogPosts = result.posts
+    const totalCount = await prisma.blogPost.count({ where })
 
     // Transform data to match frontend expectations
-    const transformedPosts = blogPosts.map((post: any) => ({
+    const transformedPosts = blogPosts.map((post) => ({
       id: post.id,
       slug: post.slug,
       title: post.title,
       excerpt: post.excerpt || '',
-      date: post.published_at?.split('T')[0] || post.created_at?.split('T')[0],
-      readTime: "8 min read", // Could calculate this based on content length
+      date: post.publishedAt?.toISOString().split('T')[0] || post.createdAt.toISOString().split('T')[0],
+      readTime: calculateReadTime(post.content || ''),
       category: post.category || 'Uncategorized',
-      image: post.image_url || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=200&fit=crop&crop=center",
-      author: post.author_name || "Edikan Udoibuot",
+      image: post.imageUrl || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=200&fit=crop&crop=center",
+      author: post.author || "Edikan Udoibuot",
     }))
-
-    // Track API performance
-    const duration = timer()
-    performanceMonitor.trackApiEndpoint(
-      'GET',
-      '/api/blog',
-      200,
-      duration,
-      JSON.stringify(transformedPosts).length
-    )
 
     return NextResponse.json({
       success: true,
       data: transformedPosts,
-      pagination: result.pagination
+      pagination: {
+        page,
+        limit,
+        total: totalCount,
+        pages: Math.ceil(totalCount / limit)
+      }
     })
   } catch (error) {
-    const duration = timer()
-    performanceMonitor.trackApiEndpoint('GET', '/api/blog', 500, duration)
-    
     console.error('Error fetching blog posts:', error)
     return NextResponse.json(
       { success: false, message: 'Failed to fetch blog posts' },
       { status: 500 }
     )
   }
-})
+}
+
+// Helper function to calculate reading time
+function calculateReadTime(content: string): string {
+  const wordsPerMinute = 200
+  const words = content.trim().split(/\s+/).length
+  const readTime = Math.ceil(words / wordsPerMinute)
+  return `${readTime} min read`
+}

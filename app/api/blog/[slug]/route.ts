@@ -12,21 +12,7 @@ export async function GET(
     const blogPost = await prisma.blogPost.findFirst({
       where: {
         slug: slug,
-        published: true, // Only published posts
-      },
-      select: {
-        id: true,
-        title: true,
-        slug: true,
-        content: true,
-        excerpt: true,
-        imageUrl: true,
-        category: true,
-        tags: true,
-        publishedAt: true,
-        createdAt: true,
-        metaTitle: true,
-        metaDescription: true,
+        published: true
       }
     })
 
@@ -39,15 +25,17 @@ export async function GET(
 
     // Transform data to match frontend expectations
     const transformedPost = {
-      id: blogPost.slug,
+      id: blogPost.id,
+      slug: blogPost.slug,
       title: blogPost.title,
-      content: blogPost.content,
+      content: blogPost.content || '',
       excerpt: blogPost.excerpt || '',
       date: blogPost.publishedAt?.toISOString().split('T')[0] || blogPost.createdAt.toISOString().split('T')[0],
-      readTime: Math.max(1, Math.ceil(blogPost.content.split(' ').length / 200)) + " min read", // Estimate reading time
+      readTime: Math.max(1, Math.ceil((blogPost.content || '').split(' ').length / 200)) + " min read",
       category: blogPost.category || 'Uncategorized',
+      tags: blogPost.tags ? JSON.parse(blogPost.tags) : [],
       image: blogPost.imageUrl || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=400&fit=crop&crop=center",
-      author: "Edikan Udoibuot",
+      author: blogPost.author || "Edikan Udoibuot",
       metaTitle: blogPost.metaTitle,
       metaDescription: blogPost.metaDescription,
     }
