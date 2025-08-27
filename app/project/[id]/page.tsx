@@ -33,6 +33,65 @@ interface Project {
   updatedAt: string
 }
 
+// Fallback project data
+const fallbackProjects: Project[] = [
+  {
+    id: '1',
+    slug: 'ai-marketing-automation-suite',
+    title: 'AI Marketing Automation Suite',
+    description: 'Comprehensive marketing automation platform leveraging AI for personalized campaigns, lead scoring, and customer journey optimization. Built to scale marketing efforts while maintaining personalization at every touchpoint.',
+    type: 'workflow',
+    technologies: ['Next.js', 'TypeScript', 'OpenAI API', 'HubSpot API', 'PostgreSQL', 'Redis', 'Stripe API'],
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop&crop=center',
+    githubUrl: 'https://github.com/example/ai-marketing-suite',
+    liveUrl: 'https://ai-marketing-suite.demo.com',
+    category: 'AI & Automation',
+    createdAt: '2024-01-01T00:00:00Z',
+    updatedAt: '2024-01-15T00:00:00Z'
+  },
+  {
+    id: '2', 
+    slug: 'growth-analytics-dashboard',
+    title: 'Growth Analytics Dashboard',
+    description: 'Real-time analytics dashboard providing comprehensive insights into marketing performance, user behavior, and growth metrics. Features advanced visualization and predictive analytics for data-driven decision making.',
+    type: 'tool',
+    technologies: ['React', 'D3.js', 'Node.js', 'Google Analytics API', 'Chart.js', 'MongoDB', 'Express'],
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop&crop=center',
+    githubUrl: 'https://github.com/example/growth-dashboard',
+    liveUrl: 'https://growth-dashboard.demo.com',
+    category: 'Analytics',
+    createdAt: '2023-12-15T00:00:00Z',
+    updatedAt: '2024-01-10T00:00:00Z'
+  },
+  {
+    id: '3',
+    slug: 'email-campaign-optimizer',
+    title: 'Email Campaign Optimizer',
+    description: 'AI-powered email optimization tool that analyzes subject lines, content, and timing to maximize open rates and click-through rates. Includes A/B testing automation and performance prediction.',
+    type: 'tool',
+    technologies: ['Python', 'Flask', 'TensorFlow', 'SendGrid API', 'React', 'SQLAlchemy', 'Celery'],
+    image: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&h=600&fit=crop&crop=center',
+    githubUrl: 'https://github.com/example/email-optimizer',
+    liveUrl: 'https://email-optimizer.demo.com',
+    category: 'Email Marketing',
+    createdAt: '2023-11-20T00:00:00Z',
+    updatedAt: '2024-01-08T00:00:00Z'
+  },
+  {
+    id: '4',
+    slug: 'social-media-scheduler',
+    title: 'Social Media Scheduler',
+    description: 'Advanced social media scheduling and analytics platform with AI-powered content suggestions, optimal posting time prediction, and cross-platform management capabilities.',
+    type: 'workflow', 
+    technologies: ['Vue.js', 'Laravel', 'Redis', 'Twitter API', 'Instagram API', 'Facebook API', 'MySQL'],
+    image: 'https://images.unsplash.com/photo-1611926653458-09294b3142bf?w=800&h=600&fit=crop&crop=center',
+    githubUrl: 'https://github.com/example/social-scheduler',
+    category: 'Social Media',
+    createdAt: '2023-10-10T00:00:00Z',
+    updatedAt: '2023-12-20T00:00:00Z'
+  }
+]
+
 // Fetch single project
 async function getProject(id: string): Promise<Project | null> {
   try {
@@ -43,16 +102,20 @@ async function getProject(id: string): Promise<Project | null> {
     
     if (!response.ok) {
       if (response.status === 404) {
-        return null
+        // Try fallback data
+        const fallbackProject = fallbackProjects.find(project => project.slug === id || project.id === id)
+        return fallbackProject || null
       }
       throw new Error('Failed to fetch project')
     }
     
     const data = await response.json()
-    return data.success ? data.data : null
+    return data.success ? data.data : (fallbackProjects.find(project => project.slug === id || project.id === id) || null)
   } catch (error) {
     console.error('Error fetching project:', error)
-    return null
+    // Return fallback data
+    const fallbackProject = fallbackProjects.find(project => project.slug === id || project.id === id)
+    return fallbackProject || null
   }
 }
 
