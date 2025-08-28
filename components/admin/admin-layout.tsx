@@ -27,7 +27,8 @@ import {
   BookOpen,
   Wrench,
   TrendingUp,
-  Database
+  Database,
+  Bug
 } from 'lucide-react'
 
 interface AdminUser {
@@ -125,6 +126,7 @@ export function AdminLayout({ children, title = "Dashboard" }: AdminLayoutProps)
     { icon: Bot, label: 'Chatbot', href: '/admin/chatbot' },
     { icon: Navigation, label: 'Navigation & Footer', href: '/admin/navigation' },
     { icon: PieChart, label: 'Analytics', href: '/admin/analytics' },
+    { icon: Bug, label: 'Debug Issues', href: '/admin/debug-issues' },
     { icon: Settings, label: 'Settings', href: '/admin/settings' }
   ]
 
