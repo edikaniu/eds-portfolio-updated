@@ -48,7 +48,7 @@ interface CaseStudy {
   updatedAt: string
 }
 
-// Fallback case studies data
+// Comprehensive fallback case studies data - matching listings page
 const fallbackCaseStudies: CaseStudy[] = [
   {
     id: '1',

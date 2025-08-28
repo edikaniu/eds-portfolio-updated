@@ -306,37 +306,69 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             </p>
           </div>
 
-          {/* Search Bar */}
-          <div className="mb-8">
-            <div className="max-w-md mx-auto relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-              <Input
-                placeholder="Search articles..."
-                className="pl-10"
-                defaultValue={typeof resolvedSearchParams.search === 'string' ? resolvedSearchParams.search : ''}
-              />
-            </div>
-          </div>
-          
-          {/* Enhanced Filter System */}
+          {/* Search and Filter Section */}
           <div className="mb-12">
             <div className="max-w-4xl mx-auto">
-              <div className="flex flex-col md:flex-row gap-4 items-center justify-center">
-                {/* Category Filter Dropdown */}
-                <div className="flex items-center gap-2">
-                  <Filter className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm font-medium text-muted-foreground">Filter by:</span>
-                  <CategoryFilter currentCategory={typeof resolvedSearchParams.category === 'string' ? resolvedSearchParams.category : ''} />
+              {/* Desktop Layout - Same Line */}
+              <div className="hidden md:flex items-center justify-between gap-6">
+                {/* Search Bar - Takes more space */}
+                <div className="flex-1 max-w-lg relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                  <Input
+                    placeholder="Search articles..."
+                    className="pl-10 w-full"
+                    defaultValue={typeof resolvedSearchParams.search === 'string' ? resolvedSearchParams.search : ''}
+                  />
                 </div>
                 
-                {/* Clear Filters */}
-                {resolvedSearchParams.category && (
-                  <Link href="/blog">
-                    <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
-                      Clear Filters
-                    </Button>
-                  </Link>
-                )}
+                {/* Filter Section */}
+                <div className="flex items-center gap-4 flex-shrink-0">
+                  <div className="flex items-center gap-2">
+                    <Filter className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm font-medium text-muted-foreground">Filter by:</span>
+                    <CategoryFilter currentCategory={typeof resolvedSearchParams.category === 'string' ? resolvedSearchParams.category : ''} />
+                  </div>
+                  
+                  {/* Clear Filters */}
+                  {resolvedSearchParams.category && (
+                    <Link href="/blog">
+                      <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
+                        Clear Filters
+                      </Button>
+                    </Link>
+                  )}
+                </div>
+              </div>
+              
+              {/* Mobile Layout - Stacked */}
+              <div className="md:hidden space-y-4">
+                {/* Search Bar */}
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                  <Input
+                    placeholder="Search articles..."
+                    className="pl-10 w-full"
+                    defaultValue={typeof resolvedSearchParams.search === 'string' ? resolvedSearchParams.search : ''}
+                  />
+                </div>
+                
+                {/* Filter Section */}
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                  <div className="flex items-center gap-2">
+                    <Filter className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm font-medium text-muted-foreground">Filter by:</span>
+                    <CategoryFilter currentCategory={typeof resolvedSearchParams.category === 'string' ? resolvedSearchParams.category : ''} />
+                  </div>
+                  
+                  {/* Clear Filters */}
+                  {resolvedSearchParams.category && (
+                    <Link href="/blog">
+                      <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
+                        Clear Filters
+                      </Button>
+                    </Link>
+                  )}
+                </div>
               </div>
             </div>
           </div>
