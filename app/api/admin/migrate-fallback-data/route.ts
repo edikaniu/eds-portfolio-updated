@@ -565,6 +565,7 @@ const FALLBACK_DATA = {
       published: true,
       publishedAt: new Date('2024-09-15T00:00:00Z')
     }
+  ],
 
   // Case Studies Data - All 14 comprehensive case studies from frontend
   caseStudies: [
