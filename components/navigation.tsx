@@ -110,9 +110,15 @@ export function Navigation() {
             <div className="hidden md:flex items-center space-x-6">
               <div className="flex items-center space-x-8">
                 {navItems.map((item) => (
-                  <button
+                  <Link
                     key={item.name}
-                    onClick={() => handleNavigation(item.href, item.isSection)}
+                    href={item.href}
+                    onClick={(e) => {
+                      if (item.isSection) {
+                        e.preventDefault()
+                        handleNavigation(item.href, item.isSection)
+                      }
+                    }}
                     className={`text-sm font-medium transition-colors hover:text-primary ${
                       (item.isSection && pathname === "/" && activeSection === item.href.substring(2)) ||
                       (!item.isSection && pathname === item.href)
@@ -121,7 +127,7 @@ export function Navigation() {
                     }`}
                   >
                     {item.name}
-                  </button>
+                  </Link>
                 ))}
               </div>
               <div className="border-l border-border h-5" />
@@ -143,9 +149,17 @@ export function Navigation() {
             <div className="md:hidden border-t border-border/50 bg-background/95 backdrop-blur-md">
               <div className="px-2 pt-2 pb-3 space-y-1">
                 {navItems.map((item) => (
-                  <button
+                  <Link
                     key={item.name}
-                    onClick={() => handleNavigation(item.href, item.isSection)}
+                    href={item.href}
+                    onClick={(e) => {
+                      if (item.isSection) {
+                        e.preventDefault()
+                        handleNavigation(item.href, item.isSection)
+                      } else {
+                        setIsOpen(false)
+                      }
+                    }}
                     className={`block px-3 py-2 text-base font-medium transition-colors hover:text-primary w-full text-left ${
                       (item.isSection && pathname === "/" && activeSection === item.href.substring(2)) ||
                       (!item.isSection && pathname === item.href)
@@ -154,7 +168,7 @@ export function Navigation() {
                     }`}
                   >
                     {item.name}
-                  </button>
+                  </Link>
                 ))}
                 <div className="px-3 py-2 space-y-2">
                   <SearchButton onClick={() => setIsSearchOpen(true)} />

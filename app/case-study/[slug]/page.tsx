@@ -193,6 +193,186 @@ const fallbackCaseStudies: CaseStudy[] = [
     ],
     createdAt: '2023-10-01T00:00:00Z',
     updatedAt: '2023-12-20T00:00:00Z'
+  },
+  {
+    id: '5',
+    slug: 'paid-advertising-scale-up',
+    title: 'Paid Advertising Scale-Up',
+    subtitle: 'From $10K to $100K monthly ad spend with 4X ROI',
+    description: 'Scaled paid advertising campaigns across Google, Facebook, and LinkedIn from $10K to $100K monthly spend while maintaining 4X return on investment through advanced targeting and optimization.',
+    fullDescription: 'This comprehensive paid advertising scale-up involved building advanced campaign structures, implementing sophisticated targeting strategies, and creating automated optimization systems to scale ad spend 10X while maintaining profitability.',
+    image: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&h=600&fit=crop',
+    metrics: { 
+      primary: '1000%', 
+      primaryLabel: 'Spend Increase', 
+      secondary: '4X', 
+      secondaryLabel: 'ROI' 
+    },
+    results: [
+      'Scaled monthly ad spend from $10K to $100K while maintaining 4X ROI',
+      'Achieved 65% increase in cost-per-acquisition efficiency across all channels',
+      'Generated $2.5M+ in additional revenue through scaled advertising efforts',
+      'Improved audience targeting precision by 300% using advanced data segmentation',
+      'Reduced campaign management time by 70% through automation implementation'
+    ],
+    tools: ['Google Ads', 'Facebook Ads Manager', 'LinkedIn Campaign Manager', 'Google Analytics', 'Triple Whale', 'Northbeam'],
+    category: 'Paid Advertising',
+    color: 'from-purple-500 to-indigo-600',
+    icon: '🎯',
+    challenge: 'The company needed to scale advertising spend rapidly to meet growth targets, but previous attempts resulted in decreased ROI and wasted budget due to poor targeting and campaign structure.',
+    solution: 'Developed a systematic scaling approach including advanced audience segmentation, campaign structure optimization, automated bidding strategies, and comprehensive tracking systems to maintain profitability at scale.',
+    timeline: [
+      { phase: 'Campaign Audit & Strategy', description: 'Analyzed existing campaigns and developed scaling strategy', duration: '2 weeks' },
+      { phase: 'Advanced Targeting Setup', description: 'Implemented sophisticated audience targeting and tracking systems', duration: '3 weeks' },
+      { phase: 'Gradual Scaling Phase', description: 'Systematically increased spend while monitoring performance metrics', duration: '8 weeks' },
+      { phase: 'Optimization & Automation', description: 'Automated campaign management and optimized for maximum efficiency', duration: '4 weeks' }
+    ],
+    createdAt: '2023-09-01T00:00:00Z',
+    updatedAt: '2023-12-15T00:00:00Z'
+  },
+  {
+    id: '6',
+    slug: 'content-marketing-authority',
+    title: 'Content Marketing Authority',
+    subtitle: 'Built thought leadership with 500K+ monthly readers',
+    description: 'Developed comprehensive content strategy that established brand as industry authority, generating 500K+ monthly readers and 1,200+ high-quality backlinks.',
+    fullDescription: 'This content marketing authority building initiative involved creating a comprehensive content ecosystem including blog content, thought leadership pieces, industry research, and strategic partnerships to establish market dominance.',
+    image: 'https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?w=800&h=600&fit=crop',
+    metrics: { 
+      primary: '500K+', 
+      primaryLabel: 'Monthly Readers', 
+      secondary: '1,200+', 
+      secondaryLabel: 'Backlinks' 
+    },
+    results: [
+      'Generated 500K+ monthly readers through consistent, high-quality content production',
+      'Earned 1,200+ high-authority backlinks from industry publications and websites',
+      'Achieved 85% increase in brand mention frequency across industry publications',
+      'Generated 15K+ qualified leads directly from content marketing efforts',
+      'Established CEO as recognized thought leader with 50+ speaking opportunities'
+    ],
+    tools: ['WordPress', 'Ahrefs', 'BuzzSumo', 'Google Analytics', 'Canva', 'Grammarly'],
+    category: 'Content Marketing',
+    color: 'from-teal-500 to-cyan-600',
+    icon: '📝',
+    challenge: 'The brand lacked industry recognition and thought leadership presence, resulting in poor organic visibility and difficulty establishing credibility with potential customers and partners.',
+    solution: 'Created comprehensive content marketing strategy focusing on original research, expert insights, and strategic thought leadership to build authority and drive organic growth.',
+    timeline: [
+      { phase: 'Content Strategy Development', description: 'Researched industry gaps and developed content pillars strategy', duration: '3 weeks' },
+      { phase: 'Content Production Ramp-Up', description: 'Established content creation workflows and began publishing schedule', duration: '4 weeks' },
+      { phase: 'Authority Building Phase', description: 'Focused on high-impact content and industry relationship building', duration: '12 weeks' },
+      { phase: 'Scaling & Optimization', description: 'Optimized content performance and scaled successful content types', duration: '8 weeks' }
+    ],
+    createdAt: '2023-08-01T00:00:00Z',
+    updatedAt: '2023-12-10T00:00:00Z'
+  },
+  {
+    id: '7',
+    slug: 'growth-hacking-startup',
+    title: 'Growth Hacking for Startup',
+    subtitle: '0 to 50K users in 8 months with viral mechanics',
+    description: 'Implemented viral growth strategies including referral programs, product-led growth, and community building to scale from 0 to 50,000 users in just 8 months.',
+    fullDescription: 'This startup growth hacking initiative involved implementing multiple viral growth mechanisms, optimizing user onboarding, and creating community-driven growth loops to achieve rapid user acquisition.',
+    image: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&h=600&fit=crop',
+    metrics: { 
+      primary: '50K+', 
+      primaryLabel: 'Users Acquired', 
+      secondary: '8 months', 
+      secondaryLabel: 'Timeline' 
+    },
+    results: [
+      'Acquired 50,000+ users in 8 months with minimal paid advertising spend',
+      'Achieved 45% viral coefficient through referral program optimization',
+      'Generated 80% of user growth through organic and viral channels',
+      'Reduced customer acquisition cost by 85% compared to traditional methods',
+      'Built active community of 15K+ engaged users driving word-of-mouth growth'
+    ],
+    tools: ['Mixpanel', 'Amplitude', 'ReferralCandy', 'Intercom', 'Hotjar', 'Zapier'],
+    category: 'Growth Marketing',
+    color: 'from-emerald-500 to-green-600',
+    icon: '⚡',
+    challenge: 'Early-stage startup with limited marketing budget needed to achieve rapid user growth to secure next funding round, but traditional marketing channels were too expensive.',
+    solution: 'Implemented comprehensive growth hacking strategy focusing on viral mechanics, product-led growth, and community building to achieve sustainable, scalable growth.',
+    timeline: [
+      { phase: 'Growth Strategy Design', description: 'Analyzed user behavior and designed viral growth mechanisms', duration: '2 weeks' },
+      { phase: 'MVP Growth Features', description: 'Built and launched referral system and onboarding optimization', duration: '4 weeks' },
+      { phase: 'Community Building Phase', description: 'Established user community and content-driven growth loops', duration: '12 weeks' },
+      { phase: 'Optimization & Scaling', description: 'Optimized growth funnels and scaled successful tactics', duration: '14 weeks' }
+    ],
+    createdAt: '2023-07-01T00:00:00Z',
+    updatedAt: '2023-12-05T00:00:00Z'
+  },
+  {
+    id: '8',
+    slug: 'ecommerce-conversion-boost',
+    title: 'E-commerce Conversion Boost',
+    subtitle: '400% revenue increase through UX optimization',
+    description: 'Optimized e-commerce user experience, checkout flow, and personalization features resulting in 400% revenue increase and 65% reduction in cart abandonment.',
+    fullDescription: 'This e-commerce optimization project involved comprehensive UX analysis, checkout flow redesign, and personalization implementation to dramatically improve conversion rates and customer experience.',
+    image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop',
+    metrics: { 
+      primary: '400%', 
+      primaryLabel: 'Revenue Increase', 
+      secondary: '65%', 
+      secondaryLabel: 'Cart Recovery' 
+    },
+    results: [
+      'Achieved 400% increase in overall e-commerce revenue within 6 months',
+      'Reduced cart abandonment rate by 65% through checkout optimization',
+      'Improved conversion rate by 280% across all product categories',
+      'Increased average order value by 85% through personalization features',
+      'Enhanced customer satisfaction scores by 90% through UX improvements'
+    ],
+    tools: ['Shopify Plus', 'Google Optimize', 'Hotjar', 'Klaviyo', 'Yotpo', 'Bold Apps'],
+    category: 'E-commerce',
+    color: 'from-yellow-500 to-orange-600',
+    icon: '🛒',
+    challenge: 'E-commerce site had poor conversion rates, high cart abandonment, and low customer satisfaction scores, resulting in significant revenue loss and poor customer experience.',
+    solution: 'Implemented comprehensive UX optimization including checkout redesign, personalization features, and customer journey improvements to maximize conversion and customer satisfaction.',
+    timeline: [
+      { phase: 'UX Audit & Analysis', description: 'Comprehensive analysis of user behavior and conversion barriers', duration: '2 weeks' },
+      { phase: 'Checkout Flow Redesign', description: 'Redesigned and optimized entire checkout process', duration: '4 weeks' },
+      { phase: 'Personalization Implementation', description: 'Built and deployed personalization and recommendation features', duration: '6 weeks' },
+      { phase: 'Testing & Optimization', description: 'A/B tested all changes and optimized based on performance', duration: '8 weeks' }
+    ],
+    createdAt: '2023-06-01T00:00:00Z',
+    updatedAt: '2023-11-30T00:00:00Z'
+  },
+  {
+    id: '9',
+    slug: 'mobile-app-engagement',
+    title: 'Mobile App Engagement',
+    subtitle: '300% user retention through push notification strategy',
+    description: 'Developed personalized push notification strategy and in-app engagement features that increased user retention by 300% and daily active users by 180%.',
+    fullDescription: 'This mobile app engagement project focused on implementing advanced push notification strategies, in-app messaging, and user experience improvements to dramatically increase user retention and engagement.',
+    image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&h=600&fit=crop',
+    metrics: { 
+      primary: '300%', 
+      primaryLabel: 'Retention Increase', 
+      secondary: '180%', 
+      secondaryLabel: 'DAU Growth' 
+    },
+    results: [
+      'Increased user retention by 300% through personalized engagement strategies',
+      'Boosted daily active users by 180% within 4 months of implementation',
+      'Improved push notification open rates by 250% through personalization',
+      'Reduced user churn rate by 70% through proactive engagement campaigns',
+      'Generated 45% increase in in-app purchases through targeted messaging'
+    ],
+    tools: ['Firebase', 'OneSignal', 'Amplitude', 'Braze', 'App Annie', 'Appsflyer'],
+    category: 'Mobile Marketing',
+    color: 'from-blue-500 to-purple-600',
+    icon: '📱',
+    challenge: 'Mobile app had poor user retention, low engagement rates, and high churn, with users typically abandoning the app within the first week of download.',
+    solution: 'Developed comprehensive mobile engagement strategy including personalized push notifications, in-app messaging, and user journey optimization to keep users active and engaged.',
+    timeline: [
+      { phase: 'User Behavior Analysis', description: 'Analyzed user patterns and identified engagement opportunities', duration: '2 weeks' },
+      { phase: 'Notification Strategy Design', description: 'Developed personalized push notification and in-app messaging strategy', duration: '3 weeks' },
+      { phase: 'Implementation & Testing', description: 'Built and deployed engagement features with A/B testing', duration: '6 weeks' },
+      { phase: 'Optimization & Scaling', description: 'Optimized campaigns based on performance data and scaled successful tactics', duration: '8 weeks' }
+    ],
+    createdAt: '2023-05-01T00:00:00Z',
+    updatedAt: '2023-11-25T00:00:00Z'
   }
 ]
 

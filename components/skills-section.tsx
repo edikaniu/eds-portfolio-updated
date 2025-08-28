@@ -30,6 +30,7 @@ import {
   Database,
 } from "lucide-react"
 
+
 // Icon mapping for skills based on name
 const getSkillIcon = (skillName: string) => {
   const iconMap: { [key: string]: React.JSX.Element } = {
@@ -508,15 +509,22 @@ export function SkillsSection() {
               >
                 <div className="flex flex-col items-center text-center">
                   <div className="mb-2 transition-transform group-hover:scale-110">
-                    <img
-                      src={tool.logoUrl || "/placeholder.svg"}
-                      alt={`${tool.name} logo`}
-                      className="w-10 h-10 object-contain opacity-70 group-hover:opacity-100 transition-opacity"
-                      loading="lazy"
-                      onError={(e) => {
-                        e.currentTarget.src = "/placeholder.svg"
+                    <div 
+                      className="w-10 h-10 flex items-center justify-center rounded-lg transition-all duration-300 group-hover:shadow-md"
+                      style={{ 
+                        backgroundColor: tool.color || '#64748b'
                       }}
-                    />
+                    >
+                      <img
+                        src={tool.logoUrl || "/placeholder.svg"}
+                        alt={`${tool.name} logo`}
+                        className="w-6 h-6 object-contain brightness-0 invert transition-all duration-300"
+                        loading="lazy"
+                        onError={(e) => {
+                          e.currentTarget.src = "/placeholder.svg"
+                        }}
+                      />
+                    </div>
                   </div>
                   <span className="text-xs font-medium text-foreground group-hover:text-primary transition-colors">
                     {tool.name}
