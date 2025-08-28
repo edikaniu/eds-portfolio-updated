@@ -45,9 +45,8 @@ async function getBlogPosts(searchParams: { [key: string]: string | string[] | u
     return data.success ? { posts: data.data, pagination: data.pagination } : { posts: [], pagination: null }
   } catch (error) {
     console.error('Error fetching blog posts:', error)
-    // Return fallback blog posts
-    return { 
-      posts: [
+    // Return fallback blog posts with 18 total posts for pagination
+    const allPosts = [
         {
           id: '1',
           slug: 'ai-marketing-transformation',
@@ -113,9 +112,163 @@ async function getBlogPosts(searchParams: { [key: string]: string | string[] | u
           category: 'Social Media',
           image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=200&fit=crop&crop=center',
           author: 'Edikan Udoibuot'
+        },
+        {
+          id: '7',
+          slug: 'marketing-automation-workflows',
+          title: 'Building Marketing Automation Workflows That Convert',
+          excerpt: 'Step-by-step guide to creating marketing automation workflows that nurture leads and drive conversions.',
+          date: '2023-12-25',
+          readTime: '16 min read',
+          category: 'Marketing Automation',
+          image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=200&fit=crop&crop=center',
+          author: 'Edikan Udoibuot'
+        },
+        {
+          id: '8',
+          slug: 'customer-retention-strategies',
+          title: 'Customer Retention: Turning One-Time Buyers into Loyal Advocates',
+          excerpt: 'Proven strategies to increase customer lifetime value and build a community of loyal brand advocates.',
+          date: '2023-12-20',
+          readTime: '11 min read',
+          category: 'Customer Retention',
+          image: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=400&h=200&fit=crop&crop=center',
+          author: 'Edikan Udoibuot'
+        },
+        {
+          id: '9',
+          slug: 'performance-marketing-metrics',
+          title: 'The Ultimate Guide to Performance Marketing Metrics',
+          excerpt: 'Master the key metrics that matter for performance marketing and learn how to optimize for maximum ROI.',
+          date: '2023-12-15',
+          readTime: '13 min read',
+          category: 'Performance Marketing',
+          image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=200&fit=crop&crop=center',
+          author: 'Edikan Udoibuot'
+        },
+        {
+          id: '10',
+          slug: 'content-marketing-strategy',
+          title: 'Content Marketing Strategy: From Planning to Execution',
+          excerpt: 'Complete framework for developing and executing a content marketing strategy that drives business results.',
+          date: '2023-12-12',
+          readTime: '17 min read',
+          category: 'Content Marketing',
+          image: 'https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?w=400&h=200&fit=crop&crop=center',
+          author: 'Edikan Udoibuot'
+        },
+        {
+          id: '11',
+          slug: 'influencer-marketing-roi',
+          title: 'Maximizing Influencer Marketing ROI: A Data-Driven Approach',
+          excerpt: 'Learn how to identify, partner with, and measure the success of influencer marketing campaigns.',
+          date: '2023-12-08',
+          readTime: '14 min read',
+          category: 'Influencer Marketing',
+          image: 'https://images.unsplash.com/photo-1611926653458-09294b3142bf?w=400&h=200&fit=crop&crop=center',
+          author: 'Edikan Udoibuot'
+        },
+        {
+          id: '12',
+          slug: 'paid-advertising-optimization',
+          title: 'Paid Advertising Optimization: Beyond Clicks and Impressions',
+          excerpt: 'Advanced strategies for optimizing paid advertising campaigns across Google, Facebook, and LinkedIn.',
+          date: '2023-12-05',
+          readTime: '19 min read',
+          category: 'Paid Advertising',
+          image: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400&h=200&fit=crop&crop=center',
+          author: 'Edikan Udoibuot'
+        },
+        {
+          id: '13',
+          slug: 'brand-positioning-strategy',
+          title: 'Brand Positioning in a Crowded Market: Stand Out or Fall Behind',
+          excerpt: 'Strategic framework for developing a unique brand position that resonates with your target audience.',
+          date: '2023-12-01',
+          readTime: '12 min read',
+          category: 'Brand Strategy',
+          image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=200&fit=crop&crop=center',
+          author: 'Edikan Udoibuot'
+        },
+        {
+          id: '14',
+          slug: 'marketing-attribution-modeling',
+          title: 'Marketing Attribution: Understanding the Customer Journey',
+          excerpt: 'Complete guide to attribution modeling and how to track the true impact of your marketing efforts.',
+          date: '2023-11-28',
+          readTime: '15 min read',
+          category: 'Analytics',
+          image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=200&fit=crop&crop=center',
+          author: 'Edikan Udoibuot'
+        },
+        {
+          id: '15',
+          slug: 'mobile-marketing-trends',
+          title: 'Mobile Marketing Trends: What to Expect in 2024',
+          excerpt: 'Stay ahead of the curve with the latest mobile marketing trends and strategies for mobile-first audiences.',
+          date: '2023-11-25',
+          readTime: '9 min read',
+          category: 'Mobile Marketing',
+          image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400&h=200&fit=crop&crop=center',
+          author: 'Edikan Udoibuot'
+        },
+        {
+          id: '16',
+          slug: 'video-marketing-engagement',
+          title: 'Video Marketing: Creating Content That Drives Engagement',
+          excerpt: 'Proven strategies for creating video content that captures attention and drives meaningful engagement.',
+          date: '2023-11-22',
+          readTime: '13 min read',
+          category: 'Video Marketing',
+          image: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=400&h=200&fit=crop&crop=center',
+          author: 'Edikan Udoibuot'
+        },
+        {
+          id: '17',
+          slug: 'ecommerce-personalization',
+          title: 'E-commerce Personalization: Increasing Sales Through Customization',
+          excerpt: 'How to implement personalization strategies that increase conversion rates and customer satisfaction.',
+          date: '2023-11-18',
+          readTime: '16 min read',
+          category: 'E-commerce',
+          image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=200&fit=crop&crop=center',
+          author: 'Edikan Udoibuot'
+        },
+        {
+          id: '18',
+          slug: 'marketing-technology-stack',
+          title: 'Building the Perfect Marketing Technology Stack',
+          excerpt: 'Guide to selecting and integrating marketing tools that work together to drive growth and efficiency.',
+          date: '2023-11-15',
+          readTime: '20 min read',
+          category: 'MarTech',
+          image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=200&fit=crop&crop=center',
+          author: 'Edikan Udoibuot'
         }
-      ], 
-      pagination: { page: 1, limit: 10, total: 6, pages: 1 } 
+    ]
+    
+    // Filter by category if specified
+    let filteredPosts = allPosts
+    if (category) {
+      filteredPosts = allPosts.filter(post => post.category === category)
+    }
+    
+    // Implement pagination with 9 posts per page
+    const currentPageNum = typeof searchParams.page === 'string' ? parseInt(searchParams.page) : 1
+    const limit = 9
+    const startIndex = (currentPageNum - 1) * limit
+    const endIndex = startIndex + limit
+    const paginatedPosts = filteredPosts.slice(startIndex, endIndex)
+    const totalPages = Math.ceil(filteredPosts.length / limit)
+    
+    return { 
+      posts: paginatedPosts, 
+      pagination: { 
+        page: currentPageNum, 
+        limit: limit, 
+        total: filteredPosts.length, 
+        pages: totalPages 
+      } 
     }
   }
 }
@@ -152,7 +305,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
           </div>
 
           {/* Search Bar */}
-          <div className="mb-12">
+          <div className="mb-8">
             <div className="max-w-md mx-auto relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
               <Input
@@ -162,10 +315,79 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
               />
             </div>
           </div>
+          
+          {/* Category Filters */}
+          <div className="mb-12">
+            <div className="flex flex-wrap justify-center gap-3">
+              <Link href="/blog">
+                <Button
+                  variant={!resolvedSearchParams.category ? "default" : "outline"}
+                  size="sm"
+                  className="px-4"
+                >
+                  All Categories
+                </Button>
+              </Link>
+              <Link href="/blog?category=AI & Marketing">
+                <Button
+                  variant={resolvedSearchParams.category === 'AI & Marketing' ? "default" : "outline"}
+                  size="sm"
+                  className="px-4"
+                >
+                  AI & Marketing
+                </Button>
+              </Link>
+              <Link href="/blog?category=Growth Marketing">
+                <Button
+                  variant={resolvedSearchParams.category === 'Growth Marketing' ? "default" : "outline"}
+                  size="sm"
+                  className="px-4"
+                >
+                  Growth Marketing
+                </Button>
+              </Link>
+              <Link href="/blog?category=Email Marketing">
+                <Button
+                  variant={resolvedSearchParams.category === 'Email Marketing' ? "default" : "outline"}
+                  size="sm"
+                  className="px-4"
+                >
+                  Email Marketing
+                </Button>
+              </Link>
+              <Link href="/blog?category=Analytics">
+                <Button
+                  variant={resolvedSearchParams.category === 'Analytics' ? "default" : "outline"}
+                  size="sm"
+                  className="px-4"
+                >
+                  Analytics
+                </Button>
+              </Link>
+              <Link href="/blog?category=Social Media">
+                <Button
+                  variant={resolvedSearchParams.category === 'Social Media' ? "default" : "outline"}
+                  size="sm"
+                  className="px-4"
+                >
+                  Social Media
+                </Button>
+              </Link>
+              <Link href="/blog?category=Content Marketing">
+                <Button
+                  variant={resolvedSearchParams.category === 'Content Marketing' ? "default" : "outline"}
+                  size="sm"
+                  className="px-4"
+                >
+                  Content Marketing
+                </Button>
+              </Link>
+            </div>
+          </div>
 
           {/* Blog Posts Grid */}
           {posts.length > 0 ? (
-            <div className="grid lg:grid-cols-2 gap-8 mb-12">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
               {posts.map((post: BlogPost) => (
                 <Card key={post.id} className="group hover:shadow-lg transition-all duration-300 overflow-hidden">
                   <div className="relative h-48 overflow-hidden">

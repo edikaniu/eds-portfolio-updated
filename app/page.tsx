@@ -82,7 +82,7 @@ async function getProjects() {
     return data.success ? data.data : []
   } catch (error) {
     logger.error('Failed to fetch projects', error, { context: 'homepage' })
-    // Return fallback projects
+    // Return fallback projects with diverse mix including campaigns
     return [
       {
         id: '1',
@@ -101,8 +101,18 @@ async function getProjects() {
         description: 'Real-time dashboard for tracking marketing performance across multiple channels and campaigns.',
         type: 'tool',
         technologies: ['React', 'D3.js', 'Node.js', 'Google Analytics API', 'Chart.js'],
-        image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=250&fit=crop&crop=center',
+        image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=250&fit=crop&crop=center',
         status: 'Live'
+      },
+      {
+        id: '5',
+        slug: 'saas-growth-campaign',
+        title: 'SaaS Growth Campaign',
+        description: 'Multi-channel growth campaign that scaled a B2B SaaS from 100 to 10,000 users through strategic acquisition.',
+        type: 'campaign',
+        technologies: ['Google Ads', 'Facebook Ads', 'LinkedIn Ads', 'HubSpot', 'Mixpanel', 'Intercom'],
+        image: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=400&h=250&fit=crop&crop=center',
+        status: 'Completed'
       },
       {
         id: '3',
@@ -115,6 +125,16 @@ async function getProjects() {
         status: 'Live'
       },
       {
+        id: '8',
+        slug: 'ecommerce-retention-campaign',
+        title: 'E-commerce Retention Campaign',
+        description: 'Customer retention campaign that increased repeat purchase rate by 300% through personalized experiences.',
+        type: 'campaign',
+        technologies: ['Klaviyo', 'Shopify', 'Google Analytics', 'Facebook Pixel', 'Hotjar'],
+        image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=250&fit=crop&crop=center',
+        status: 'Completed'
+      },
+      {
         id: '4',
         slug: 'social-media-scheduler',
         title: 'Social Media Scheduler',
@@ -123,26 +143,6 @@ async function getProjects() {
         technologies: ['Vue.js', 'Laravel', 'Redis', 'Twitter API', 'Instagram API'],
         image: 'https://images.unsplash.com/photo-1611926653458-09294b3142bf?w=400&h=250&fit=crop&crop=center',
         status: 'In Development'
-      },
-      {
-        id: '5',
-        slug: 'conversion-funnel-analyzer',
-        title: 'Conversion Funnel Analyzer',
-        description: 'Data visualization tool for analyzing customer conversion funnels and identifying optimization opportunities.',
-        type: 'tool',
-        technologies: ['React', 'TypeScript', 'D3.js', 'Node.js', 'MongoDB'],
-        image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=250&fit=crop&crop=center',
-        status: 'Live'
-      },
-      {
-        id: '6',
-        slug: 'lead-scoring-engine',
-        title: 'Lead Scoring Engine',
-        description: 'Machine learning-powered lead scoring system that predicts conversion probability for marketing qualified leads.',
-        type: 'workflow',
-        technologies: ['Python', 'Scikit-learn', 'FastAPI', 'PostgreSQL', 'React'],
-        image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=250&fit=crop&crop=center',
-        status: 'Live'
       }
     ]
   }
