@@ -954,12 +954,16 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       </div>
       
       {/* Featured Image */}
-      <div className="relative h-64 md:h-96 overflow-hidden">
-        <img
-          src={post.image}
-          alt={post.title}
-          className="w-full h-full object-cover"
-        />
+      <div className="container mx-auto px-6 lg:px-12 xl:px-16">
+        <div className="max-w-4xl mx-auto">
+          <div className="relative h-64 md:h-96 overflow-hidden rounded-lg shadow-lg">
+            <img
+              src={post.image}
+              alt={post.title}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </div>
       </div>
       
       {/* Content */}

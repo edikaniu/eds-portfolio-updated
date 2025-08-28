@@ -4,9 +4,10 @@ import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { CalendarDays, Clock, Search, ArrowRight } from 'lucide-react'
+import { CalendarDays, Clock, Search, ArrowRight, Filter } from 'lucide-react'
 import { Navigation } from '@/components/navigation'
 import { Footer } from '@/components/footer'
+import { CategoryFilter } from '@/components/blog/category-filter'
 
 interface BlogPost {
   id: string
@@ -278,6 +279,7 @@ export const metadata: Metadata = {
   description: 'Insights on marketing, AI, growth strategies, and digital innovation',
 }
 
+
 interface BlogPageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
@@ -316,72 +318,26 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             </div>
           </div>
           
-          {/* Category Filters */}
+          {/* Enhanced Filter System */}
           <div className="mb-12">
-            <div className="flex flex-wrap justify-center gap-3">
-              <Link href="/blog">
-                <Button
-                  variant={!resolvedSearchParams.category ? "default" : "outline"}
-                  size="sm"
-                  className="px-4"
-                >
-                  All Categories
-                </Button>
-              </Link>
-              <Link href="/blog?category=AI & Marketing">
-                <Button
-                  variant={resolvedSearchParams.category === 'AI & Marketing' ? "default" : "outline"}
-                  size="sm"
-                  className="px-4"
-                >
-                  AI & Marketing
-                </Button>
-              </Link>
-              <Link href="/blog?category=Growth Marketing">
-                <Button
-                  variant={resolvedSearchParams.category === 'Growth Marketing' ? "default" : "outline"}
-                  size="sm"
-                  className="px-4"
-                >
-                  Growth Marketing
-                </Button>
-              </Link>
-              <Link href="/blog?category=Email Marketing">
-                <Button
-                  variant={resolvedSearchParams.category === 'Email Marketing' ? "default" : "outline"}
-                  size="sm"
-                  className="px-4"
-                >
-                  Email Marketing
-                </Button>
-              </Link>
-              <Link href="/blog?category=Analytics">
-                <Button
-                  variant={resolvedSearchParams.category === 'Analytics' ? "default" : "outline"}
-                  size="sm"
-                  className="px-4"
-                >
-                  Analytics
-                </Button>
-              </Link>
-              <Link href="/blog?category=Social Media">
-                <Button
-                  variant={resolvedSearchParams.category === 'Social Media' ? "default" : "outline"}
-                  size="sm"
-                  className="px-4"
-                >
-                  Social Media
-                </Button>
-              </Link>
-              <Link href="/blog?category=Content Marketing">
-                <Button
-                  variant={resolvedSearchParams.category === 'Content Marketing' ? "default" : "outline"}
-                  size="sm"
-                  className="px-4"
-                >
-                  Content Marketing
-                </Button>
-              </Link>
+            <div className="max-w-4xl mx-auto">
+              <div className="flex flex-col md:flex-row gap-4 items-center justify-center">
+                {/* Category Filter Dropdown */}
+                <div className="flex items-center gap-2">
+                  <Filter className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm font-medium text-muted-foreground">Filter by:</span>
+                  <CategoryFilter currentCategory={typeof resolvedSearchParams.category === 'string' ? resolvedSearchParams.category : ''} />
+                </div>
+                
+                {/* Clear Filters */}
+                {resolvedSearchParams.category && (
+                  <Link href="/blog">
+                    <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
+                      Clear Filters
+                    </Button>
+                  </Link>
+                )}
+              </div>
             </div>
           </div>
 
