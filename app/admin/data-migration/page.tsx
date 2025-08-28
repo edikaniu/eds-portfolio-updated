@@ -63,7 +63,7 @@ export default function DataMigrationPage() {
         projects: 0,
         skillCategories: 0,
         tools: 0,
-        errors: [error.message || 'Unknown error occurred']
+        errors: [error instanceof Error ? error.message : 'Unknown error occurred']
       })
     } finally {
       setIsLoading(false)
