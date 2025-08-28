@@ -192,6 +192,258 @@ const fallbackProjects: Project[] = [
     timeline: '6 months campaign execution',
     createdAt: '2023-09-01T00:00:00Z',
     updatedAt: '2024-03-01T00:00:00Z'
+  },
+  {
+    id: '6',
+    slug: 'content-automation-workflow',
+    title: 'Content Automation Workflow',
+    description: 'Automated content creation and distribution system that generates and publishes 100+ pieces monthly.',
+    type: 'workflow',
+    technologies: ['OpenAI API', 'Zapier', 'WordPress', 'Buffer', 'Canva API'],
+    image: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&h=600&fit=crop&crop=center',
+    category: 'Content Marketing',
+    features: [
+      'AI-powered content generation and ideation',
+      'Automated social media distribution across platforms',
+      'SEO optimization and keyword integration',
+      'Visual content creation with brand consistency',
+      'Performance tracking and optimization workflows'
+    ],
+    results: [
+      'Generated 100+ content pieces per month automatically',
+      'Increased content production efficiency by 500%',
+      'Improved SEO rankings for 200+ keywords',
+      'Saved 40+ hours weekly in manual content tasks'
+    ],
+    challenge: 'Manual content creation was time-consuming and inconsistent, limiting the ability to maintain regular publishing schedules across multiple platforms.',
+    solution: 'Built comprehensive automation workflow using AI tools for content generation, automated distribution systems, and performance optimization.',
+    timeline: '3 months development, 1 month optimization',
+    createdAt: '2023-08-01T00:00:00Z',
+    updatedAt: '2023-11-01T00:00:00Z'
+  },
+  {
+    id: '7',
+    slug: 'lead-scoring-engine',
+    title: 'Lead Scoring Engine',
+    description: 'Machine learning-powered lead scoring system that identifies high-value prospects automatically.',
+    type: 'tool',
+    technologies: ['Python', 'Scikit-learn', 'FastAPI', 'PostgreSQL', 'React'],
+    image: 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&h=600&fit=crop&crop=center',
+    category: 'Sales Analytics',
+    features: [
+      'ML-powered predictive lead scoring algorithms',
+      'Real-time prospect evaluation and ranking',
+      'Integration with CRM systems and sales workflows',
+      'Behavioral tracking and engagement analysis',
+      'Automated lead qualification and routing'
+    ],
+    results: [
+      'Improved lead conversion rates by 250%',
+      'Reduced time-to-qualification by 60%',
+      'Increased sales team efficiency by 180%',
+      'Generated $300K+ in additional qualified pipeline'
+    ],
+    challenge: 'Sales team was spending too much time on unqualified leads, with inconsistent scoring criteria and poor conversion rates.',
+    solution: 'Developed machine learning system that automatically scores leads based on behavior, demographics, and engagement patterns.',
+    timeline: '4 months development, 2 months training',
+    createdAt: '2023-07-01T00:00:00Z',
+    updatedAt: '2023-11-01T00:00:00Z'
+  },
+  {
+    id: '8',
+    slug: 'ecommerce-retention-campaign',
+    title: 'E-commerce Retention Campaign',
+    description: 'Customer retention campaign that increased repeat purchase rate by 300% through personalized experiences.',
+    type: 'campaign',
+    technologies: ['Klaviyo', 'Shopify', 'Google Analytics', 'Facebook Pixel', 'Hotjar'],
+    image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop&crop=center',
+    category: 'E-commerce',
+    features: [
+      'Personalized email retention sequences',
+      'Behavioral trigger campaigns based on purchase history',
+      'Win-back campaigns for inactive customers',
+      'Loyalty program integration and optimization',
+      'Cross-sell and upsell automation workflows'
+    ],
+    results: [
+      'Increased repeat purchase rate by 300%',
+      'Improved customer lifetime value by 180%',
+      'Reduced churn rate by 45%',
+      'Generated $200K+ in additional recurring revenue'
+    ],
+    challenge: 'E-commerce store had low customer retention with most customers making only one purchase, limiting long-term revenue growth.',
+    solution: 'Implemented comprehensive retention strategy with personalized campaigns, behavioral triggers, and loyalty programs to increase repeat purchases.',
+    timeline: '4 months campaign development and execution',
+    createdAt: '2023-06-01T00:00:00Z',
+    updatedAt: '2023-10-01T00:00:00Z'
+  },
+  {
+    id: '9',
+    slug: 'referral-program-system',
+    title: 'Referral Program System',
+    description: 'Complete referral program platform with tracking, rewards, and analytics for viral growth.',
+    type: 'workflow',
+    technologies: ['Next.js', 'Stripe API', 'Firebase', 'SendGrid', 'React'],
+    image: 'https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=800&h=600&fit=crop&crop=center',
+    category: 'Growth Marketing',
+    features: [
+      'Custom referral link generation and tracking',
+      'Automated reward distribution and management',
+      'Multi-tier referral program structures',
+      'Real-time analytics and performance dashboards',
+      'Integration with existing marketing stack'
+    ],
+    results: [
+      'Generated 40% of new customers through referrals',
+      'Achieved 2.5x viral coefficient improvement',
+      'Reduced customer acquisition cost by 35%',
+      'Increased user engagement by 150%'
+    ],
+    challenge: 'Company lacked systematic approach to referral marketing, missing opportunities for viral growth and organic customer acquisition.',
+    solution: 'Built comprehensive referral system with tracking, automated rewards, and analytics to create sustainable viral growth loop.',
+    timeline: '3 months development, 1 month optimization',
+    createdAt: '2023-05-01T00:00:00Z',
+    updatedAt: '2023-08-01T00:00:00Z'
+  },
+  {
+    id: '10',
+    slug: 'conversion-tracking-tool',
+    title: 'Conversion Tracking Tool',
+    description: 'Advanced conversion tracking and attribution tool for multi-channel marketing campaigns.',
+    type: 'tool',
+    technologies: ['JavaScript', 'Google Tag Manager', 'BigQuery', 'Data Studio', 'Node.js'],
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop&crop=center',
+    category: 'Analytics',
+    features: [
+      'Cross-platform conversion attribution modeling',
+      'Real-time campaign performance tracking',
+      'Custom event tracking and goal management',
+      'Advanced funnel analysis and optimization',
+      'Automated reporting and alert systems'
+    ],
+    results: [
+      'Improved attribution accuracy by 90%',
+      'Identified $150K+ in optimization opportunities',
+      'Reduced data discrepancies by 85%',
+      'Increased marketing ROI by 120%'
+    ],
+    challenge: 'Marketing team struggled with accurate conversion tracking across multiple channels, leading to poor budget allocation decisions.',
+    solution: 'Developed comprehensive tracking system with advanced attribution modeling to provide accurate insights for optimization.',
+    timeline: '2 months development, 1 month integration',
+    createdAt: '2023-04-01T00:00:00Z',
+    updatedAt: '2023-07-01T00:00:00Z'
+  },
+  {
+    id: '11',
+    slug: 'influencer-outreach-campaign',
+    title: 'Influencer Outreach Campaign',
+    description: 'Strategic influencer partnership campaign that generated 2M+ impressions and 50K+ new followers.',
+    type: 'campaign',
+    technologies: ['BuzzSumo', 'Pitchbox', 'Airtable', 'Instagram API', 'TikTok API'],
+    image: 'https://images.unsplash.com/photo-1611926653458-09294b3142bf?w=800&h=600&fit=crop&crop=center',
+    category: 'Influencer Marketing',
+    features: [
+      'Influencer discovery and vetting processes',
+      'Automated outreach and relationship management',
+      'Campaign performance tracking and analytics',
+      'Content approval and brand consistency workflows',
+      'ROI measurement and optimization strategies'
+    ],
+    results: [
+      'Generated 2M+ impressions across campaigns',
+      'Acquired 50K+ new social media followers',
+      'Achieved 8x ROI on influencer partnerships',
+      'Increased brand awareness by 300% in target demographics'
+    ],
+    challenge: 'Brand struggled with influencer discovery, relationship management, and measuring ROI from influencer partnerships.',
+    solution: 'Built systematic approach to influencer marketing with tools for discovery, outreach, tracking, and performance measurement.',
+    timeline: '5 months campaign planning and execution',
+    createdAt: '2023-03-01T00:00:00Z',
+    updatedAt: '2023-08-01T00:00:00Z'
+  },
+  {
+    id: '12',
+    slug: 'marketing-attribution-dashboard',
+    title: 'Marketing Attribution Dashboard',
+    description: 'Comprehensive attribution dashboard that tracks customer journey across all touchpoints.',
+    type: 'tool',
+    technologies: ['React', 'D3.js', 'Python', 'Google Analytics API', 'Facebook API'],
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop&crop=center',
+    category: 'Analytics',
+    features: [
+      'Multi-touch attribution modeling and analysis',
+      'Customer journey visualization and mapping',
+      'Real-time performance metrics and KPI tracking',
+      'Cross-channel campaign comparison tools',
+      'Predictive analytics for budget optimization'
+    ],
+    results: [
+      'Improved marketing attribution accuracy by 150%',
+      'Optimized budget allocation for 25% better ROI',
+      'Reduced reporting time by 80%',
+      'Identified top-performing customer journey paths'
+    ],
+    challenge: 'Marketing team lacked visibility into customer journey across touchpoints, making it difficult to optimize campaigns and allocate budget effectively.',
+    solution: 'Created comprehensive dashboard with advanced attribution modeling to provide clear insights into customer journey and campaign performance.',
+    timeline: '3 months development, 1 month integration',
+    createdAt: '2023-02-01T00:00:00Z',
+    updatedAt: '2023-05-01T00:00:00Z'
+  },
+  {
+    id: '13',
+    slug: 'ab-testing-framework',
+    title: 'A/B Testing Framework',
+    description: 'Complete A/B testing framework for running experiments on websites and mobile apps.',
+    type: 'workflow',
+    technologies: ['JavaScript', 'React', 'Node.js', 'MongoDB', 'Statistics'],
+    image: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&h=600&fit=crop&crop=center',
+    category: 'Conversion Optimization',
+    features: [
+      'Visual experiment builder with no-code interface',
+      'Statistical significance testing and analysis',
+      'Multi-variant testing capabilities',
+      'Automated traffic allocation and optimization',
+      'Integration with analytics and tracking systems'
+    ],
+    results: [
+      'Increased conversion rates by average of 35%',
+      'Reduced development time for tests by 70%',
+      'Ran 50+ experiments with statistical confidence',
+      'Generated $250K+ in additional revenue from optimizations'
+    ],
+    challenge: 'Development team spent significant time building custom A/B tests, and marketing lacked tools for systematic experimentation.',
+    solution: 'Built comprehensive testing framework that enables rapid experiment creation, statistical analysis, and optimization workflows.',
+    timeline: '4 months development, 1 month optimization',
+    createdAt: '2023-01-01T00:00:00Z',
+    updatedAt: '2023-05-01T00:00:00Z'
+  },
+  {
+    id: '14',
+    slug: 'brand-awareness-campaign',
+    title: 'Brand Awareness Campaign',
+    description: 'Integrated brand awareness campaign that increased brand recognition by 400% in target market.',
+    type: 'campaign',
+    technologies: ['Google Ads', 'Facebook Ads', 'YouTube Ads', 'Brand24', 'Google Trends'],
+    image: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&h=600&fit=crop&crop=center',
+    category: 'Brand Marketing',
+    features: [
+      'Multi-channel brand awareness strategy',
+      'Creative campaign development and testing',
+      'Brand sentiment monitoring and analysis',
+      'Competitive analysis and positioning',
+      'Integrated content marketing approach'
+    ],
+    results: [
+      'Increased brand recognition by 400% in target market',
+      'Improved brand sentiment score by 250%',
+      'Generated 5M+ impressions across all channels',
+      'Achieved 3.5x increase in branded search volume'
+    ],
+    challenge: 'New brand in competitive market with low awareness and unclear positioning relative to established competitors.',
+    solution: 'Developed comprehensive brand awareness strategy with integrated campaigns across paid, owned, and earned media channels.',
+    timeline: '6 months campaign planning and execution',
+    createdAt: '2022-12-01T00:00:00Z',
+    updatedAt: '2023-06-01T00:00:00Z'
   }
 ]
 

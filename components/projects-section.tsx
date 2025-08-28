@@ -5,7 +5,7 @@ import { motion } from "framer-motion"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Wrench, Workflow, ArrowRight } from "lucide-react"
+import { Wrench, Workflow, Target, ArrowRight } from "lucide-react"
 import Link from "next/link"
 
 interface Project {
@@ -13,7 +13,7 @@ interface Project {
   slug: string
   title: string
   description: string
-  type: "tool" | "workflow"
+  type: "tool" | "workflow" | "campaign"
   technologies: string[]
   image?: string
   status: "Live" | "In Development" | "Completed"
@@ -24,7 +24,7 @@ interface ProjectsSectionProps {
 }
 
 export function ProjectsSection({ projects = [] }: ProjectsSectionProps) {
-  const [filter, setFilter] = useState<"all" | "tool" | "workflow">("all")
+  const [filter, setFilter] = useState<"all" | "tool" | "workflow" | "campaign">("all")
   const [isVisible, setIsVisible] = useState(false)
 
   const filteredProjects = projects.filter((project) =>
@@ -49,7 +49,7 @@ export function ProjectsSection({ projects = [] }: ProjectsSectionProps) {
           </p>
 
           {/* Filter Buttons */}
-          <div className="flex justify-center gap-4 mb-12">
+          <div className="flex flex-wrap justify-center gap-4 mb-12">
             <Button
               variant={filter === "all" ? "default" : "outline"}
               onClick={() => setFilter("all")}
@@ -73,6 +73,14 @@ export function ProjectsSection({ projects = [] }: ProjectsSectionProps) {
               <Workflow className="w-4 h-4 mr-2" />
               Workflows
             </Button>
+            <Button
+              variant={filter === "campaign" ? "default" : "outline"}
+              onClick={() => setFilter("campaign")}
+              className="px-6"
+            >
+              <Target className="w-4 h-4 mr-2" />
+              Campaigns
+            </Button>
           </div>
         </motion.div>
 
@@ -94,14 +102,18 @@ export function ProjectsSection({ projects = [] }: ProjectsSectionProps) {
                       className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                     <div className="absolute top-4 left-4">
-                      <Badge variant={project.type === "tool" ? "default" : "secondary"}>
+                      <Badge variant={project.type === "tool" ? "default" : project.type === "workflow" ? "secondary" : "destructive"}>
                         {project.type === "tool" ? (
                           <>
                             <Wrench className="w-3 h-3 mr-1" /> Tool
                           </>
-                        ) : (
+                        ) : project.type === "workflow" ? (
                           <>
                             <Workflow className="w-3 h-3 mr-1" /> Workflow
+                          </>
+                        ) : (
+                          <>
+                            <Target className="w-3 h-3 mr-1" /> Campaign
                           </>
                         )}
                       </Badge>
