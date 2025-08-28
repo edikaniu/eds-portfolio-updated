@@ -394,7 +394,7 @@ export const POST = withAdminAuth(async (request: NextRequest) => {
   } catch (error) {
     console.error('Data migration error:', error)
     return NextResponse.json(
-      { success: false, message: 'Failed to migrate data', error: error.message },
+      { success: false, message: 'Failed to migrate data', error: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     )
   }
