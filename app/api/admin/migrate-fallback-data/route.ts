@@ -291,6 +291,9 @@ const FALLBACK_DATA = {
 // POST - Migrate all fallback data to database
 export const POST = withAdminAuth(async (request: NextRequest) => {
   try {
+    // First, test database connection
+    await prisma.$queryRaw`SELECT 1 as test`
+    
     const results = {
       blogPosts: 0,
       caseStudies: 0, 
@@ -393,8 +396,27 @@ export const POST = withAdminAuth(async (request: NextRequest) => {
 
   } catch (error) {
     console.error('Data migration error:', error)
+    
+    let errorMessage = 'Failed to migrate data'
+    let detailedError = error instanceof Error ? error.message : 'Unknown error'
+    
+    // Provide specific error messages for common issues
+    if (detailedError.includes('file:')) {
+      errorMessage = 'Database configuration error: SQLite not supported on Vercel'
+      detailedError = 'Please set up PostgreSQL database in Vercel dashboard and configure DATABASE_URL environment variable'
+    } else if (detailedError.includes('connect ECONNREFUSED')) {
+      errorMessage = 'Database connection refused'
+      detailedError = 'Cannot connect to database. Please check DATABASE_URL and ensure database is accessible'
+    } else if (detailedError.includes('password authentication failed')) {
+      errorMessage = 'Database authentication failed'
+      detailedError = 'Invalid database credentials in DATABASE_URL'
+    } else if (detailedError.includes('database') && detailedError.includes('does not exist')) {
+      errorMessage = 'Database does not exist'
+      detailedError = 'Please create the database or check DATABASE_URL'
+    }
+    
     return NextResponse.json(
-      { success: false, message: 'Failed to migrate data', error: error instanceof Error ? error.message : 'Unknown error' },
+      { success: false, message: errorMessage, error: detailedError },
       { status: 500 }
     )
   }
