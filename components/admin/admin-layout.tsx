@@ -26,7 +26,8 @@ import {
   PieChart,
   BookOpen,
   Wrench,
-  TrendingUp
+  TrendingUp,
+  Database
 } from 'lucide-react'
 
 interface AdminUser {
@@ -110,6 +111,7 @@ export function AdminLayout({ children, title = "Dashboard" }: AdminLayoutProps)
 
   const sidebarItems = [
     { icon: LayoutDashboard, label: 'Dashboard', href: '/admin/dashboard' },
+    { icon: Database, label: 'Data Migration', href: '/admin/data-migration' },
     { icon: Globe, label: 'Frontend Content', href: '/admin/frontend-content' },
     { icon: FolderOpen, label: 'Content Management', href: '/admin/content' },
     { icon: BookOpen, label: 'Blog Posts', href: '/admin/blog' },
