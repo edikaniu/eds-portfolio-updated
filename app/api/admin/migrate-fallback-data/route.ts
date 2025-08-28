@@ -1033,55 +1033,144 @@ const FALLBACK_DATA = {
     }
   ],
 
-  // Projects Data  
+  // Projects Data - All 14 comprehensive projects from frontend
   projects: [
     {
       title: "AI Marketing Automation Suite",
       slug: "ai-marketing-automation-suite",
-      description: "Comprehensive AI-powered marketing automation platform with predictive analytics, dynamic content personalization, and multi-channel campaign orchestration.",
-      image: "/images/projects/ai-automation.jpg",
-      technologies: JSON.stringify(["Python", "TensorFlow", "React", "Node.js", "PostgreSQL", "Redis", "Docker"]),
+      description: "Comprehensive marketing automation platform leveraging AI for personalized campaigns, lead scoring, and customer journey optimization. Built to scale marketing efforts while maintaining personalization at every touchpoint.",
+      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop&crop=center",
+      technologies: JSON.stringify(['Next.js', 'TypeScript', 'OpenAI API', 'HubSpot API', 'PostgreSQL', 'Redis', 'Stripe API']),
       githubUrl: "https://github.com/example/ai-marketing-suite",
       liveUrl: "https://ai-marketing-suite.demo.com",
-      category: "tool",
+      category: "workflow",
       order: 1
     },
     {
-      title: "Growth Analytics Dashboard", 
+      title: "Growth Analytics Dashboard",
       slug: "growth-analytics-dashboard",
-      description: "Real-time marketing performance dashboard with advanced attribution modeling, cohort analysis, and predictive growth forecasting.",
-      image: "/images/projects/analytics-dashboard.jpg",
-      technologies: JSON.stringify(["Next.js", "TypeScript", "D3.js", "Chart.js", "Prisma", "PostgreSQL"]),
-      githubUrl: "https://github.com/example/growth-analytics",
+      description: "Real-time analytics dashboard providing comprehensive insights into marketing performance, user behavior, and growth metrics. Features advanced visualization and predictive analytics for data-driven decision making.",
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop&crop=center",
+      technologies: JSON.stringify(['React', 'D3.js', 'Node.js', 'Google Analytics API', 'Chart.js', 'MongoDB', 'Express']),
+      githubUrl: "https://github.com/example/growth-dashboard",
       liveUrl: "https://growth-dashboard.demo.com",
       category: "tool",
       order: 2
     },
     {
       title: "Email Campaign Optimizer",
-      slug: "email-campaign-optimizer", 
-      description: "AI-powered email marketing optimization tool with A/B testing, send time optimization, and dynamic content personalization.",
-      image: "/images/projects/email-optimizer.jpg",
-      technologies: JSON.stringify(["Vue.js", "Python", "FastAPI", "MySQL", "Redis", "Celery"]),
+      slug: "email-campaign-optimizer",
+      description: "AI-powered email optimization tool that analyzes subject lines, content, and timing to maximize open rates and click-through rates. Includes A/B testing automation and performance prediction.",
+      image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&h=600&fit=crop&crop=center",
+      technologies: JSON.stringify(['Python', 'Flask', 'TensorFlow', 'SendGrid API', 'React', 'SQLAlchemy', 'Celery']),
       githubUrl: "https://github.com/example/email-optimizer",
       liveUrl: "https://email-optimizer.demo.com",
       category: "tool",
       order: 3
     },
     {
-      title: "Content Automation Workflow",
-      slug: "content-automation-workflow",
-      description: "Automated content creation and distribution system using AI for content generation, optimization, and multi-channel publishing.",
-      image: "/images/projects/content-workflow.jpg", 
-      technologies: JSON.stringify(["React", "Node.js", "OpenAI API", "MongoDB", "AWS Lambda", "Zapier"]),
-      githubUrl: "https://github.com/example/content-automation",
-      liveUrl: "https://content-automation.demo.com",
+      title: "Social Media Scheduler",
+      slug: "social-media-scheduler",
+      description: "Advanced social media scheduling and analytics platform with AI-powered content suggestions, optimal posting time prediction, and cross-platform management capabilities.",
+      image: "https://images.unsplash.com/photo-1611926653458-09294b3142bf?w=800&h=600&fit=crop&crop=center",
+      technologies: JSON.stringify(['Vue.js', 'Laravel', 'Redis', 'Twitter API', 'Instagram API', 'Facebook API', 'MySQL']),
+      githubUrl: "https://github.com/example/social-scheduler",
       category: "workflow",
       order: 4
+    },
+    {
+      title: "SaaS Growth Campaign",
+      slug: "saas-growth-campaign",
+      description: "Multi-channel growth campaign that scaled a B2B SaaS from 100 to 10,000 users through strategic acquisition channels and conversion optimization.",
+      image: "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&h=600&fit=crop&crop=center",
+      technologies: JSON.stringify(['Google Ads', 'Facebook Ads', 'LinkedIn Ads', 'HubSpot', 'Mixpanel', 'Intercom']),
+      category: "campaign",
+      order: 5
+    },
+    {
+      title: "Content Automation Workflow",
+      slug: "content-automation-workflow",
+      description: "Automated content creation and distribution system that generates and publishes 100+ pieces monthly.",
+      image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&h=600&fit=crop&crop=center",
+      technologies: JSON.stringify(['OpenAI API', 'Zapier', 'WordPress', 'Buffer', 'Canva API']),
+      category: "workflow",
+      order: 6
+    },
+    {
+      title: "Lead Scoring Engine",
+      slug: "lead-scoring-engine",
+      description: "Machine learning-powered lead scoring system that identifies high-value prospects automatically.",
+      image: "https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&h=600&fit=crop&crop=center",
+      technologies: JSON.stringify(['Python', 'Scikit-learn', 'FastAPI', 'PostgreSQL', 'React']),
+      category: "tool",
+      order: 7
+    },
+    {
+      title: "E-commerce Retention Campaign",
+      slug: "ecommerce-retention-campaign",
+      description: "Customer retention campaign that increased repeat purchase rate by 300% through personalized experiences.",
+      image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop&crop=center",
+      technologies: JSON.stringify(['Klaviyo', 'Shopify', 'Google Analytics', 'Facebook Pixel', 'Hotjar']),
+      category: "campaign",
+      order: 8
+    },
+    {
+      title: "Referral Program System",
+      slug: "referral-program-system",
+      description: "Complete referral program platform with tracking, rewards, and analytics for viral growth.",
+      image: "https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=800&h=600&fit=crop&crop=center",
+      technologies: JSON.stringify(['Next.js', 'Stripe API', 'Firebase', 'SendGrid', 'React']),
+      category: "workflow",
+      order: 9
+    },
+    {
+      title: "Conversion Tracking Tool",
+      slug: "conversion-tracking-tool",
+      description: "Advanced conversion tracking and attribution tool for multi-channel marketing campaigns.",
+      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop&crop=center",
+      technologies: JSON.stringify(['JavaScript', 'Google Tag Manager', 'BigQuery', 'Data Studio', 'Node.js']),
+      category: "tool",
+      order: 10
+    },
+    {
+      title: "Influencer Outreach Campaign",
+      slug: "influencer-outreach-campaign",
+      description: "Strategic influencer partnership campaign that generated 2M+ impressions and 50K+ new followers.",
+      image: "https://images.unsplash.com/photo-1611926653458-09294b3142bf?w=800&h=600&fit=crop&crop=center",
+      technologies: JSON.stringify(['BuzzSumo', 'Pitchbox', 'Airtable', 'Instagram API', 'TikTok API']),
+      category: "campaign",
+      order: 11
+    },
+    {
+      title: "Marketing Attribution Dashboard",
+      slug: "marketing-attribution-dashboard",
+      description: "Comprehensive attribution dashboard that tracks customer journey across all touchpoints.",
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop&crop=center",
+      technologies: JSON.stringify(['React', 'D3.js', 'Python', 'Google Analytics API', 'Facebook API']),
+      category: "tool",
+      order: 12
+    },
+    {
+      title: "A/B Testing Framework",
+      slug: "ab-testing-framework",
+      description: "Complete A/B testing framework for running experiments on websites and mobile apps.",
+      image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&h=600&fit=crop&crop=center",
+      technologies: JSON.stringify(['JavaScript', 'React', 'Node.js', 'MongoDB', 'Statistics']),
+      category: "workflow",
+      order: 13
+    },
+    {
+      title: "Brand Awareness Campaign",
+      slug: "brand-awareness-campaign",
+      description: "Integrated brand awareness campaign that increased brand recognition by 400% in target market.",
+      image: "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&h=600&fit=crop&crop=center",
+      technologies: JSON.stringify(['Google Ads', 'Facebook Ads', 'YouTube Ads', 'Brand24', 'Google Trends']),
+      category: "campaign",
+      order: 14
     }
   ],
 
-  // Skills Categories Data
+  // Skills Categories Data - All 6 comprehensive skill categories with 24 skills
   skillCategories: [
     {
       title: "Strategic Leadership",
@@ -1108,6 +1197,18 @@ const FALLBACK_DATA = {
       order: 2
     },
     {
+      title: "Brand & Communications",
+      description: "Strategic brand positioning and integrated communications",
+      color: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+      skills: JSON.stringify([
+        { name: "Brand Strategy", proficiency: 89 },
+        { name: "Public Relations", proficiency: 87 },
+        { name: "Content Strategy", proficiency: 92 },
+        { name: "Crisis Communication", proficiency: 85 }
+      ]),
+      order: 3
+    },
+    {
       title: "Growth Marketing",
       description: "Data-driven growth strategies and customer acquisition",
       color: "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)",
@@ -1117,11 +1218,35 @@ const FALLBACK_DATA = {
         { name: "Customer Acquisition", proficiency: 93 },
         { name: "Product Positioning", proficiency: 88 }
       ]),
-      order: 3
+      order: 4
+    },
+    {
+      title: "Analytics & Performance",
+      description: "Data analysis, performance tracking, and optimization",
+      color: "linear-gradient(135deg, #fa709a 0%, #fee140 100%)",
+      skills: JSON.stringify([
+        { name: "Marketing Analytics", proficiency: 90 },
+        { name: "Performance Tracking", proficiency: 92 },
+        { name: "A/B Testing", proficiency: 89 },
+        { name: "Data Visualization", proficiency: 86 }
+      ]),
+      order: 5
+    },
+    {
+      title: "Campaign Management",
+      description: "End-to-end campaign planning, execution and optimization",
+      color: "linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)",
+      skills: JSON.stringify([
+        { name: "Integrated Marketing Campaigns", proficiency: 94 },
+        { name: "Partnership Development", proficiency: 87 },
+        { name: "Event Marketing", proficiency: 85 },
+        { name: "CRM", proficiency: 88 }
+      ]),
+      order: 6
     }
   ],
 
-  // Tools Data
+  // Tools Data - All 16 comprehensive professional tools with brand colors
   tools: [
     { name: 'HubSpot', description: 'CRM and Marketing Automation', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/hubspot.svg', category: 'Marketing', color: '#ff7a59', order: 1 },
     { name: 'Google Analytics', description: 'Web Analytics', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/googleanalytics.svg', category: 'Analytics', color: '#e37400', order: 2 },
@@ -1130,7 +1255,15 @@ const FALLBACK_DATA = {
     { name: 'Google Ads', description: 'Search and Display Advertising', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/googleads.svg', category: 'Advertising', color: '#4285f4', order: 5 },
     { name: 'Mailchimp', description: 'Email Marketing Platform', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/mailchimp.svg', category: 'Email Marketing', color: '#ffe01b', order: 6 },
     { name: 'Salesforce', description: 'Customer Relationship Management', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/salesforce.svg', category: 'CRM', color: '#00a1e0', order: 7 },
-    { name: 'Canva', description: 'Graphic Design Platform', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/canva.svg', category: 'Design', color: '#00c4cc', order: 8 }
+    { name: 'Canva', description: 'Graphic Design Platform', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/canva.svg', category: 'Design', color: '#00c4cc', order: 8 },
+    { name: 'Figma', description: 'Design and Prototyping', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/figma.svg', category: 'Design', color: '#f24e1e', order: 9 },
+    { name: 'Slack', description: 'Team Communication', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/slack.svg', category: 'Communication', color: '#4a154b', order: 10 },
+    { name: 'Zapier', description: 'Workflow Automation', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/zapier.svg', category: 'Automation', color: '#ff4a00', order: 11 },
+    { name: 'WordPress', description: 'Content Management System', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/wordpress.svg', category: 'CMS', color: '#21759b', order: 12 },
+    { name: 'Hotjar', description: 'User Behavior Analytics', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/hotjar.svg', category: 'Analytics', color: '#fd3a5c', order: 13 },
+    { name: 'Typeform', description: 'Online Form Builder', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/typeform.svg', category: 'Forms', color: '#262627', order: 14 },
+    { name: 'Buffer', description: 'Social Media Management', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/buffer.svg', category: 'Social Media', color: '#168eea', order: 15 },
+    { name: 'Airtable', description: 'Cloud Collaboration Platform', logoUrl: 'https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/airtable.svg', category: 'Productivity', color: '#18bfff', order: 16 }
   ]
 }
 
