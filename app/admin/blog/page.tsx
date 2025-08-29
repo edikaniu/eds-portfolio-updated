@@ -362,47 +362,57 @@ export default function BlogManagementPage() {
               </div>
             </Card>
 
-            {/* Posts List */}
+            {/* Posts List - Responsive Design */}
             <Card className="shadow-lg border-0 bg-white rounded-xl overflow-hidden">
-              <div className="overflow-x-auto">
+              {/* Desktop Table View */}
+              <div className="hidden lg:block">
                 <table className="w-full">
                   <thead className="bg-gradient-to-r from-indigo-50 to-indigo-100 border-b border-indigo-200">
                     <tr>
-                      <th className="px-4 lg:px-6 py-5 text-left text-sm font-bold text-indigo-900 uppercase tracking-wide">Title</th>
-                      <th className="px-4 lg:px-6 py-5 text-left text-sm font-bold text-indigo-900 uppercase tracking-wide hidden sm:table-cell">Category</th>
-                      <th className="px-4 lg:px-6 py-5 text-left text-sm font-bold text-indigo-900 uppercase tracking-wide hidden md:table-cell">Status</th>
-                      <th className="px-4 lg:px-6 py-5 text-left text-sm font-bold text-indigo-900 uppercase tracking-wide hidden lg:table-cell">Date</th>
-                      <th className="px-4 lg:px-6 py-5 text-right text-sm font-bold text-indigo-900 uppercase tracking-wide">Actions</th>
+                      <th className="px-6 py-5 text-left text-sm font-bold text-indigo-900 uppercase tracking-wide">Actions</th>
+                      <th className="px-6 py-5 text-left text-sm font-bold text-indigo-900 uppercase tracking-wide">Title</th>
+                      <th className="px-6 py-5 text-left text-sm font-bold text-indigo-900 uppercase tracking-wide">Category</th>
+                      <th className="px-6 py-5 text-left text-sm font-bold text-indigo-900 uppercase tracking-wide">Status</th>
+                      <th className="px-6 py-5 text-left text-sm font-bold text-indigo-900 uppercase tracking-wide">Date</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-100">
                     {blogPosts.map((post) => (
                       <tr key={post.id} className="hover:bg-gray-50 transition-colors">
-                        <td className="px-4 lg:px-6 py-6">
-                          <div className="min-w-0">
-                            <div className="text-base font-semibold text-gray-900 truncate">{post.title}</div>
-                            <div className="text-sm text-gray-500 truncate mt-1">{post.slug}</div>
-                            {/* Show category and status on mobile */}
-                            <div className="flex gap-2 mt-2 sm:hidden">
-                              <span className="inline-flex px-2 py-1 text-xs font-medium rounded bg-blue-50 text-blue-700">
-                                {post.category || 'Uncategorized'}
-                              </span>
-                              <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded ${
-                                post.isDraft 
-                                  ? 'bg-amber-50 text-amber-700' 
-                                  : 'bg-emerald-50 text-emerald-700'
-                              }`}>
-                                {post.isDraft ? 'Draft' : 'Published'}
-                              </span>
-                            </div>
+                        <td className="px-6 py-6">
+                          <div className="flex items-center space-x-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleEdit(post)}
+                              className="px-3 py-2 rounded-lg border-gray-200 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 transition-colors"
+                              title="Edit post"
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="text-red-600 hover:text-red-700 hover:bg-red-50 hover:border-red-300 px-3 py-2 rounded-lg border-gray-200 transition-colors"
+                              onClick={() => handleDelete(post.id)}
+                              title="Delete post"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
                           </div>
                         </td>
-                        <td className="px-4 lg:px-6 py-6 hidden sm:table-cell">
+                        <td className="px-6 py-6">
+                          <div className="min-w-0">
+                            <div className="text-base font-semibold text-gray-900">{post.title}</div>
+                            <div className="text-sm text-gray-500 truncate mt-1">{post.slug}</div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-6">
                           <span className="inline-flex px-3 py-1.5 text-sm font-medium rounded-lg bg-blue-50 text-blue-700 border border-blue-200 whitespace-nowrap">
                             {post.category || 'Uncategorized'}
                           </span>
                         </td>
-                        <td className="px-4 lg:px-6 py-6 hidden md:table-cell">
+                        <td className="px-6 py-6">
                           <span className={`inline-flex px-3 py-1.5 text-sm font-semibold rounded-lg whitespace-nowrap border ${
                             post.isDraft 
                               ? 'bg-amber-50 text-amber-700 border-amber-200' 
@@ -411,36 +421,77 @@ export default function BlogManagementPage() {
                             {post.isDraft ? 'Draft' : 'Published'}
                           </span>
                         </td>
-                        <td className="px-4 lg:px-6 py-6 text-sm text-gray-600 hidden lg:table-cell">
+                        <td className="px-6 py-6 text-sm text-gray-600">
                           <div className="flex items-center whitespace-nowrap">
                             <Calendar className="h-4 w-4 mr-2 flex-shrink-0 text-gray-400" />
                             <span className="truncate font-medium">{new Date(post.createdAt).toLocaleDateString()}</span>
-                          </div>
-                        </td>
-                        <td className="px-4 lg:px-6 py-6 text-right">
-                          <div className="flex items-center justify-end space-x-1">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleEdit(post)}
-                              className="min-w-0 px-2 py-1.5 rounded-lg border-gray-200 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 transition-colors"
-                            >
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="text-red-600 hover:text-red-700 hover:bg-red-50 hover:border-red-300 min-w-0 px-2 py-1.5 rounded-lg border-gray-200 transition-colors"
-                              onClick={() => handleDelete(post.id)}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
                           </div>
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
+              </div>
+
+              {/* Mobile/Tablet Card View */}
+              <div className="lg:hidden">
+                <div className="divide-y divide-gray-100">
+                  {blogPosts.map((post) => (
+                    <div key={post.id} className="p-4 sm:p-6 hover:bg-gray-50 transition-colors">
+                      {/* Mobile First Layout */}
+                      <div className="space-y-4">
+                        {/* Title and Actions Row */}
+                        <div className="flex items-start justify-between gap-3">
+                          <h3 className="text-base sm:text-lg font-semibold text-gray-900 flex-1 leading-tight">{post.title}</h3>
+                          {/* Action buttons - always visible without scrolling */}
+                          <div className="flex items-center space-x-1 flex-shrink-0">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleEdit(post)}
+                              className="px-2 py-2 rounded-lg border-gray-200 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 transition-colors"
+                              title="Edit post"
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="text-red-600 hover:text-red-700 hover:bg-red-50 hover:border-red-300 px-2 py-2 rounded-lg border-gray-200 transition-colors"
+                              onClick={() => handleDelete(post.id)}
+                              title="Delete post"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                        
+                        {/* Slug */}
+                        <div className="text-sm text-gray-500 font-mono break-all">{post.slug}</div>
+                        
+                        {/* Meta information - responsive stacking */}
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="inline-flex px-2 py-1 text-xs font-medium rounded-md bg-blue-50 text-blue-700 border border-blue-200">
+                              {post.category || 'Uncategorized'}
+                            </span>
+                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-md border ${
+                              post.isDraft 
+                                ? 'bg-amber-50 text-amber-700 border-amber-200' 
+                                : 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                            }`}>
+                              {post.isDraft ? 'Draft' : 'Published'}
+                            </span>
+                          </div>
+                          <div className="flex items-center text-sm text-gray-600">
+                            <Calendar className="h-4 w-4 mr-1 text-gray-400" />
+                            <span className="font-medium">{new Date(post.createdAt).toLocaleDateString()}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
               {blogPosts.length === 0 && (
                 <div className="text-center py-16 px-8">

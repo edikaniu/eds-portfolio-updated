@@ -19,18 +19,48 @@ export const GET = withAdminAuth(async (request: NextRequest) => {
   try {
     const { searchParams } = new URL(request.url)
     const includeInactive = searchParams.get('includeInactive') === 'true'
+    const page = parseInt(searchParams.get('page') || '1')
+    const limit = parseInt(searchParams.get('limit') || '10')
+    const search = searchParams.get('search') || ''
 
     const where: any = {}
     if (!includeInactive) {
       where.isActive = true
     }
 
+    // Add search functionality
+    if (search) {
+      where.OR = [
+        {
+          title: {
+            contains: search,
+            mode: 'insensitive'
+          }
+        },
+        {
+          description: {
+            contains: search,
+            mode: 'insensitive'
+          }
+        }
+      ]
+    }
+
+    // Calculate pagination
+    const skip = (page - 1) * limit
+    const take = limit
+
+    // Get total count for pagination metadata
+    const totalCount = await prisma.skillCategory.count({ where })
+
     const skillCategories = await prisma.skillCategory.findMany({
       where,
       orderBy: [
         { order: 'asc' },
         { createdAt: 'desc' }
-      ]
+      ],
+      skip,
+      take
     })
 
     // Parse skills JSON field
@@ -39,9 +69,18 @@ export const GET = withAdminAuth(async (request: NextRequest) => {
       skills: category.skills ? JSON.parse(category.skills) : []
     }))
 
+    // Calculate pagination metadata
+    const totalPages = Math.ceil(totalCount / limit)
+
     return NextResponse.json({
       success: true,
-      data: formattedCategories
+      data: formattedCategories,
+      pagination: {
+        page,
+        limit,
+        total: totalCount,
+        pages: totalPages
+      }
     })
   } catch (error) {
     console.error('Error fetching skill categories:', error)

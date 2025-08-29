@@ -27,12 +27,64 @@ export const GET = withAdminAuth(async (request: NextRequest) => {
     console.log('🔍 CASE STUDIES API: Request received')
     const { searchParams } = new URL(request.url)
     const includeInactive = searchParams.get('includeInactive') === 'true'
-    console.log('📊 CASE STUDIES API: Include inactive:', includeInactive)
+    const page = parseInt(searchParams.get('page') || '1')
+    const limit = parseInt(searchParams.get('limit') || '10')
+    const search = searchParams.get('search') || ''
+    console.log('📊 CASE STUDIES API: Include inactive:', includeInactive, 'Page:', page, 'Limit:', limit, 'Search:', search)
 
     const where: any = {}
     if (!includeInactive) {
       where.isActive = true
     }
+
+    // Add search functionality
+    if (search) {
+      where.OR = [
+        {
+          title: {
+            contains: search,
+            mode: 'insensitive'
+          }
+        },
+        {
+          subtitle: {
+            contains: search,
+            mode: 'insensitive'
+          }
+        },
+        {
+          description: {
+            contains: search,
+            mode: 'insensitive'
+          }
+        },
+        {
+          category: {
+            contains: search,
+            mode: 'insensitive'
+          }
+        },
+        {
+          challenge: {
+            contains: search,
+            mode: 'insensitive'
+          }
+        },
+        {
+          solution: {
+            contains: search,
+            mode: 'insensitive'
+          }
+        }
+      ]
+    }
+
+    // Calculate pagination
+    const skip = (page - 1) * limit
+    const take = limit
+
+    // Get total count for pagination metadata
+    const totalCount = await prisma.caseStudy.count({ where })
 
     console.log('🔎 CASE STUDIES API: Querying database with where:', where)
     const caseStudies = await prisma.caseStudy.findMany({
@@ -40,7 +92,9 @@ export const GET = withAdminAuth(async (request: NextRequest) => {
       orderBy: [
         { order: 'asc' },
         { createdAt: 'desc' }
-      ]
+      ],
+      skip,
+      take
     })
     console.log('📝 CASE STUDIES API: Found', caseStudies.length, 'case studies')
 
@@ -67,9 +121,18 @@ export const GET = withAdminAuth(async (request: NextRequest) => {
     })
     console.log('✅ CASE STUDIES API: Formatted', formattedCaseStudies.length, 'case studies')
 
+    // Calculate pagination metadata
+    const totalPages = Math.ceil(totalCount / limit)
+
     return NextResponse.json({
       success: true,
       data: formattedCaseStudies,
+      pagination: {
+        page,
+        limit,
+        total: totalCount,
+        pages: totalPages
+      },
       debug: {
         rawCount: caseStudies.length,
         formattedCount: formattedCaseStudies.length,

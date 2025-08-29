@@ -17,6 +17,7 @@ import {
   Eye
 } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
+import { Pagination } from '@/components/ui/pagination'
 
 interface Tool {
   id: string
@@ -37,7 +38,11 @@ export default function ToolsManagementPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [showForm, setShowForm] = useState(false)
   const [editingTool, setEditingTool] = useState<Tool | null>(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const [totalTools, setTotalTools] = useState(0)
   const { toast } = useToast()
+  const toolsPerPage = 12
 
   // Form state
   const [formData, setFormData] = useState({
@@ -51,15 +56,27 @@ export default function ToolsManagementPage() {
 
   useEffect(() => {
     loadTools()
-  }, [])
+  }, [currentPage, searchTerm])
 
   const loadTools = async () => {
     try {
-      const response = await fetch('/api/admin/tools')
+      setIsLoading(true)
+      const queryParams = new URLSearchParams({
+        page: currentPage.toString(),
+        limit: toolsPerPage.toString(),
+        includeInactive: 'true',
+        ...(searchTerm && { search: searchTerm })
+      })
+      
+      const response = await fetch(`/api/admin/tools?${queryParams}`)
       const data = await response.json()
       
       if (data.success) {
         setTools(data.data || [])
+        if (data.pagination) {
+          setTotalPages(data.pagination.pages)
+          setTotalTools(data.pagination.total)
+        }
       } else {
         toast({
           title: "Error",
@@ -187,10 +204,16 @@ export default function ToolsManagementPage() {
     setShowForm(false)
   }
 
-  const filteredTools = tools.filter(tool =>
-    tool.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    tool.category?.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+  }
+
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value)
+    setCurrentPage(1)
+  }
+
+  // Tools are now filtered server-side via API
 
   const categories = [...new Set(tools.map(t => t.category).filter(Boolean))]
 
@@ -288,7 +311,7 @@ export default function ToolsManagementPage() {
                     type="text"
                     placeholder="Search tools and technologies by name or category..."
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={(e) => handleSearchChange(e.target.value)}
                     className="w-full pl-12 pr-4 h-12 text-lg rounded-lg border-2 border-gray-200 bg-white text-gray-900 placeholder-gray-500 focus:border-orange-400 focus:ring-2 focus:ring-orange-100 focus:outline-none transition-all duration-200"
                   />
                 </div>
@@ -299,7 +322,7 @@ export default function ToolsManagementPage() {
             <Card className="shadow-lg border-0 bg-white rounded-xl overflow-hidden">
               <div className="p-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {filteredTools.map((tool) => (
+                  {tools.map((tool) => (
                     <Card key={tool.id} className="p-6 border border-gray-200 hover:shadow-lg transition-all duration-300 rounded-lg bg-gradient-to-br from-gray-50 to-gray-100">
                     <div className="flex flex-col items-center text-center space-y-4">
                       {/* Logo */}
@@ -367,7 +390,7 @@ export default function ToolsManagementPage() {
                   </Card>
                 ))}
               </div>
-                {filteredTools.length === 0 && (
+                {tools.length === 0 && (
                   <div className="text-center py-16 px-8">
                     <div className="w-20 h-20 bg-gradient-to-br from-orange-100 to-orange-200 rounded-full flex items-center justify-center mx-auto mb-6">
                       <Wrench className="h-10 w-10 text-orange-600" />
@@ -382,6 +405,15 @@ export default function ToolsManagementPage() {
                 )}
               </div>
             </Card>
+
+            {/* Pagination */}
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+              totalItems={totalTools}
+              itemsPerPage={toolsPerPage}
+            />
           </div>
         ) : (
           /* Tool Form */

@@ -24,9 +24,11 @@ import {
   Save,
   X,
   Target,
-  Calendar
+  Calendar,
+  Search
 } from 'lucide-react'
 import { AdminLayout } from '@/components/admin/admin-layout'
+import { Pagination } from '@/components/ui/pagination'
 
 interface CaseStudy {
   id: string
@@ -68,7 +70,12 @@ export default function CaseStudiesManagementPage() {
   const [showForm, setShowForm] = useState(false)
   const [editingCaseStudy, setEditingCaseStudy] = useState<CaseStudy | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const [totalCaseStudies, setTotalCaseStudies] = useState(0)
   const router = useRouter()
+  const caseStudiesPerPage = 8
 
   // Form state
   const [formData, setFormData] = useState({
@@ -97,8 +104,11 @@ export default function CaseStudiesManagementPage() {
 
   useEffect(() => {
     checkAuth()
-    loadCaseStudies()
   }, [])
+
+  useEffect(() => {
+    loadCaseStudies()
+  }, [currentPage, searchTerm])
 
   const checkAuth = async () => {
     try {
@@ -114,8 +124,16 @@ export default function CaseStudiesManagementPage() {
 
   const loadCaseStudies = async () => {
     try {
+      setIsLoading(true)
       console.log('🔍 FRONTEND: Loading case studies...')
-      const response = await fetch('/api/admin/case-studies?includeInactive=true')
+      const queryParams = new URLSearchParams({
+        page: currentPage.toString(),
+        limit: caseStudiesPerPage.toString(),
+        includeInactive: 'true',
+        ...(searchTerm && { search: searchTerm })
+      })
+      
+      const response = await fetch(`/api/admin/case-studies?${queryParams}`)
       console.log('📡 FRONTEND: Response status:', response.status)
       const data = await response.json()
       console.log('📊 FRONTEND: Response data:', data)
@@ -123,6 +141,10 @@ export default function CaseStudiesManagementPage() {
       if (data.success) {
         console.log('✅ FRONTEND: Successfully loaded', data.data?.length || 0, 'case studies')
         setCaseStudies(data.data || [])
+        if (data.pagination) {
+          setTotalPages(data.pagination.pages)
+          setTotalCaseStudies(data.pagination.total)
+        }
       } else {
         console.error('❌ FRONTEND: API returned success:false', data)
       }
@@ -158,6 +180,15 @@ export default function CaseStudiesManagementPage() {
       order: 0
     })
     setEditingCaseStudy(null)
+  }
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+  }
+
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value)
+    setCurrentPage(1)
   }
 
   const handleEdit = (caseStudy: CaseStudy) => {
@@ -648,6 +679,22 @@ export default function CaseStudiesManagementPage() {
           </Dialog>
         </div>
 
+        {/* Search Bar */}
+        <div className="bg-white rounded-xl shadow-lg border-0 overflow-hidden">
+          <div className="bg-gradient-to-r from-gray-50 to-gray-100 p-6 border-b border-gray-200">
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-400 h-5 w-5" />
+              <input
+                type="text"
+                placeholder="Search case studies by title, category, challenge, solution..."
+                value={searchTerm}
+                onChange={(e) => handleSearchChange(e.target.value)}
+                className="w-full pl-12 pr-4 h-12 text-lg rounded-lg border-2 border-gray-200 bg-white text-gray-900 placeholder-gray-500 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 focus:outline-none transition-all duration-200"
+              />
+            </div>
+          </div>
+        </div>
+
         {/* Case Studies List */}
         <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-8">
           {caseStudies.map((caseStudy) => (
@@ -830,6 +877,15 @@ export default function CaseStudiesManagementPage() {
             </Card>
           ))}
         </div>
+
+        {/* Pagination */}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+          totalItems={totalCaseStudies}
+          itemsPerPage={caseStudiesPerPage}
+        />
 
         {caseStudies.length === 0 && (
           <Card className="border-0 shadow-lg bg-gradient-to-br from-gray-50 to-gray-100">
