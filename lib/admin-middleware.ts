@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { verifySessionToken } from './simple-auth'
+import { verifyJWT, JWTPayload } from './jwt-auth'
 
-export function withAdminAuth(handler: (request: NextRequest, user: any) => Promise<NextResponse>) {
+export function withAdminAuth(handler: (request: NextRequest, user: JWTPayload) => Promise<NextResponse>) {
   return async (request: NextRequest) => {
     try {
       const token = request.cookies.get('admin-session')?.value
@@ -16,7 +16,7 @@ export function withAdminAuth(handler: (request: NextRequest, user: any) => Prom
         )
       }
 
-      const user = verifySessionToken(token)
+      const user = verifyJWT(token)
       if (!user) {
         return NextResponse.json(
           { 
@@ -24,6 +24,17 @@ export function withAdminAuth(handler: (request: NextRequest, user: any) => Prom
             message: 'Invalid or expired token' 
           },
           { status: 401 }
+        )
+      }
+
+      // Ensure user has admin role
+      if (user.role !== 'admin') {
+        return NextResponse.json(
+          { 
+            success: false, 
+            message: 'Insufficient permissions' 
+          },
+          { status: 403 }
         )
       }
 

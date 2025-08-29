@@ -13,23 +13,6 @@ export interface SimpleUser {
 }
 
 export function validateCredentials(email: string, password: string): boolean {
-  // Debug logging for credential validation
-  console.log('🔍 CREDENTIAL DEBUG:', {
-    providedEmail: email,
-    providedPassword: '***' + password.substring(Math.max(0, password.length - 3)),
-    expectedEmail: ADMIN_CREDENTIALS.email,
-    expectedPassword: '***' + ADMIN_CREDENTIALS.password.substring(Math.max(0, ADMIN_CREDENTIALS.password.length - 3)),
-    emailMatch: email.toLowerCase() === ADMIN_CREDENTIALS.email.toLowerCase(),
-    passwordMatch: password === ADMIN_CREDENTIALS.password,
-    passwordLength: {
-      provided: password.length,
-      expected: ADMIN_CREDENTIALS.password.length
-    },
-    // Check for whitespace issues
-    passwordTrimmed: password.trim() === ADMIN_CREDENTIALS.password.trim(),
-    emailTrimmed: email.trim().toLowerCase() === ADMIN_CREDENTIALS.email.trim().toLowerCase()
-  })
-  
   const emailMatch = email.toLowerCase() === ADMIN_CREDENTIALS.email.toLowerCase()
   const passwordMatch = password === ADMIN_CREDENTIALS.password
   

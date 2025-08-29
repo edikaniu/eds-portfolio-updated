@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
-import { validateCredentials, createUserSession, generateSessionToken } from '@/lib/simple-auth'
+import { validateCredentials, createUserSession } from '@/lib/simple-auth'
+import { generateJWT } from '@/lib/jwt-auth'
 
 const LoginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -9,15 +10,10 @@ const LoginSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('🔥 LOGIN ENDPOINT HIT - Starting authentication process')
-    
     const body = await request.json()
-    console.log('📝 Request body received:', { email: body.email, hasPassword: !!body.password })
-    
     const validationResult = LoginSchema.safeParse(body)
 
     if (!validationResult.success) {
-      console.log('❌ Validation failed:', validationResult.error.errors)
       return NextResponse.json(
         { 
           success: false, 
@@ -29,14 +25,11 @@ export async function POST(request: NextRequest) {
     }
 
     const { email, password } = validationResult.data
-    console.log('✅ Validation passed, checking credentials...')
 
     // Validate credentials using environment variables
     const isValid = validateCredentials(email, password)
-    console.log('🔐 Credential check result:', isValid)
     
     if (!isValid) {
-      console.log('❌ Invalid credentials provided')
       return NextResponse.json(
         { 
           success: false, 
@@ -45,18 +38,10 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       )
     }
-
-    console.log('🎯 Credentials valid! Creating session...')
     
-    // Create user session
+    // Create user session with JWT
     const user = createUserSession()
-    const sessionToken = generateSessionToken(user)
-    
-    console.log('🔑 Session created:', {
-      userId: user.id,
-      userEmail: user.email,
-      tokenLength: sessionToken.length
-    })
+    const sessionToken = generateJWT(user)
 
     // Create response with session token in cookie
     const response = NextResponse.json({
@@ -70,37 +55,21 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    // Environment detection
+    // Secure cookie configuration
     const isProduction = process.env.NODE_ENV === 'production'
-    const isVercel = !!process.env.VERCEL
-    
-    console.log('🍪 Setting cookie - Environment:', {
-      isProduction,
-      isVercel,
-      nodeEnv: process.env.NODE_ENV,
-      vercelUrl: process.env.VERCEL_URL || 'local'
-    })
-    
-    // FIXED: Proper cookie configuration for Vercel deployment
     const cookieConfig = {
       httpOnly: true,
-      secure: isProduction, // Only secure in production (not always true)
-      sameSite: 'strict' as const, // Changed from lax to strict for better auth security
+      secure: isProduction,
+      sameSite: 'strict' as const,
       path: '/',
       maxAge: 7 * 24 * 60 * 60, // 7 days
     }
     
-    // Use only Next.js cookie setting (remove duplicate Set-Cookie header)
     response.cookies.set('admin-session', sessionToken, cookieConfig)
-    
-    console.log('🍪 Cookie configuration:', cookieConfig)
-    console.log('🍪 Session token length:', sessionToken.length)
-
-    console.log('✅ LOGIN COMPLETE - Session cookie set successfully')
     return response
 
   } catch (error) {
-    console.error('💥 LOGIN ERROR:', error)
+    console.error('Login error:', error)
     return NextResponse.json(
       { 
         success: false, 

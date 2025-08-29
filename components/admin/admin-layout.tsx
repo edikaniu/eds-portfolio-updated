@@ -112,7 +112,6 @@ export function AdminLayout({ children, title = "Dashboard" }: AdminLayoutProps)
   const sidebarItems = [
     { icon: LayoutDashboard, label: 'Dashboard', href: '/admin/dashboard' },
     { icon: Database, label: 'Data Migration', href: '/admin/data-migration' },
-    { icon: Settings, label: 'Database Debug', href: '/admin/database-debug' },
     { icon: Globe, label: 'Frontend Content', href: '/admin/frontend-content' },
     { icon: FolderOpen, label: 'Content Management', href: '/admin/content' },
     { icon: BookOpen, label: 'Blog Posts', href: '/admin/blog' },
@@ -125,7 +124,6 @@ export function AdminLayout({ children, title = "Dashboard" }: AdminLayoutProps)
     { icon: Bot, label: 'Chatbot', href: '/admin/chatbot' },
     { icon: Navigation, label: 'Navigation & Footer', href: '/admin/navigation' },
     { icon: PieChart, label: 'Analytics', href: '/admin/analytics' },
-    { icon: Bug, label: 'Debug Issues', href: '/admin/debug-issues' },
     { icon: Settings, label: 'Settings', href: '/admin/settings' }
   ]
 

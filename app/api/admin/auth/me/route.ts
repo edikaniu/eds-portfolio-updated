@@ -1,40 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { verifySessionToken } from '@/lib/simple-auth'
+import { verifyJWT } from '@/lib/jwt-auth'
 
 export async function GET(request: NextRequest) {
   try {
-    // Debug: Check all cookies
-    const allCookies = request.cookies.getAll()
-    console.log('🍪 AUTH/ME DEBUG - All cookies received:', allCookies.map(c => ({ 
-      name: c.name, 
-      hasValue: !!c.value,
-      valueLength: c.value?.length || 0 
-    })))
-    
     const sessionToken = request.cookies.get('admin-session')?.value
-    console.log('🔍 Session token found:', !!sessionToken, 'Length:', sessionToken?.length || 0)
 
     if (!sessionToken) {
-      console.log('❌ No session token - returning 401')
       return NextResponse.json(
         { 
           success: false, 
-          message: 'No authentication session found',
-          debug: {
-            cookieCount: allCookies.length,
-            cookieNames: allCookies.map(c => c.name)
-          }
+          message: 'No authentication session found'
         },
         { status: 401 }
       )
     }
 
-    console.log('🔍 Verifying session token...')
-    const user = verifySessionToken(sessionToken)
-    console.log('✅ Token verification result:', !!user ? 'SUCCESS' : 'FAILED')
+    const user = verifyJWT(sessionToken)
 
     if (!user) {
-      console.log('❌ Token verification failed')
       return NextResponse.json(
         { 
           success: false, 
@@ -44,7 +27,6 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    console.log('✅ Auth successful for user:', user.email)
     return NextResponse.json({
       success: true,
       user: {
