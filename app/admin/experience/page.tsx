@@ -17,6 +17,7 @@ import {
 } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 import { WysiwygEditor } from '@/components/ui/wysiwyg-editor'
+import { Pagination } from '@/components/ui/pagination'
 
 interface ExperienceEntry {
   id: string
@@ -41,7 +42,11 @@ export default function ExperienceManagementPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [showForm, setShowForm] = useState(false)
   const [editingExperience, setEditingExperience] = useState<ExperienceEntry | null>(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const [totalExperiences, setTotalExperiences] = useState(0)
   const { toast } = useToast()
+  const experiencesPerPage = 9
 
   // Form state
   const [formData, setFormData] = useState({
@@ -59,15 +64,27 @@ export default function ExperienceManagementPage() {
 
   useEffect(() => {
     loadExperiences()
-  }, [])
+  }, [currentPage, searchTerm])
 
   const loadExperiences = async () => {
     try {
-      const response = await fetch('/api/admin/experience')
+      setIsLoading(true)
+      const queryParams = new URLSearchParams({
+        page: currentPage.toString(),
+        limit: experiencesPerPage.toString(),
+        includeInactive: 'true',
+        ...(searchTerm && { search: searchTerm })
+      })
+      
+      const response = await fetch(`/api/admin/experience?${queryParams}`)
       const data = await response.json()
       
       if (data.success) {
         setExperiences(data.data || [])
+        if (data.pagination) {
+          setTotalPages(data.pagination.pages)
+          setTotalExperiences(data.pagination.total)
+        }
       } else {
         toast({
           title: "Error",
@@ -85,6 +102,15 @@ export default function ExperienceManagementPage() {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+  }
+
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value)
+    setCurrentPage(1) // Reset to first page when searching
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -224,11 +250,7 @@ export default function ExperienceManagementPage() {
     }))
   }
 
-  const filteredExperiences = experiences.filter(exp =>
-    exp.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    exp.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    exp.category.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  // Experiences are now filtered server-side via API
 
   if (isLoading) {
     return (
@@ -324,7 +346,7 @@ export default function ExperienceManagementPage() {
                     type="text"
                     placeholder="Search experience entries by title, company, or category..."
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={(e) => handleSearchChange(e.target.value)}
                     className="w-full pl-12 pr-4 h-12 text-lg rounded-lg border-2 border-gray-200 bg-white text-gray-900 placeholder-gray-500 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 focus:outline-none transition-all duration-200"
                   />
                 </div>
@@ -333,7 +355,7 @@ export default function ExperienceManagementPage() {
 
             {/* Experience Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredExperiences.map((experience) => (
+              {experiences.map((experience) => (
                 <Card key={experience.id} className="shadow-lg border-0 bg-white rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300">
                   <div className="p-6">
                     <div className="flex items-start justify-between mb-4">
@@ -411,7 +433,7 @@ export default function ExperienceManagementPage() {
               ))}
             </div>
 
-            {filteredExperiences.length === 0 && (
+            {experiences.length === 0 && (
               <div className="text-center py-12">
                 <Briefcase className="h-12 w-12 text-gray-300 mx-auto mb-4" />
                 <p className="text-gray-500 mb-4">No experience entries found</p>
@@ -421,6 +443,15 @@ export default function ExperienceManagementPage() {
                 </Button>
               </div>
             )}
+
+            {/* Pagination */}
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+              totalItems={totalExperiences}
+              itemsPerPage={experiencesPerPage}
+            />
           </div>
         ) : (
           /* Experience Form */

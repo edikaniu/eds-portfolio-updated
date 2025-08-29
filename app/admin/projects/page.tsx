@@ -18,6 +18,7 @@ import {
 import { useToast } from '@/hooks/use-toast'
 import { WysiwygEditor } from '@/components/ui/wysiwyg-editor'
 import { ImageUpload } from '@/components/ui/image-upload'
+import { Pagination } from '@/components/ui/pagination'
 
 interface Project {
   id: string
@@ -40,7 +41,11 @@ export default function ProjectManagementPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [showForm, setShowForm] = useState(false)
   const [editingProject, setEditingProject] = useState<Project | null>(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const [totalProjects, setTotalProjects] = useState(0)
   const { toast } = useToast()
+  const projectsPerPage = 9
 
   // Form state
   const [formData, setFormData] = useState({
@@ -57,15 +62,26 @@ export default function ProjectManagementPage() {
 
   useEffect(() => {
     loadProjects()
-  }, [])
+  }, [currentPage, searchTerm])
 
   const loadProjects = async () => {
     try {
-      const response = await fetch('/api/admin/projects')
+      setIsLoading(true)
+      const queryParams = new URLSearchParams({
+        page: currentPage.toString(),
+        limit: projectsPerPage.toString(),
+        ...(searchTerm && { search: searchTerm })
+      })
+      
+      const response = await fetch(`/api/admin/projects?${queryParams}`)
       const data = await response.json()
       
       if (data.success) {
         setProjects(data.data || [])
+        if (data.pagination) {
+          setTotalPages(data.pagination.pages)
+          setTotalProjects(data.pagination.total)
+        }
       } else {
         toast({
           title: "Error",
@@ -83,6 +99,15 @@ export default function ProjectManagementPage() {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+  }
+
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value)
+    setCurrentPage(1) // Reset to first page when searching
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -202,11 +227,7 @@ export default function ProjectManagementPage() {
     setShowForm(false)
   }
 
-  const filteredProjects = projects.filter(project =>
-    project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    project.category?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    project.description.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  // Projects are now filtered server-side via API
 
   if (isLoading) {
     return (
@@ -302,7 +323,7 @@ export default function ProjectManagementPage() {
                     type="text"
                     placeholder="Search projects by title, category, or description..."
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={(e) => handleSearchChange(e.target.value)}
                     className="w-full pl-12 pr-4 h-12 text-lg rounded-lg border-2 border-gray-200 bg-white text-gray-900 placeholder-gray-500 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100 focus:outline-none transition-all duration-200"
                   />
                 </div>
@@ -311,7 +332,7 @@ export default function ProjectManagementPage() {
 
             {/* Projects Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredProjects.map((project) => (
+              {projects.map((project) => (
                 <Card key={project.id} className="shadow-lg border-0 bg-white rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300">
                   <div className="p-6">
                     <div className="flex items-start justify-between mb-4">
@@ -392,7 +413,7 @@ export default function ProjectManagementPage() {
               ))}
             </div>
 
-            {filteredProjects.length === 0 && (
+            {projects.length === 0 && (
               <div className="text-center py-12">
                 <Code className="h-12 w-12 text-gray-300 mx-auto mb-4" />
                 <p className="text-gray-500 mb-4">No projects found</p>
@@ -402,6 +423,15 @@ export default function ProjectManagementPage() {
                 </Button>
               </div>
             )}
+
+            {/* Pagination */}
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+              totalItems={totalProjects}
+              itemsPerPage={projectsPerPage}
+            />
           </div>
         ) : (
           /* Project Form */

@@ -21,10 +21,21 @@ export const GET = withAdminAuth(async (request: NextRequest) => {
   try {
     const { searchParams } = new URL(request.url)
     const includeInactive = searchParams.get('includeInactive') === 'true'
+    const page = parseInt(searchParams.get('page') || '1')
+    const limit = parseInt(searchParams.get('limit') || '50')
+    const search = searchParams.get('search')
 
     const where: any = {}
     if (!includeInactive) {
       where.isActive = true
+    }
+    
+    if (search) {
+      where.OR = [
+        { title: { contains: search, mode: 'insensitive' } },
+        { company: { contains: search, mode: 'insensitive' } },
+        { category: { contains: search, mode: 'insensitive' } }
+      ]
     }
 
     const experiences = await prisma.experienceEntry.findMany({
@@ -32,8 +43,12 @@ export const GET = withAdminAuth(async (request: NextRequest) => {
       orderBy: [
         { order: 'asc' },
         { createdAt: 'desc' }
-      ]
+      ],
+      skip: (page - 1) * limit,
+      take: limit
     })
+
+    const totalCount = await prisma.experienceEntry.count({ where })
 
     // Parse JSON fields
     const formattedExperiences = experiences.map(exp => ({
@@ -43,7 +58,13 @@ export const GET = withAdminAuth(async (request: NextRequest) => {
 
     return NextResponse.json({
       success: true,
-      data: formattedExperiences
+      data: formattedExperiences,
+      pagination: {
+        page,
+        limit,
+        total: totalCount,
+        pages: Math.ceil(totalCount / limit)
+      }
     })
   } catch (error) {
     console.error('Error fetching experiences:', error)
