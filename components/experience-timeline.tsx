@@ -393,7 +393,7 @@ export function ExperienceTimeline() {
                           </div>
                         </div>
                         <Badge variant="secondary" className="bg-accent/20 text-accent text-xs">
-                          {exp.metrics}
+                          <span dangerouslySetInnerHTML={{ __html: exp.metrics || '' }} />
                         </Badge>
                       </div>
 

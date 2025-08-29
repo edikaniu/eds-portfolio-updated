@@ -20,6 +20,7 @@ import { WysiwygEditor } from '@/components/ui/wysiwyg-editor'
 import { CategorySelect } from '@/components/ui/category-select'
 import { TagsSelect } from '@/components/ui/tags-select'
 import { ImageUpload } from '@/components/ui/image-upload'
+import { Pagination } from '@/components/ui/pagination'
 
 interface BlogPost {
   id: string
@@ -44,7 +45,11 @@ export default function BlogManagementPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [showForm, setShowForm] = useState(false)
   const [editingPost, setEditingPost] = useState<BlogPost | null>(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const [totalPosts, setTotalPosts] = useState(0)
   const { toast } = useToast()
+  const postsPerPage = 15
 
   // Form state
   const [formData, setFormData] = useState({
@@ -62,15 +67,26 @@ export default function BlogManagementPage() {
 
   useEffect(() => {
     loadBlogPosts()
-  }, [])
+  }, [currentPage, searchTerm])
 
   const loadBlogPosts = async () => {
     try {
-      const response = await fetch('/api/admin/blog')
+      setIsLoading(true)
+      const queryParams = new URLSearchParams({
+        page: currentPage.toString(),
+        limit: postsPerPage.toString(),
+        ...(searchTerm && { search: searchTerm })
+      })
+      
+      const response = await fetch(`/api/admin/blog?${queryParams}`)
       const data = await response.json()
       
       if (data.success) {
         setBlogPosts(data.data || [])
+        if (data.pagination) {
+          setTotalPages(data.pagination.pages)
+          setTotalPosts(data.pagination.total)
+        }
       } else {
         toast({
           title: "Error",
@@ -88,6 +104,15 @@ export default function BlogManagementPage() {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+  }
+
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value)
+    setCurrentPage(1) // Reset to first page when searching
   }
 
   const handleSubmit = async (e: React.FormEvent, isDraftOverride?: boolean) => {
@@ -234,10 +259,7 @@ export default function BlogManagementPage() {
       .replace(/-+/g, '-')
   }
 
-  const filteredPosts = blogPosts.filter(post =>
-    post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    post.category?.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  // Posts are now filtered server-side via API
 
   if (isLoading) {
     return (
@@ -333,7 +355,7 @@ export default function BlogManagementPage() {
                     type="text"
                     placeholder="Search blog posts by title or category..."
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={(e) => handleSearchChange(e.target.value)}
                     className="w-full pl-12 pr-4 h-12 text-lg rounded-lg border-2 border-gray-200 bg-white text-gray-900 placeholder-gray-500 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 focus:outline-none transition-all duration-200"
                   />
                 </div>
@@ -354,7 +376,7 @@ export default function BlogManagementPage() {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-100">
-                    {filteredPosts.map((post) => (
+                    {blogPosts.map((post) => (
                       <tr key={post.id} className="hover:bg-gray-50 transition-colors">
                         <td className="px-4 lg:px-6 py-6">
                           <div className="min-w-0">
@@ -420,7 +442,7 @@ export default function BlogManagementPage() {
                   </tbody>
                 </table>
               </div>
-              {filteredPosts.length === 0 && (
+              {blogPosts.length === 0 && (
                 <div className="text-center py-16 px-8">
                   <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
                     <FileText className="h-10 w-10 text-gray-400" />
@@ -434,6 +456,15 @@ export default function BlogManagementPage() {
                 </div>
               )}
             </Card>
+
+            {/* Pagination */}
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+              totalItems={totalPosts}
+              itemsPerPage={postsPerPage}
+            />
           </div>
         ) : (
           /* Blog Form */
