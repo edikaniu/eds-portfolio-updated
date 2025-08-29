@@ -114,14 +114,20 @@ export default function CaseStudiesManagementPage() {
 
   const loadCaseStudies = async () => {
     try {
+      console.log('🔍 FRONTEND: Loading case studies...')
       const response = await fetch('/api/admin/case-studies?includeInactive=true')
+      console.log('📡 FRONTEND: Response status:', response.status)
       const data = await response.json()
+      console.log('📊 FRONTEND: Response data:', data)
       
       if (data.success) {
+        console.log('✅ FRONTEND: Successfully loaded', data.data?.length || 0, 'case studies')
         setCaseStudies(data.data || [])
+      } else {
+        console.error('❌ FRONTEND: API returned success:false', data)
       }
     } catch (error) {
-      console.error('Error loading case studies:', error)
+      console.error('❌ FRONTEND: Error loading case studies:', error)
     } finally {
       setIsLoading(false)
     }

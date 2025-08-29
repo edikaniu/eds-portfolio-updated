@@ -24,14 +24,17 @@ const CaseStudySchema = z.object({
 // GET - Fetch all case studies
 export const GET = withAdminAuth(async (request: NextRequest) => {
   try {
+    console.log('🔍 CASE STUDIES API: Request received')
     const { searchParams } = new URL(request.url)
     const includeInactive = searchParams.get('includeInactive') === 'true'
+    console.log('📊 CASE STUDIES API: Include inactive:', includeInactive)
 
     const where: any = {}
     if (!includeInactive) {
       where.isActive = true
     }
 
+    console.log('🔎 CASE STUDIES API: Querying database with where:', where)
     const caseStudies = await prisma.caseStudy.findMany({
       where,
       orderBy: [
@@ -39,24 +42,45 @@ export const GET = withAdminAuth(async (request: NextRequest) => {
         { createdAt: 'desc' }
       ]
     })
+    console.log('📝 CASE STUDIES API: Found', caseStudies.length, 'case studies')
 
     // Parse JSON fields from strings
-    const formattedCaseStudies = caseStudies.map(cs => ({
-      ...cs,
-      metrics: cs.metrics ? JSON.parse(cs.metrics as string) : {},
-      results: cs.results ? JSON.parse(cs.results as string) : [],
-      tools: cs.tools ? JSON.parse(cs.tools as string) : [],
-      timeline: cs.timeline ? JSON.parse(cs.timeline as string) : []
-    }))
+    const formattedCaseStudies = caseStudies.map(cs => {
+      try {
+        return {
+          ...cs,
+          metrics: cs.metrics ? JSON.parse(cs.metrics as string) : {},
+          results: cs.results ? JSON.parse(cs.results as string) : [],
+          tools: cs.tools ? JSON.parse(cs.tools as string) : [],
+          timeline: cs.timeline ? JSON.parse(cs.timeline as string) : []
+        }
+      } catch (parseError) {
+        console.error('JSON parse error for case study', cs.id, ':', parseError)
+        return {
+          ...cs,
+          metrics: {},
+          results: [],
+          tools: [],
+          timeline: []
+        }
+      }
+    })
+    console.log('✅ CASE STUDIES API: Formatted', formattedCaseStudies.length, 'case studies')
 
     return NextResponse.json({
       success: true,
-      data: formattedCaseStudies
+      data: formattedCaseStudies,
+      debug: {
+        rawCount: caseStudies.length,
+        formattedCount: formattedCaseStudies.length,
+        includeInactive,
+        timestamp: new Date().toISOString()
+      }
     })
   } catch (error) {
-    console.error('Error fetching case studies:', error)
+    console.error('❌ CASE STUDIES API: Error fetching case studies:', error)
     return NextResponse.json(
-      { success: false, message: 'Failed to fetch case studies' },
+      { success: false, message: 'Failed to fetch case studies', error: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     )
   }
