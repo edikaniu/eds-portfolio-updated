@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { logger } from '@/lib/logger'
 import { AdminErrorBoundary } from '@/components/error-boundary'
 import { 
   LayoutDashboard,
@@ -75,11 +74,11 @@ export function AdminLayout({ children, title = "Dashboard" }: AdminLayoutProps)
           setCsrfToken(csrfCookie.split('=')[1])
         }
       } else {
-        logger.warn('Admin authentication failed', { status: response.status })
+        console.warn('Admin authentication failed', response.status)
         router.push('/admin/login')
       }
     } catch (error) {
-      logger.error('Admin auth check failed', error)
+      console.error('Admin auth check failed', error)
       router.push('/admin/login')
     } finally {
       setIsLoading(false)
@@ -102,7 +101,7 @@ export function AdminLayout({ children, title = "Dashboard" }: AdminLayoutProps)
       router.push('/admin/login')
       router.refresh()
     } catch (error) {
-      logger.error('Admin logout failed', error)
+      console.error('Admin logout failed', error)
       // Force redirect even if logout API fails
       setUser(null)
       setCsrfToken('')
