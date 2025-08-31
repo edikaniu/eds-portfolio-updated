@@ -54,6 +54,9 @@ model CaseStudy {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
+  @@index([isActive, order])
+  @@index([category, isActive])
+  @@index([isActive, createdAt(sort: Desc)])
   @@map("case_studies")
 }
 
@@ -267,6 +270,9 @@ model BlogPost {
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 
+  @@index([published, publishedAt(sort: Desc)])
+  @@index([category, published])
+  @@index([published, createdAt(sort: Desc)])
   @@map("blog_posts")
 }
 
@@ -285,6 +291,9 @@ model Project {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
+  @@index([isActive, order])
+  @@index([category, isActive])
+  @@index([isActive, createdAt(sort: Desc)])
   @@map("projects")
 }
 

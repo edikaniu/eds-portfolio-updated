@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { createCachedResponse, CACHE_DURATIONS } from '@/lib/api-cache'
 
 // GET - Fetch active projects for frontend
 export async function GET(request: NextRequest) {
@@ -49,7 +50,7 @@ export async function GET(request: NextRequest) {
       liveUrl: project.liveUrl,
     }))
 
-    return NextResponse.json({
+    return createCachedResponse({
       success: true,
       data: transformedProjects,
       pagination: {
@@ -58,7 +59,7 @@ export async function GET(request: NextRequest) {
         total: totalCount,
         pages: Math.ceil(totalCount / limit)
       }
-    })
+    }, CACHE_DURATIONS.PROJECTS)
   } catch (error) {
     console.error('Error fetching projects:', error)
     return NextResponse.json(

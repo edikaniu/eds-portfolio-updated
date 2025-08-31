@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { createCachedResponse, CACHE_DURATIONS } from '@/lib/api-cache'
 
 // GET - Fetch all active case studies for public use
 export async function GET(request: NextRequest) {
@@ -53,10 +54,10 @@ export async function GET(request: NextRequest) {
       }
     })
 
-    return NextResponse.json({
+    return createCachedResponse({
       success: true,
       data: formattedCaseStudies
-    })
+    }, CACHE_DURATIONS.CASE_STUDIES)
   } catch (error) {
     console.error('Error fetching case studies:', error)
     return NextResponse.json(

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { createCachedResponse, CACHE_DURATIONS } from '@/lib/api-cache'
 
 // GET - Fetch active skill categories for public display
 export async function GET(request: NextRequest) {
@@ -24,10 +25,10 @@ export async function GET(request: NextRequest) {
       order: category.order
     }))
 
-    return NextResponse.json({
+    return createCachedResponse({
       success: true,
       data: formattedCategories
-    })
+    }, CACHE_DURATIONS.SKILLS)
   } catch (error) {
     console.error('Error fetching public skills data:', error)
     return NextResponse.json(
