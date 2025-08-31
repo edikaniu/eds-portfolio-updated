@@ -61,23 +61,33 @@ async function searchBlogPosts(query: string, limit: number) {
           }
         ]
       },
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        content: true,
+        excerpt: true,
+        category: true,
+        publishedAt: true
+      },
       take: limit,
-      orderBy: { createdAt: 'desc' }
+      orderBy: { publishedAt: 'desc' }
     })
 
-    return blogPosts.map(post => ({
+    return blogPosts.filter(post => post.slug).map(post => ({
       id: post.id,
       title: post.title,
       content: post.content,
       type: 'blog' as const,
       slug: post.slug,
       category: post.category,
-      excerpt: post.excerpt,
+      excerpt: post.excerpt || post.content.substring(0, 150) + (post.content.length > 150 ? '...' : ''),
       url: `/blog/${post.slug}`,
       relevanceScore: Math.max(
         calculateRelevance(post.title, query),
         calculateRelevance(post.content, query) * 0.8,
-        calculateRelevance(post.excerpt || '', query) * 0.6
+        calculateRelevance(post.excerpt || '', query) * 0.6,
+        calculateRelevance(post.category || '', query) * 0.5
       )
     }))
   } catch (error) {
@@ -103,23 +113,33 @@ async function searchProjects(query: string, limit: number) {
           }
         ]
       },
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        description: true,
+        category: true,
+        technologies: true,
+        createdAt: true
+      },
       take: limit,
-      orderBy: { createdAt: 'desc' }
+      orderBy: { order: 'asc' }
     })
 
-    return projects.map(project => ({
+    return projects.filter(project => project.id).map(project => ({
       id: project.id,
       title: project.title,
       content: project.description,
       type: 'project' as const,
       slug: project.slug,
       category: project.category,
-      excerpt: project.description.substring(0, 150) + '...',
-      url: `/project/${project.id}`,
+      excerpt: project.description.substring(0, 150) + (project.description.length > 150 ? '...' : ''),
+      url: `/project/${project.slug || project.id}`, // Prefer slug for SEO, fallback to id
       relevanceScore: Math.max(
         calculateRelevance(project.title, query),
         calculateRelevance(project.description, query) * 0.8,
-        calculateRelevance(project.category || '', query) * 0.6
+        calculateRelevance(project.category || '', query) * 0.6,
+        calculateRelevance(project.technologies || '', query) * 0.4
       )
     }))
   } catch (error) {
@@ -148,23 +168,33 @@ async function searchCaseStudies(query: string, limit: number) {
           }
         ]
       },
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        subtitle: true,
+        description: true,
+        category: true,
+        createdAt: true
+      },
       take: limit,
-      orderBy: { createdAt: 'desc' }
+      orderBy: { order: 'asc' }
     })
 
-    return caseStudies.map(study => ({
+    return caseStudies.filter(study => study.slug).map(study => ({
       id: study.id,
       title: study.title,
       content: study.description,
       type: 'case-study' as const,
       slug: study.slug,
       category: study.category,
-      excerpt: study.subtitle,
+      excerpt: study.subtitle || study.description.substring(0, 150) + (study.description.length > 150 ? '...' : ''),
       url: `/case-study/${study.slug}`,
       relevanceScore: Math.max(
         calculateRelevance(study.title, query),
         calculateRelevance(study.description, query) * 0.8,
-        calculateRelevance(study.subtitle, query) * 0.7
+        calculateRelevance(study.subtitle || '', query) * 0.7,
+        calculateRelevance(study.category || '', query) * 0.5
       )
     }))
   } catch (error) {
@@ -191,8 +221,17 @@ async function searchExperiences(query: string, limit: number) {
           }
         ]
       },
+      select: {
+        id: true,
+        title: true,
+        company: true,
+        achievements: true,
+        period: true,
+        type: true,
+        category: true
+      },
       take: limit,
-      orderBy: { createdAt: 'desc' }
+      orderBy: { order: 'asc' }
     })
 
     return experiences.map(exp => ({
@@ -206,7 +245,8 @@ async function searchExperiences(query: string, limit: number) {
       relevanceScore: Math.max(
         calculateRelevance(exp.title, query),
         calculateRelevance(exp.company, query),
-        calculateRelevance(exp.achievements, query) * 0.8
+        calculateRelevance(exp.achievements, query) * 0.8,
+        calculateRelevance(exp.category || '', query) * 0.5
       )
     }))
   } catch (error) {
@@ -282,18 +322,32 @@ export async function GET(request: NextRequest) {
       ...experienceResults
     ]
 
-    // Sort by relevance score (highest first)
-    const sortedResults = allResults
+    // Filter out results with invalid URLs and sort by relevance score (highest first)
+    const validResults = allResults
+      .filter(result => {
+        // Ensure all results have required fields for valid URLs
+        if (result.type === 'blog' && !result.slug) return false
+        if (result.type === 'case-study' && !result.slug) return false
+        if (result.type === 'project' && !result.id && !result.slug) return false
+        return result.title && result.url && result.relevanceScore > 0.1 // Minimum relevance threshold
+      })
       .sort((a, b) => b.relevanceScore - a.relevanceScore)
       .slice(0, limit)
 
+    // Log search results for debugging
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`Search for "${query}" returned ${validResults.length} results:`, 
+        validResults.map(r => ({ type: r.type, title: r.title, url: r.url, score: r.relevanceScore.toFixed(2) }))
+      )
+    }
+
     // Generate suggestions
-    const suggestions = generateSuggestions(query, sortedResults)
+    const suggestions = generateSuggestions(query, validResults)
 
     return createCachedResponse({
       success: true,
-      results: sortedResults,
-      totalResults: allResults.length,
+      results: validResults,
+      totalResults: validResults.length, // Use filtered count
       query,
       suggestions: suggestions.length > 0 ? suggestions : undefined
     } satisfies SearchResponse, CACHE_DURATIONS.SEARCH)
