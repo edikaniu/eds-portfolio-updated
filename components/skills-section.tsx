@@ -140,10 +140,20 @@ export function SkillsSection() {
 
         if (skillsRes.ok) {
           const skillsData = await skillsRes.json()
+          console.log('🔍 Skills API Response:', skillsData)
           if (skillsData.success && skillsData.data && skillsData.data.length > 0) {
+            console.log('✅ Using API data for skills')
             setSkillCategories(skillsData.data)
             skillsLoaded = true
+          } else {
+            console.log('❌ API data invalid, will use fallback:', { 
+              success: skillsData.success, 
+              hasData: !!skillsData.data, 
+              dataLength: skillsData.data?.length 
+            })
           }
+        } else {
+          console.log('❌ Skills API request failed:', skillsRes.status, skillsRes.statusText)
         }
 
         if (toolsRes.ok) {
@@ -167,6 +177,7 @@ export function SkillsSection() {
 
         // Load fallback data if APIs failed or returned empty data
         if (!skillsLoaded) {
+          console.log('🔄 Loading fallback skills data - API failed or returned empty data')
           setSkillCategories([
             {
               id: '1',
@@ -276,7 +287,8 @@ export function SkillsSection() {
           ])
         }
       } catch (error) {
-        console.error('Error fetching skills data:', error)
+        console.error('🚨 Error fetching skills data:', error)
+        console.log('🔄 Loading fallback skills data due to API error')
         // Load comprehensive fallback data
         setSkillCategories([
           {
