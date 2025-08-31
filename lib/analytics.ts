@@ -7,7 +7,10 @@ import { logger } from './logger'
 // Global gtag function type definition
 declare global {
   interface Window {
-    gtag: (...args: any[]) => void
+    gtag: {
+      (...args: any[]): void
+      q?: any[]
+    }
   }
 }
 

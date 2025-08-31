@@ -1,13 +1,42 @@
+import dynamic from 'next/dynamic'
 import { Navigation } from "@/components/navigation"
 import { HeroSection } from "@/components/hero-section"
-import { AboutSection } from "@/components/about-section"
-import { SkillsSection } from "@/components/skills-section"
-import { CaseStudiesSection } from "@/components/case-studies-section"
-import { ExperienceTimeline } from "@/components/experience-timeline"
-import { ContactSection } from "@/components/contact-section"
 import { Footer } from "@/components/footer"
-import { ProjectsSection } from "@/components/projects-section"
-import { BlogSection } from "@/components/blog-section"
+
+// Lazy load below-the-fold sections for better performance
+const AboutSection = dynamic(() => import("@/components/about-section").then(mod => ({ default: mod.AboutSection })), {
+  ssr: true // Keep SSR for SEO
+})
+
+const SkillsSection = dynamic(() => import("@/components/skills-section").then(mod => ({ default: mod.SkillsSection })), {
+  ssr: true,
+  loading: () => <div className="py-24 bg-card/30"><div className="container mx-auto text-center"><div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div></div></div>
+})
+
+const CaseStudiesSection = dynamic(() => import("@/components/case-studies-section").then(mod => ({ default: mod.CaseStudiesSection })), {
+  ssr: true,
+  loading: () => <div className="py-24 bg-background"><div className="container mx-auto text-center"><div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div></div></div>
+})
+
+const ExperienceTimeline = dynamic(() => import("@/components/experience-timeline").then(mod => ({ default: mod.ExperienceTimeline })), {
+  ssr: true,
+  loading: () => <div className="py-24 bg-background"><div className="container mx-auto text-center"><div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div></div></div>
+})
+
+const ProjectsSection = dynamic(() => import("@/components/projects-section").then(mod => ({ default: mod.ProjectsSection })), {
+  ssr: true,
+  loading: () => <div className="py-24 bg-card/30"><div className="container mx-auto text-center"><div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div></div></div>
+})
+
+const BlogSection = dynamic(() => import("@/components/blog-section").then(mod => ({ default: mod.BlogSection })), {
+  ssr: true,
+  loading: () => <div className="py-24 bg-background"><div className="container mx-auto text-center"><div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div></div></div>
+})
+
+const ContactSection = dynamic(() => import("@/components/contact-section").then(mod => ({ default: mod.ContactSection })), {
+  ssr: true,
+  loading: () => <div className="py-24 bg-card/30"><div className="container mx-auto text-center"><div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div></div></div>
+})
 import { logger } from "@/lib/logger"
 import { homeMetadata } from "@/lib/meta-tags"
 

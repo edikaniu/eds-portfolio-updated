@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { createCachedResponse, CACHE_DURATIONS } from '@/lib/api-cache'
 
 // GET - Fetch published blog posts for frontend
 export async function GET(request: NextRequest) {
@@ -54,7 +55,7 @@ export async function GET(request: NextRequest) {
       author: post.author || "Edikan Udoibuot",
     }))
 
-    return NextResponse.json({
+    return createCachedResponse({
       success: true,
       data: transformedPosts,
       pagination: {
@@ -63,7 +64,7 @@ export async function GET(request: NextRequest) {
         total: totalCount,
         pages: Math.ceil(totalCount / limit)
       }
-    })
+    }, CACHE_DURATIONS.BLOG_POSTS)
   } catch (error) {
     console.error('Error fetching blog posts:', error)
     return NextResponse.json(

@@ -9,6 +9,9 @@ import { Navigation } from '@/components/navigation'
 import { Footer } from '@/components/footer'
 import { CategoryFilter } from '@/components/blog/category-filter'
 
+// Configure ISR (Incremental Static Regeneration)
+export const revalidate = 300 // Revalidate every 5 minutes
+
 interface BlogPost {
   id: string
   slug: string

@@ -154,20 +154,20 @@ export function SearchDialog({
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-start justify-center pt-20">
-      <Card className="w-full max-w-2xl mx-4 max-h-[70vh] flex flex-col">
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-start justify-center pt-4 sm:pt-20">
+      <Card className="w-full max-w-2xl mx-2 sm:mx-4 max-h-[90vh] sm:max-h-[70vh] flex flex-col">
         {/* Search Header */}
-        <div className="flex items-center gap-3 p-4 border-b">
-          <Search className="h-5 w-5 text-muted-foreground" />
+        <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 border-b">
+          <Search className="h-5 w-5 text-muted-foreground hidden sm:block" />
           <div className="relative flex-1">
             <Input
               ref={inputRef}
               type="text"
-              placeholder="Search blogs, projects, case studies..."
+              placeholder="Search content..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="text-base"
+              className="text-base sm:text-base text-sm"
               autoComplete="off"
               spellCheck={false}
             />
@@ -175,14 +175,19 @@ export function SearchDialog({
               <Button
                 variant="ghost"
                 size="sm"
-                className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 p-0"
+                className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 p-0 touch-target-44"
                 onClick={clearSearch}
               >
                 <X className="h-3 w-3" />
               </Button>
             )}
           </div>
-          <Button variant="ghost" size="sm" onClick={onClose}>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={onClose}
+            className="touch-target-44 p-2"
+          >
             <X className="h-4 w-4" />
           </Button>
         </div>
@@ -242,7 +247,7 @@ export function SearchDialog({
                 {results.map((result, index) => (
                   <div
                     key={result.id}
-                    className={`p-4 hover:bg-muted/50 cursor-pointer transition-colors ${
+                    className={`p-3 sm:p-4 hover:bg-muted/50 cursor-pointer transition-colors touch-target-44 ${
                       index === selectedIndex ? 'bg-muted/50' : ''
                     }`}
                     onClick={() => {
@@ -250,38 +255,40 @@ export function SearchDialog({
                       onClose()
                     }}
                   >
-                    <div className="flex items-start gap-3">
-                      <div className={`p-2 rounded-lg ${getTypeColor(result.type)}`}>
+                    <div className="flex items-start gap-2 sm:gap-3">
+                      <div className={`p-1.5 sm:p-2 rounded-lg ${getTypeColor(result.type)} flex-shrink-0`}>
                         {getTypeIcon(result.type)}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h3 className="font-medium text-foreground truncate">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-1">
+                          <h3 className="font-medium text-foreground text-sm sm:text-base line-clamp-1">
                             {highlightText(result.title, query)}
                           </h3>
-                          <Badge variant="secondary" className="text-xs capitalize flex-shrink-0">
-                            {result.type.replace('-', ' ')}
-                          </Badge>
-                          {result.category && (
-                            <Badge variant="outline" className="text-xs flex-shrink-0">
-                              {result.category}
+                          <div className="flex gap-1 sm:gap-2">
+                            <Badge variant="secondary" className="text-xs capitalize flex-shrink-0">
+                              {result.type.replace('-', ' ')}
                             </Badge>
-                          )}
+                            {result.category && (
+                              <Badge variant="outline" className="text-xs flex-shrink-0 hidden sm:inline-flex">
+                                {result.category}
+                              </Badge>
+                            )}
+                          </div>
                         </div>
-                        <p className="text-sm text-muted-foreground line-clamp-2">
+                        <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
                           {highlightText(
-                            result.excerpt || result.content.slice(0, 150) + '...', 
+                            result.excerpt || result.content.slice(0, 120) + '...', 
                             query
                           )}
                         </p>
-                        <div className="mt-2 flex items-center gap-2">
-                          <span className="text-xs text-muted-foreground">
+                        <div className="mt-2 flex items-center gap-2 text-xs">
+                          <span className="text-muted-foreground hidden sm:inline">
                             Relevance: {(result.relevanceScore * 100).toFixed(0)}%
                           </span>
-                          <span className="text-xs text-muted-foreground">•</span>
+                          <span className="text-muted-foreground hidden sm:inline">•</span>
                           <Link
                             href={result.url}
-                            className="text-xs text-primary hover:underline"
+                            className="text-primary hover:underline"
                             onClick={(e) => e.stopPropagation()}
                           >
                             View →

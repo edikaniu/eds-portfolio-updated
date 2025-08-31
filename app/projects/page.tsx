@@ -17,6 +17,9 @@ import {
 import { Navigation } from '@/components/navigation'
 import { Footer } from '@/components/footer'
 
+// Configure ISR (Incremental Static Regeneration)  
+export const revalidate = 300 // Revalidate every 5 minutes
+
 interface Project {
   id: string
   slug: string

@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { FormInput, FormField } from '@/components/ui/form-field'
+import { FormField } from '@/components/ui/form-field'
+import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
 
@@ -140,61 +141,66 @@ export function ContactForm() {
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FormField label="Name" required>
-            <FormInput
+          <FormField label="Name" id="name" required>
+            <Input
               type="text"
               value={formData.name}
               onChange={handleInputChange('name')}
               placeholder="Your full name"
               required
               disabled={formState.loading}
+              className="bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
             />
           </FormField>
 
-          <FormField label="Email" required>
-            <FormInput
+          <FormField label="Email" id="email" required>
+            <Input
               type="email"
               value={formData.email}
               onChange={handleInputChange('email')}
               placeholder="your.email@example.com"
               required
               disabled={formState.loading}
+              className="bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
             />
           </FormField>
 
-          <FormField label="Company">
-            <FormInput
+          <FormField label="Company" id="company">
+            <Input
               type="text"
               value={formData.company}
               onChange={handleInputChange('company')}
               placeholder="Your company (optional)"
               disabled={formState.loading}
+              className="bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
             />
           </FormField>
 
-          <FormField label="Phone">
-            <FormInput
+          <FormField label="Phone" id="phone">
+            <Input
               type="tel"
               value={formData.phone}
               onChange={handleInputChange('phone')}
               placeholder="Your phone number (optional)"
               disabled={formState.loading}
+              className="bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
             />
           </FormField>
         </div>
 
-        <FormField label="Subject" required>
-          <FormInput
+        <FormField label="Subject" id="subject" required>
+          <Input
             type="text"
             value={formData.subject}
             onChange={handleInputChange('subject')}
             placeholder="What would you like to discuss?"
             required
             disabled={formState.loading}
+            className="bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
           />
         </FormField>
 
-        <FormField label="Message" required>
+        <FormField label="Message" id="message" required>
           <Textarea
             value={formData.message}
             onChange={handleInputChange('message')}

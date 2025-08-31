@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
+import { SkillsGridSkeleton, ToolsGridSkeleton } from "@/components/ui/loading-skeleton"
 import {
   Users,
   Handshake,
@@ -400,18 +401,11 @@ export function SkillsSection() {
                 Loading skills and expertise...
               </p>
             </div>
-            <div className="grid lg:grid-cols-2 gap-8 mb-16">
-              {[...Array(6)].map((_, i) => (
-                <Card key={i} className="p-8 bg-background/50 border-border/50 animate-pulse">
-                  <div className="h-6 bg-gray-300 rounded mb-4"></div>
-                  <div className="h-4 bg-gray-300 rounded mb-6"></div>
-                  <div className="space-y-4">
-                    {[...Array(4)].map((_, j) => (
-                      <div key={j} className="h-4 bg-gray-300 rounded"></div>
-                    ))}
-                  </div>
-                </Card>
-              ))}
+            <SkillsGridSkeleton />
+            
+            <div className="mb-16">
+              <h3 className="text-2xl font-bold text-foreground mb-8 text-center">Professional Tools & Technologies</h3>
+              <ToolsGridSkeleton />
             </div>
           </div>
         </div>

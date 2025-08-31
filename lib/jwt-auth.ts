@@ -20,6 +20,8 @@ const JWT_SECRET = process.env.JWT_SECRET || process.env.NEXTAUTH_SECRET
 if (!JWT_SECRET) {
   throw new Error('JWT_SECRET or NEXTAUTH_SECRET environment variable is required')
 }
+// TypeScript assertion since we validate above
+const JWT_SECRET_SAFE = JWT_SECRET as string
 
 export function generateJWT(user: SimpleUser): string {
   const payload: Omit<JWTPayload, 'exp' | 'iat'> = {
@@ -29,7 +31,7 @@ export function generateJWT(user: SimpleUser): string {
     role: user.role
   }
   
-  return jwt.sign(payload, JWT_SECRET, {
+  return jwt.sign(payload, JWT_SECRET_SAFE, {
     algorithm: 'HS256',
     expiresIn: '7d', // 7 days
     issuer: 'eds-portfolio',
@@ -39,7 +41,7 @@ export function generateJWT(user: SimpleUser): string {
 
 export function verifyJWT(token: string): JWTPayload | null {
   try {
-    const decoded = jwt.verify(token, JWT_SECRET, {
+    const decoded = jwt.verify(token, JWT_SECRET_SAFE, {
       algorithms: ['HS256'],
       issuer: 'eds-portfolio',
       audience: 'admin-panel'

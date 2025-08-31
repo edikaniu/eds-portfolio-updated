@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { createCachedResponse, CACHE_DURATIONS } from '@/lib/api-cache'
 
 // GET - Fetch stats for skills section display
 export async function GET(request: NextRequest) {
@@ -21,10 +22,10 @@ export async function GET(request: NextRequest) {
       yearsExperience: '7+'  // Static value based on experience
     }
 
-    return NextResponse.json({
+    return createCachedResponse({
       success: true,
       data: stats
-    })
+    }, CACHE_DURATIONS.STATS)
   } catch (error) {
     console.error('Error fetching stats:', error)
     // Return fallback stats if database fails

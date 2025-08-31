@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Calendar, TrendingUp, Zap, Target, GraduationCap } from "lucide-react"
+import { ExperienceTimelineSkeleton } from "@/components/ui/loading-skeleton"
 
 interface ExperienceEntry {
   id: string
@@ -329,20 +330,7 @@ export function ExperienceTimeline() {
               <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">Professional Journey</h2>
               <p className="text-xl text-muted-foreground">Loading professional experience...</p>
             </div>
-            <div className="space-y-8">
-              {[...Array(5)].map((_, i) => (
-                <div key={i} className="bg-card p-6 rounded-lg animate-pulse">
-                  <div className="h-6 bg-gray-300 rounded mb-4"></div>
-                  <div className="h-4 bg-gray-300 rounded mb-2"></div>
-                  <div className="h-4 bg-gray-300 rounded mb-4 w-3/4"></div>
-                  <div className="space-y-2">
-                    {[...Array(3)].map((_, j) => (
-                      <div key={j} className="h-3 bg-gray-300 rounded"></div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <ExperienceTimelineSkeleton />
           </div>
         </div>
       </section>
