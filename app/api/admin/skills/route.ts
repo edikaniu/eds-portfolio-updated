@@ -198,7 +198,7 @@ export const PUT = withAdminAuth(async (request: NextRequest) => {
   }
 })
 
-// DELETE - Delete skill category
+// DELETE - Delete skill category (permanently)
 export const DELETE = withAdminAuth(async (request: NextRequest) => {
   try {
     const { searchParams } = new URL(request.url)
@@ -211,14 +211,26 @@ export const DELETE = withAdminAuth(async (request: NextRequest) => {
       )
     }
 
-    await prisma.skillCategory.update({
-      where: { id },
-      data: { isActive: false }
+    // Check if the skill category exists
+    const existingCategory = await prisma.skillCategory.findUnique({
+      where: { id }
+    })
+
+    if (!existingCategory) {
+      return NextResponse.json(
+        { success: false, message: 'Skill category not found' },
+        { status: 404 }
+      )
+    }
+
+    // Permanently delete the skill category
+    await prisma.skillCategory.delete({
+      where: { id }
     })
 
     return NextResponse.json({
       success: true,
-      message: 'Skill category deleted successfully'
+      message: 'Skill category deleted permanently'
     })
   } catch (error) {
     console.error('Error deleting skill category:', error)

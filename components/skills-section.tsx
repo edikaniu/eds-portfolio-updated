@@ -183,7 +183,7 @@ export function SkillsSection() {
             {
               id: '1',
               title: 'Strategic Leadership',
-              description: 'Leading cross-functional teams and driving organizational growth',
+              description: '<p>Leading cross-functional teams and driving organizational growth</p>',
               color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
               skills: [
                 { name: 'Cross-functional Team Leadership', proficiency: 95 },
@@ -197,8 +197,8 @@ export function SkillsSection() {
             {
               id: '2',
               title: 'AI & Marketing Automation',
-              description: 'Leveraging AI and automation for enhanced marketing performance',
-              color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+              description: '<p>Leveraging AI and automation for enhanced marketing performance</p>',
+              color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%),',
               skills: [
                 { name: 'Generative AI', proficiency: 94 },
                 { name: 'ChatGPT, Claude, etc', proficiency: 96 },
@@ -211,8 +211,8 @@ export function SkillsSection() {
             {
               id: '3',
               title: 'Brand & Communications',
-              description: 'Strategic brand positioning and integrated communications',
-              color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+              description: '<p>Strategic brand positioning and integrated communications</p>',
+              color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%),',
               skills: [
                 { name: 'Brand Strategy', proficiency: 89 },
                 { name: 'Public Relations', proficiency: 87 },
@@ -225,8 +225,8 @@ export function SkillsSection() {
             {
               id: '4',
               title: 'Growth Marketing',
-              description: 'Data-driven growth strategies and customer acquisition',
-              color: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+              description: '<p>Data-driven growth strategies and customer acquisition</p>',
+              color: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%),',
               skills: [
                 { name: 'Growth Marketing', proficiency: 94 },
                 { name: 'GTM Strategy', proficiency: 91 },
@@ -239,8 +239,8 @@ export function SkillsSection() {
             {
               id: '5',
               title: 'Analytics & Performance',
-              description: 'Data analysis, performance tracking, and optimization',
-              color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+              description: '<p>Data analysis, performance tracking, and optimization</p>',
+              color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%),',
               skills: [
                 { name: 'Marketing Analytics', proficiency: 90 },
                 { name: 'Performance Tracking', proficiency: 92 },
@@ -253,7 +253,7 @@ export function SkillsSection() {
             {
               id: '6',
               title: 'Campaign Management',
-              description: 'End-to-end campaign planning, execution and optimization',
+              description: '<p>End-to-end campaign planning, execution and optimization</p>',
               color: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
               skills: [
                 { name: 'Integrated Marketing Campaigns', proficiency: 94 },
@@ -295,7 +295,7 @@ export function SkillsSection() {
           {
             id: '1',
             title: 'Strategic Leadership',
-            description: 'Leading cross-functional teams and driving organizational growth',
+            description: '<p>Leading cross-functional teams and driving organizational growth</p>',
             color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
             skills: [
               { name: 'Cross-functional Team Leadership', proficiency: 95 },
@@ -309,8 +309,8 @@ export function SkillsSection() {
           {
             id: '2',
             title: 'AI & Marketing Automation',
-            description: 'Leveraging AI and automation for enhanced marketing performance',
-            color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+            description: '<p>Leveraging AI and automation for enhanced marketing performance</p>',
+            color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%),',
             skills: [
               { name: 'Generative AI', proficiency: 94 },
               { name: 'ChatGPT, Claude, etc', proficiency: 96 },
@@ -323,8 +323,8 @@ export function SkillsSection() {
           {
             id: '3',
             title: 'Brand & Communications',
-            description: 'Strategic brand positioning and integrated communications',
-            color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+            description: '<p>Strategic brand positioning and integrated communications</p>',
+            color: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%),',
             skills: [
               { name: 'Brand Strategy', proficiency: 89 },
               { name: 'Public Relations', proficiency: 87 },
@@ -337,8 +337,8 @@ export function SkillsSection() {
           {
             id: '4',
             title: 'Growth Marketing',
-            description: 'Data-driven growth strategies and customer acquisition',
-            color: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+            description: '<p>Data-driven growth strategies and customer acquisition</p>',
+            color: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%),',
             skills: [
               { name: 'Growth Marketing', proficiency: 94 },
               { name: 'GTM Strategy', proficiency: 91 },
@@ -351,8 +351,8 @@ export function SkillsSection() {
           {
             id: '5',
             title: 'Analytics & Performance',
-            description: 'Data analysis, performance tracking, and optimization',
-            color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+            description: '<p>Data analysis, performance tracking, and optimization</p>',
+            color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%),',
             skills: [
               { name: 'Marketing Analytics', proficiency: 90 },
               { name: 'Performance Tracking', proficiency: 92 },
@@ -365,7 +365,7 @@ export function SkillsSection() {
           {
             id: '6',
             title: 'Campaign Management',
-            description: 'End-to-end campaign planning, execution and optimization',
+            description: '<p>End-to-end campaign planning, execution and optimization</p>',
             color: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
             skills: [
               { name: 'Integrated Marketing Campaigns', proficiency: 94 },
