@@ -10,7 +10,8 @@
       "Bash(npm run build:*)",
       "Bash(curl:*)",
       "Bash(gh pr create:*)",
-      "Bash(npx prisma db seed:*)"
+      "Bash(npx prisma db seed:*)",
+      "WebSearch"
     ],
     "deny": [],
     "ask": [],
