@@ -70,7 +70,7 @@ export function SearchDialog({
 
     setIsLoading(true)
     try {
-      const response = await fetch(`/api/search?q=${encodeURIComponent(searchQuery)}&limit=10`)
+      const response = await fetch(`/api/search?q=${encodeURIComponent(searchQuery)}&limit=20`)
       const data: SearchResponse = await response.json()
       
       if (data.success) {
@@ -96,10 +96,35 @@ export function SearchDialog({
       onClose()
     } else if (e.key === 'ArrowDown') {
       e.preventDefault()
-      setSelectedIndex(prev => Math.min(prev + 1, results.length - 1))
+      setSelectedIndex(prev => {
+        const newIndex = Math.min(prev + 1, results.length - 1)
+        // Scroll selected item into view
+        setTimeout(() => {
+          const element = resultsRef.current?.querySelector(`[data-index="${newIndex}"]`)
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+          }
+        }, 0)
+        return newIndex
+      })
     } else if (e.key === 'ArrowUp') {
       e.preventDefault()
-      setSelectedIndex(prev => Math.max(prev - 1, -1))
+      setSelectedIndex(prev => {
+        const newIndex = Math.max(prev - 1, -1)
+        // Scroll selected item into view
+        setTimeout(() => {
+          if (newIndex >= 0) {
+            const element = resultsRef.current?.querySelector(`[data-index="${newIndex}"]`)
+            if (element) {
+              element.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+            }
+          } else {
+            // Scroll to top if nothing selected
+            resultsRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+          }
+        }, 0)
+        return newIndex
+      })
     } else if (e.key === 'Enter' && selectedIndex >= 0) {
       e.preventDefault()
       const selectedResult = results[selectedIndex]
@@ -155,7 +180,7 @@ export function SearchDialog({
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-start justify-center pt-4 sm:pt-20">
-      <Card className="w-full max-w-2xl mx-2 sm:mx-4 max-h-[90vh] sm:max-h-[70vh] flex flex-col">
+      <Card className="w-full max-w-2xl mx-2 sm:mx-4 h-[90vh] sm:h-[70vh] max-h-[90vh] sm:max-h-[70vh] flex flex-col">
         {/* Search Header */}
         <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 border-b">
           <Search className="h-5 w-5 text-muted-foreground hidden sm:block" />
@@ -193,14 +218,14 @@ export function SearchDialog({
         </div>
 
         {/* Search Results */}
-        <div className="flex-1 overflow-hidden">
+        <div className="flex-1 min-h-0 flex flex-col">
           {isLoading ? (
-            <div className="flex items-center justify-center p-8">
+            <div className="flex items-center justify-center p-8 flex-1">
               <Loader2 className="h-6 w-6 animate-spin mr-2" />
               <span className="text-muted-foreground">Searching...</span>
             </div>
           ) : query.trim().length < 2 ? (
-            <div className="p-8 text-center text-muted-foreground">
+            <div className="p-8 text-center text-muted-foreground flex-1 flex flex-col justify-center">
               <Search className="h-12 w-12 mx-auto mb-4 opacity-50" />
               <p className="text-lg font-medium mb-2">Search Portfolio</p>
               <p className="text-sm">
@@ -208,7 +233,7 @@ export function SearchDialog({
               </p>
             </div>
           ) : results.length === 0 ? (
-            <div className="p-8 text-center">
+            <div className="p-8 text-center flex-1 flex flex-col justify-center">
               <div className="text-muted-foreground mb-4">
                 <Search className="h-8 w-8 mx-auto mb-3 opacity-50" />
                 <p className="text-base font-medium">No results found</p>
@@ -234,82 +259,88 @@ export function SearchDialog({
               )}
             </div>
           ) : (
-            <div ref={resultsRef} className="overflow-y-auto max-h-full">
+            <div className="flex-1 min-h-0 flex flex-col">
               {/* Results Header */}
-              <div className="px-4 py-2 border-b bg-muted/30">
+              <div className="px-4 py-2 border-b bg-muted/30 flex-shrink-0">
                 <p className="text-sm text-muted-foreground">
                   {totalResults} result{totalResults !== 1 ? 's' : ''} for "{query}"
                 </p>
               </div>
 
-              {/* Results List */}
-              <div className="divide-y">
-                {results.map((result, index) => (
-                  <div
-                    key={result.id}
-                    className={`p-3 sm:p-4 hover:bg-muted/50 cursor-pointer transition-colors touch-target-44 ${
-                      index === selectedIndex ? 'bg-muted/50' : ''
-                    }`}
-                    onClick={() => {
-                      window.open(result.url, '_blank')
-                      onClose()
-                    }}
-                  >
-                    <div className="flex items-start gap-2 sm:gap-3">
-                      <div className={`p-1.5 sm:p-2 rounded-lg ${getTypeColor(result.type)} flex-shrink-0`}>
-                        {getTypeIcon(result.type)}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-1">
-                          <h3 className="font-medium text-foreground text-sm sm:text-base line-clamp-1">
-                            {highlightText(result.title, query)}
-                          </h3>
-                          <div className="flex gap-1 sm:gap-2">
-                            <Badge variant="secondary" className="text-xs capitalize flex-shrink-0">
-                              {result.type.replace('-', ' ')}
-                            </Badge>
-                            {result.category && (
-                              <Badge variant="outline" className="text-xs flex-shrink-0 hidden sm:inline-flex">
-                                {result.category}
-                              </Badge>
-                            )}
-                          </div>
+              {/* Results List - Scrollable */}
+              <div ref={resultsRef} className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent">
+                <div className="divide-y">
+                  {results.map((result, index) => (
+                    <div
+                      key={result.id}
+                      data-index={index}
+                      className={`p-3 sm:p-4 hover:bg-muted/50 cursor-pointer transition-colors touch-target-44 ${
+                        index === selectedIndex ? 'bg-muted/50 ring-2 ring-primary/20' : ''
+                      }`}
+                      onClick={() => {
+                        window.open(result.url, '_blank')
+                        onClose()
+                      }}
+                    >
+                      <div className="flex items-start gap-2 sm:gap-3">
+                        <div className={`p-1.5 sm:p-2 rounded-lg ${getTypeColor(result.type)} flex-shrink-0`}>
+                          {getTypeIcon(result.type)}
                         </div>
-                        <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
-                          {highlightText(
-                            result.excerpt || result.content.slice(0, 120) + '...', 
-                            query
-                          )}
-                        </p>
-                        <div className="mt-2 flex items-center gap-2 text-xs">
-                          <span className="text-muted-foreground hidden sm:inline">
-                            Relevance: {(result.relevanceScore * 100).toFixed(0)}%
-                          </span>
-                          <span className="text-muted-foreground hidden sm:inline">•</span>
-                          <Link
-                            href={result.url}
-                            className="text-primary hover:underline"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            View →
-                          </Link>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-1">
+                            <h3 className="font-medium text-foreground text-sm sm:text-base line-clamp-1">
+                              {highlightText(result.title, query)}
+                            </h3>
+                            <div className="flex gap-1 sm:gap-2">
+                              <Badge variant="secondary" className="text-xs capitalize flex-shrink-0">
+                                {result.type.replace('-', ' ')}
+                              </Badge>
+                              {result.category && (
+                                <Badge variant="outline" className="text-xs flex-shrink-0 hidden sm:inline-flex">
+                                  {result.category}
+                                </Badge>
+                              )}
+                            </div>
+                          </div>
+                          <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
+                            {highlightText(
+                              result.excerpt || result.content.slice(0, 120) + '...', 
+                              query
+                            )}
+                          </p>
+                          <div className="mt-2 flex items-center gap-2 text-xs">
+                            <span className="text-muted-foreground hidden sm:inline">
+                              Relevance: {(result.relevanceScore * 100).toFixed(0)}%
+                            </span>
+                            <span className="text-muted-foreground hidden sm:inline">•</span>
+                            <Link
+                              href={result.url}
+                              className="text-primary hover:underline"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              View →
+                            </Link>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           )}
         </div>
 
         {/* Search Footer */}
-        <div className="border-t p-3">
+        <div className="border-t p-3 flex-shrink-0">
           <div className="flex items-center justify-between text-xs text-muted-foreground">
             <div className="flex items-center gap-4">
               <span>↑↓ Navigate</span>
               <span>↵ Open</span>
               <span>ESC Close</span>
+              {results.length > 0 && (
+                <span className="hidden sm:inline">• {results.length} shown</span>
+              )}
             </div>
             <span>Powered by Portfolio Search</span>
           </div>
