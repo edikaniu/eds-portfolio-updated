@@ -463,7 +463,6 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
               title="Get Weekly Tool & Automation Ideas"
               description="Learn the exact tools and workflows I use to scale marketing operations. Join 2,000+ marketers getting actionable insights every Tuesday."
               showStats={true}
-              showBenefits={true}
             />
           </div>
           

@@ -211,7 +211,6 @@ export default async function Home() {
               title="Get Marketing Insights That Scale"
               description="Join 2,000+ marketers getting weekly case studies, growth tactics, and AI-powered strategies. The marketing insights I don't share publicly."
               showStats={true}
-              showBenefits={true}
             />
           </div>
         </section>

@@ -12,7 +12,6 @@ interface NewsletterCTAProps {
   title?: string
   description?: string
   showStats?: boolean
-  showBenefits?: boolean
   className?: string
 }
 
@@ -21,18 +20,11 @@ export function NewsletterCTA({
   title = "Get Marketing Insights That Scale",
   description = "Join 2,000+ marketers getting weekly case studies, growth tactics, and AI-powered strategies that I don't share publicly.",
   showStats = true,
-  showBenefits = true,
   className = ""
 }: NewsletterCTAProps) {
   const [showEmbed, setShowEmbed] = useState(false)
   const [isSubscribed, setIsSubscribed] = useState(false)
 
-  const benefits = [
-    "Weekly case studies from real campaigns",
-    "AI-powered marketing tools & templates", 
-    "Growth tactics that scaled 50+ products",
-    "Exclusive strategies not shared publicly"
-  ]
 
   const stats = [
     { icon: <Users className="h-4 w-4" />, value: "2,000+", label: "Marketers" },
@@ -157,18 +149,6 @@ export function NewsletterCTA({
           </div>
         )}
 
-        {showBenefits && (
-          <div className="grid md:grid-cols-2 gap-3 mb-8 text-left">
-            {benefits.map((benefit, index) => (
-              <div key={index} className="flex items-start gap-3">
-                <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <div className="w-2 h-2 bg-green-500 rounded-full" />
-                </div>
-                <span className="text-sm text-muted-foreground">{benefit}</span>
-              </div>
-            ))}
-          </div>
-        )}
 
         <Button onClick={() => setShowEmbed(true)} size="lg" className="px-8">
           <Mail className="h-4 w-4 mr-2" />

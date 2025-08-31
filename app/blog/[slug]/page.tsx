@@ -1023,7 +1023,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   title="Join the Newsletter"
                   description="Weekly marketing insights and case studies"
                   showStats={false}
-                  showBenefits={false}
                 />
               </div>
             </div>
