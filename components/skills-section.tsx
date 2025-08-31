@@ -127,6 +127,7 @@ export function SkillsSection() {
 
   // Fetch skills, tools, and stats from API
   useEffect(() => {
+    console.log('🚀 SKILLS COMPONENT STARTED - Debug logging active')
     const fetchData = async () => {
       try {
         const [skillsRes, toolsRes, statsRes] = await Promise.all([
@@ -458,6 +459,7 @@ export function SkillsSection() {
                   <div 
                     className="text-muted-foreground prose prose-sm max-w-none" 
                     dangerouslySetInnerHTML={{ __html: category.description }} 
+                    data-debug="html-render-active"
                   />
                 </div>
 
