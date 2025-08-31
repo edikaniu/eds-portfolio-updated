@@ -50,7 +50,7 @@ export function BeehiveEmbed({
   return (
     <div className={`beehive-newsletter-container ${className}`}>
       <iframe 
-        src="https://embeds.beehiiv.com/05a6be12-18c2-4c11-86a7-71992ad08d73"
+        src="https://subscribe-forms.beehiiv.com/d6ed7510-b199-42ed-816a-ef341a71139c"
         className="beehiiv-embed"
         data-test-id="beehiiv-embed"
         style={iframeStyle}
