@@ -458,7 +458,7 @@ export function SkillsSection() {
                   <h3 className="text-2xl font-bold text-foreground mb-2">{category.title}</h3>
                   <div 
                     className="text-muted-foreground prose prose-sm max-w-none" 
-                    dangerouslySetInnerHTML={{ __html: category.description }} 
+                    dangerouslySetInnerHTML={{ __html: category.description || 'No description available' }} 
                     data-debug="html-render-active"
                   />
                 </div>
