@@ -68,11 +68,6 @@ export async function POST(request: NextRequest) {
     // Set the session cookie
     response.cookies.set('admin-session', sessionToken, cookieConfig)
     
-    // Add backup header for debugging (will be removed after auth fix)
-    if (!isProduction) {
-      response.headers.set('X-Debug-Token', sessionToken.substring(0, 20) + '...')
-      response.headers.set('X-Debug-Cookie-Config', JSON.stringify(cookieConfig))
-    }
     return response
 
   } catch (error) {

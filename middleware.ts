@@ -4,11 +4,11 @@ import { verifySessionToken } from '@/lib/simple-auth'
 // Rate limiting store (in production, use Redis or database)
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>()
 
-// Rate limiting configuration - much more lenient for quick deployment
+// Rate limiting configuration - production security settings
 const RATE_LIMITS = {
-  admin: { requests: 1000, windowMs: 15 * 60 * 1000 }, // 1000 requests per 15 minutes for admin
-  api: { requests: 2000, windowMs: 15 * 60 * 1000 },   // 2000 requests per 15 minutes for API
-  default: { requests: 5000, windowMs: 15 * 60 * 1000 } // 5000 requests per 15 minutes for other routes
+  admin: { requests: 100, windowMs: 15 * 60 * 1000 }, // 100 requests per 15 minutes for admin
+  api: { requests: 300, windowMs: 15 * 60 * 1000 },   // 300 requests per 15 minutes for API
+  default: { requests: 500, windowMs: 15 * 60 * 1000 } // 500 requests per 15 minutes for other routes
 }
 
 function getRateLimit(pathname: string): { requests: number; windowMs: number } {
