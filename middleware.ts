@@ -85,50 +85,39 @@ export async function middleware(request: NextRequest) {
     "frame-ancestors 'none';"
   )
 
-  // Admin authentication middleware - simplified session-based
+  // Admin authentication middleware - session-based
   if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
-    console.log('🛡️ MIDDLEWARE DEBUG - Admin route accessed:', pathname)
-    
     const sessionToken = request.cookies.get('admin-session')?.value
-    console.log('🍪 MIDDLEWARE - Session token found:', !!sessionToken, 'Length:', sessionToken?.length || 0)
 
     if (!sessionToken) {
-      console.log('❌ MIDDLEWARE - No session, redirecting to login')
       // No session, redirect to login
       return NextResponse.redirect(new URL('/admin/login', request.url))
     }
 
     try {
-      console.log('🔍 MIDDLEWARE - Verifying session token...')
       const user = verifySessionToken(sessionToken)
-      console.log('✅ MIDDLEWARE - Token verification:', !!user ? 'SUCCESS' : 'FAILED')
       
       if (!user || user.role !== 'admin') {
-        console.log('❌ MIDDLEWARE - Invalid session or not admin, redirecting')
-        // Invalid session or not admin, redirect to login
-        const response = NextResponse.redirect(new URL('/admin/login', request.url))
-        response.cookies.delete('admin-session')
-        return response
+        // Invalid session or not admin, clear cookie and redirect
+        const redirectResponse = NextResponse.redirect(new URL('/admin/login', request.url))
+        redirectResponse.cookies.delete('admin-session')
+        return redirectResponse
       }
 
-      console.log('✅ MIDDLEWARE - Access granted for:', user.email)
-      // Session is valid, allow access
+      // Session is valid, add user context to headers
       response.headers.set('X-User-ID', user.id)
       response.headers.set('X-User-Role', user.role)
     } catch (error) {
-      console.error('❌ MIDDLEWARE - Session verification failed:', error)
-      const response = NextResponse.redirect(new URL('/admin/login', request.url))
-      response.cookies.delete('admin-session')
-      return response
+      // Session verification failed, clear cookie and redirect
+      const redirectResponse = NextResponse.redirect(new URL('/admin/login', request.url))
+      redirectResponse.cookies.delete('admin-session')
+      return redirectResponse
     }
   }
 
-  // Handle API routes - CSRF COMPLETELY DISABLED FOR AUTHENTICATION DEBUGGING
-  // Cache bust timestamp: ${new Date().toISOString()}
+  // Handle API routes
   if (pathname.startsWith('/api')) {
-    console.log('🔧 API REQUEST:', request.method, pathname, '- CSRF COMPLETELY DISABLED, NO WARNINGS SHOULD APPEAR')
-    
-    // Set CORS headers for API routes if needed
+    // Set CORS headers for public API routes if needed
     if (pathname.startsWith('/api/public')) {
       response.headers.set('Access-Control-Allow-Origin', '*')
       response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')

@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
-import { validateCredentials, createUserSession } from '@/lib/simple-auth'
-import { generateJWT } from '@/lib/jwt-auth'
+import { validateCredentials, createUserSession, generateSessionToken } from '@/lib/simple-auth'
 
 const LoginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -39,9 +38,9 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    // Create user session with JWT
+    // Create user session with simple session token
     const user = createUserSession()
-    const sessionToken = generateJWT(user)
+    const sessionToken = generateSessionToken(user)
 
     // Create response with session token in cookie
     const response = NextResponse.json({
@@ -55,17 +54,25 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    // Secure cookie configuration
+    // Secure cookie configuration optimized for Vercel production
     const isProduction = process.env.NODE_ENV === 'production'
     const cookieConfig = {
       httpOnly: true,
       secure: isProduction,
-      sameSite: 'strict' as const,
+      sameSite: isProduction ? 'lax' as const : 'strict' as const, // Use 'lax' in production for better compatibility
       path: '/',
       maxAge: 7 * 24 * 60 * 60, // 7 days
+      domain: isProduction ? '.vercel.app' : undefined, // Set domain for Vercel deployment
     }
     
+    // Set the session cookie
     response.cookies.set('admin-session', sessionToken, cookieConfig)
+    
+    // Add backup header for debugging (will be removed after auth fix)
+    if (!isProduction) {
+      response.headers.set('X-Debug-Token', sessionToken.substring(0, 20) + '...')
+      response.headers.set('X-Debug-Cookie-Config', JSON.stringify(cookieConfig))
+    }
     return response
 
   } catch (error) {

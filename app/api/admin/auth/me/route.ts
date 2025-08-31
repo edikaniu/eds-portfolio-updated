@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { verifyJWT } from '@/lib/jwt-auth'
+import { verifySessionToken } from '@/lib/simple-auth'
 
 export async function GET(request: NextRequest) {
   try {
@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const user = verifyJWT(sessionToken)
+    const user = verifySessionToken(sessionToken)
 
     if (!user) {
       return NextResponse.json(
