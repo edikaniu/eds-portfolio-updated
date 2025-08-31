@@ -39,6 +39,7 @@ const ContactSection = dynamic(() => import("@/components/contact-section").then
 })
 import { logger } from "@/lib/logger"
 import { homeMetadata } from "@/lib/meta-tags"
+import { NewsletterCTA, NewsletterPopup } from "@/components/newsletter"
 
 export const metadata = homeMetadata
 
@@ -201,6 +202,20 @@ export default async function Home() {
         <section id="case-studies">
           <CaseStudiesSection />
         </section>
+        
+        {/* Newsletter CTA after case studies */}
+        <section className="py-24 bg-gradient-to-b from-card/30 to-background">
+          <div className="container mx-auto px-6 lg:px-12 xl:px-16">
+            <NewsletterCTA 
+              variant="card"
+              title="Get Marketing Insights That Scale"
+              description="Join 2,000+ marketers getting weekly case studies, growth tactics, and AI-powered strategies. The marketing insights I don't share publicly."
+              showStats={true}
+              showBenefits={true}
+            />
+          </div>
+        </section>
+        
         <section id="blog">
           <BlogSection posts={blogPosts} />
         </section>
@@ -212,6 +227,14 @@ export default async function Home() {
         </section>
       </main>
       <Footer />
+      
+      {/* Newsletter Popup for homepage visitors */}
+      <NewsletterPopup 
+        trigger="timer"
+        delay={45000}
+        title="Ready to Scale Your Marketing?"
+        description="Get the strategies that helped scale 50+ products. Weekly case studies, AI tools, and growth tactics delivered every Tuesday."
+      />
     </>
   )
 }

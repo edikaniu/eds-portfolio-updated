@@ -22,6 +22,7 @@ import {
 import { ShareButton } from '@/components/blog/share-button'
 import { Navigation } from '@/components/navigation'
 import { Footer } from '@/components/footer'
+import { NewsletterCTA } from '@/components/newsletter'
 
 interface Project {
   id: string
@@ -770,6 +771,15 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     </Link>
                   </div>
                 </Card>
+
+                {/* Newsletter Sidebar CTA */}
+                <NewsletterCTA 
+                  variant="sidebar"
+                  title="Get Tool & Automation Ideas"
+                  description="Weekly insights on marketing tools, automation workflows, and growth tactics."
+                  showStats={true}
+                  className="mt-6"
+                />
               </div>
             </div>
             

@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { Mail, Linkedin } from "lucide-react"
+import { NewsletterCTA } from "@/components/newsletter"
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -38,6 +39,17 @@ export function Footer() {
     <footer className="bg-card/50 border-t border-border/50">
       <div className="container mx-auto px-6 lg:px-12 xl:px-16 py-12">
         <div className="max-w-6xl mx-auto">
+          {/* Newsletter Section */}
+          <div className="mb-12">
+            <NewsletterCTA 
+              variant="inline"
+              title="Stay Updated with Marketing Insights"
+              description="Get weekly case studies, growth tactics, and AI marketing strategies in your inbox."
+              showStats={false}
+              className="border border-border/50"
+            />
+          </div>
+          
           <div className="grid md:grid-cols-3 gap-8">
             {/* Brand Section */}
             <div className="space-y-4">

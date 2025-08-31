@@ -16,6 +16,7 @@ import {
 } from 'lucide-react'
 import { Navigation } from '@/components/navigation'
 import { Footer } from '@/components/footer'
+import { NewsletterCTA } from '@/components/newsletter'
 
 // Configure ISR (Incremental Static Regeneration)  
 export const revalidate = 300 // Revalidate every 5 minutes
@@ -454,6 +455,17 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
               )}
             </div>
           )}
+
+          {/* Newsletter CTA */}
+          <div className="mt-16">
+            <NewsletterCTA 
+              variant="card"
+              title="Get Weekly Tool & Automation Ideas"
+              description="Learn the exact tools and workflows I use to scale marketing operations. Join 2,000+ marketers getting actionable insights every Tuesday."
+              showStats={true}
+              showBenefits={true}
+            />
+          </div>
           
           {/* Call to Action */}
           <div className="mt-16 text-center">

@@ -17,6 +17,7 @@ import {
 import { ShareButton } from '@/components/blog/share-button'
 import { Navigation } from '@/components/navigation'
 import { Footer } from '@/components/footer'
+import { NewsletterCTA } from '@/components/newsletter'
 
 interface CaseStudy {
   id: string
@@ -680,6 +681,15 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
                     </Link>
                   </div>
                 </Card>
+
+                {/* Newsletter Sidebar CTA */}
+                <NewsletterCTA 
+                  variant="sidebar"
+                  title="Get Case Study Insights"
+                  description="Weekly marketing case studies with strategies, results, and actionable takeaways."
+                  showStats={true}
+                  className="mt-6"
+                />
               </div>
             </div>
             

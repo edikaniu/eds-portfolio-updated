@@ -12,6 +12,7 @@ import {
 import { ShareButton } from '@/components/blog/share-button'
 import { Navigation } from '@/components/navigation'
 import { Footer } from '@/components/footer'
+import { NewsletterCTA, NewsletterPopup } from '@/components/newsletter'
 
 interface BlogPost {
   id: string
@@ -976,6 +977,17 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 className="text-foreground leading-relaxed"
               />
             </div>
+
+            {/* Newsletter CTA after content */}
+            <div className="mt-12">
+              <NewsletterCTA 
+                variant="inline"
+                title="Get More Marketing Insights Like This"
+                description="Join 2,000+ marketers who get case studies, growth tactics, and AI marketing strategies delivered weekly."
+                showStats={true}
+                className="border-2 border-primary/20"
+              />
+            </div>
             
             {/* Tags */}
             {post.tags.length > 0 && (
@@ -1006,11 +1018,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   </Button>
                 </Link>
                 
-                <Link href="/contact">
-                  <Button>
-                    Get in Touch
-                  </Button>
-                </Link>
+                <NewsletterCTA 
+                  variant="minimal"
+                  title="Join the Newsletter"
+                  description="Weekly marketing insights and case studies"
+                  showStats={false}
+                  showBenefits={false}
+                />
               </div>
             </div>
           </div>
@@ -1018,6 +1032,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       </div>
       
       <Footer />
+      
+      {/* Newsletter Popup for blog readers */}
+      <NewsletterPopup 
+        trigger="scroll"
+        scrollPercentage={70}
+        title="Enjoying This Marketing Content?"
+        description="Get weekly case studies and growth tactics that helped scale 50+ products. Join 2,000+ marketers."
+      />
     </div>
   )
 }
