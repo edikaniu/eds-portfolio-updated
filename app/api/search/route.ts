@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { createCachedResponse, CACHE_DURATIONS } from '@/lib/api-cache'
 
 interface SearchResult {
   id: string
@@ -7,8 +8,8 @@ interface SearchResult {
   content: string
   type: 'blog' | 'project' | 'case-study' | 'experience'
   slug?: string
-  category?: string
-  excerpt?: string
+  category?: string | null
+  excerpt?: string | null
   url: string
   relevanceScore: number
 }
@@ -52,10 +53,10 @@ async function searchBlogPosts(query: string, limit: number) {
           { published: true },
           {
             OR: [
-              { title: { contains: query, mode: 'insensitive' } },
-              { content: { contains: query, mode: 'insensitive' } },
-              { excerpt: { contains: query, mode: 'insensitive' } },
-              { category: { contains: query, mode: 'insensitive' } }
+              { title: { contains: query } },
+              { content: { contains: query } },
+              { excerpt: { contains: query } },
+              { category: { contains: query } }
             ]
           }
         ]
@@ -94,11 +95,10 @@ async function searchProjects(query: string, limit: number) {
           { isActive: true },
           {
             OR: [
-              { title: { contains: query, mode: 'insensitive' } },
-              { description: { contains: query, mode: 'insensitive' } },
-              { type: { contains: query, mode: 'insensitive' } },
-              { challenge: { contains: query, mode: 'insensitive' } },
-              { solution: { contains: query, mode: 'insensitive' } }
+              { title: { contains: query } },
+              { description: { contains: query } },
+              { category: { contains: query } },
+              { technologies: { contains: query } }
             ]
           }
         ]
@@ -113,13 +113,13 @@ async function searchProjects(query: string, limit: number) {
       content: project.description,
       type: 'project' as const,
       slug: project.slug,
-      category: project.type,
+      category: project.category,
       excerpt: project.description.substring(0, 150) + '...',
       url: `/project/${project.id}`,
       relevanceScore: Math.max(
         calculateRelevance(project.title, query),
         calculateRelevance(project.description, query) * 0.8,
-        calculateRelevance(project.challenge || '', query) * 0.6
+        calculateRelevance(project.category || '', query) * 0.6
       )
     }))
   } catch (error) {
@@ -137,13 +137,13 @@ async function searchCaseStudies(query: string, limit: number) {
           { isActive: true },
           {
             OR: [
-              { title: { contains: query, mode: 'insensitive' } },
-              { subtitle: { contains: query, mode: 'insensitive' } },
-              { description: { contains: query, mode: 'insensitive' } },
-              { fullDescription: { contains: query, mode: 'insensitive' } },
-              { category: { contains: query, mode: 'insensitive' } },
-              { challenge: { contains: query, mode: 'insensitive' } },
-              { solution: { contains: query, mode: 'insensitive' } }
+              { title: { contains: query } },
+              { subtitle: { contains: query } },
+              { description: { contains: query } },
+              { fullDescription: { contains: query } },
+              { category: { contains: query } },
+              { challenge: { contains: query } },
+              { solution: { contains: query } }
             ]
           }
         ]
@@ -182,11 +182,11 @@ async function searchExperiences(query: string, limit: number) {
           { isActive: true },
           {
             OR: [
-              { title: { contains: query, mode: 'insensitive' } },
-              { company: { contains: query, mode: 'insensitive' } },
-              { achievements: { contains: query, mode: 'insensitive' } },
-              { type: { contains: query, mode: 'insensitive' } },
-              { category: { contains: query, mode: 'insensitive' } }
+              { title: { contains: query } },
+              { company: { contains: query } },
+              { achievements: { contains: query } },
+              { type: { contains: query } },
+              { category: { contains: query } }
             ]
           }
         ]
@@ -226,7 +226,8 @@ function generateSuggestions(query: string, results: SearchResult[]): string[] {
     const titleWords = result.title.toLowerCase().split(/\s+/)
     const categoryWords = result.category?.toLowerCase().split(/\s+/) || []
     
-    [...titleWords, ...categoryWords].forEach(word => {
+    const allWords = titleWords.concat(categoryWords)
+    allWords.forEach(word => {
       if (word.length > 3 && !word.includes(queryLower) && word !== queryLower) {
         words.add(word)
       }
@@ -259,7 +260,6 @@ export async function GET(request: NextRequest) {
     if (!query || query.length < 2) {
       return NextResponse.json({
         success: false,
-        message: 'Query must be at least 2 characters long',
         results: [],
         totalResults: 0,
         query: query || ''
@@ -290,19 +290,18 @@ export async function GET(request: NextRequest) {
     // Generate suggestions
     const suggestions = generateSuggestions(query, sortedResults)
 
-    return NextResponse.json({
+    return createCachedResponse({
       success: true,
       results: sortedResults,
       totalResults: allResults.length,
       query,
       suggestions: suggestions.length > 0 ? suggestions : undefined
-    } satisfies SearchResponse)
+    } satisfies SearchResponse, CACHE_DURATIONS.SEARCH)
 
   } catch (error) {
     console.error('Search API error:', error)
     return NextResponse.json({
       success: false,
-      message: 'Search failed',
       results: [],
       totalResults: 0,
       query: '',
