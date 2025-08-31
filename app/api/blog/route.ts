@@ -17,16 +17,15 @@ export async function GET(request: NextRequest) {
     
     if (category) {
       where.category = {
-        contains: category,
-        mode: 'insensitive'
+        contains: category
       }
     }
     
     if (search) {
       where.OR = [
-        { title: { contains: search, mode: 'insensitive' } },
-        { excerpt: { contains: search, mode: 'insensitive' } },
-        { content: { contains: search, mode: 'insensitive' } }
+        { title: { contains: search } },
+        { excerpt: { contains: search } },
+        { content: { contains: search } }
       ]
     }
 

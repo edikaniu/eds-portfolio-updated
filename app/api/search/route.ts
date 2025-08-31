@@ -74,22 +74,26 @@ async function searchBlogPosts(query: string, limit: number) {
       orderBy: { publishedAt: 'desc' }
     })
 
-    return blogPosts.filter(post => post.slug).map(post => ({
-      id: post.id,
-      title: post.title,
-      content: post.content,
-      type: 'blog' as const,
-      slug: post.slug,
-      category: post.category,
-      excerpt: post.excerpt || post.content.substring(0, 150) + (post.content.length > 150 ? '...' : ''),
-      url: `/blog/${post.slug}`,
-      relevanceScore: Math.max(
-        calculateRelevance(post.title, query),
-        calculateRelevance(post.content, query) * 0.8,
-        calculateRelevance(post.excerpt || '', query) * 0.6,
-        calculateRelevance(post.category || '', query) * 0.5
-      )
-    }))
+    // Only return posts that have both slug and are published - no fallback content
+    return blogPosts
+      .filter(post => post.slug && post.slug.trim() !== '')
+      .map(post => ({
+        id: post.id,
+        title: post.title,
+        content: post.content,
+        type: 'blog' as const,
+        slug: post.slug,
+        category: post.category,
+        excerpt: post.excerpt || post.content.substring(0, 150) + (post.content.length > 150 ? '...' : ''),
+        url: `/blog/${post.slug}`,
+        relevanceScore: Math.max(
+          calculateRelevance(post.title, query),
+          calculateRelevance(post.content, query) * 0.8,
+          calculateRelevance(post.excerpt || '', query) * 0.6,
+          calculateRelevance(post.category || '', query) * 0.5
+        )
+      }))
+      .filter(result => result.relevanceScore > 0.1) // Filter low relevance results
   } catch (error) {
     console.error('Blog search error:', error)
     return []
@@ -126,22 +130,31 @@ async function searchProjects(query: string, limit: number) {
       orderBy: { order: 'asc' }
     })
 
-    return projects.filter(project => project.id).map(project => ({
-      id: project.id,
-      title: project.title,
-      content: project.description,
-      type: 'project' as const,
-      slug: project.slug,
-      category: project.category,
-      excerpt: project.description.substring(0, 150) + (project.description.length > 150 ? '...' : ''),
-      url: `/project/${project.slug || project.id}`, // Prefer slug for SEO, fallback to id
-      relevanceScore: Math.max(
-        calculateRelevance(project.title, query),
-        calculateRelevance(project.description, query) * 0.8,
-        calculateRelevance(project.category || '', query) * 0.6,
-        calculateRelevance(project.technologies || '', query) * 0.4
+    // Only return projects with valid identifiers and descriptions
+    return projects
+      .filter(project => 
+        project.id && 
+        project.title && 
+        project.description && 
+        (project.slug || project.id) // Must have either slug or id for URL
       )
-    }))
+      .map(project => ({
+        id: project.id,
+        title: project.title,
+        content: project.description,
+        type: 'project' as const,
+        slug: project.slug,
+        category: project.category,
+        excerpt: project.description.substring(0, 150) + (project.description.length > 150 ? '...' : ''),
+        url: `/project/${project.slug || project.id}`, // Prefer slug for SEO, fallback to id
+        relevanceScore: Math.max(
+          calculateRelevance(project.title, query),
+          calculateRelevance(project.description, query) * 0.8,
+          calculateRelevance(project.category || '', query) * 0.6,
+          calculateRelevance(project.technologies || '', query) * 0.4
+        )
+      }))
+      .filter(result => result.relevanceScore > 0.1) // Filter low relevance results
   } catch (error) {
     console.error('Project search error:', error)
     return []
@@ -181,22 +194,31 @@ async function searchCaseStudies(query: string, limit: number) {
       orderBy: { order: 'asc' }
     })
 
-    return caseStudies.filter(study => study.slug).map(study => ({
-      id: study.id,
-      title: study.title,
-      content: study.description,
-      type: 'case-study' as const,
-      slug: study.slug,
-      category: study.category,
-      excerpt: study.subtitle || study.description.substring(0, 150) + (study.description.length > 150 ? '...' : ''),
-      url: `/case-study/${study.slug}`,
-      relevanceScore: Math.max(
-        calculateRelevance(study.title, query),
-        calculateRelevance(study.description, query) * 0.8,
-        calculateRelevance(study.subtitle || '', query) * 0.7,
-        calculateRelevance(study.category || '', query) * 0.5
+    // Only return case studies with valid slug and content
+    return caseStudies
+      .filter(study => 
+        study.slug && 
+        study.slug.trim() !== '' && 
+        study.title && 
+        study.description
       )
-    }))
+      .map(study => ({
+        id: study.id,
+        title: study.title,
+        content: study.description,
+        type: 'case-study' as const,
+        slug: study.slug,
+        category: study.category,
+        excerpt: study.subtitle || study.description.substring(0, 150) + (study.description.length > 150 ? '...' : ''),
+        url: `/case-study/${study.slug}`,
+        relevanceScore: Math.max(
+          calculateRelevance(study.title, query),
+          calculateRelevance(study.description, query) * 0.8,
+          calculateRelevance(study.subtitle || '', query) * 0.7,
+          calculateRelevance(study.category || '', query) * 0.5
+        )
+      }))
+      .filter(result => result.relevanceScore > 0.1) // Filter low relevance results
   } catch (error) {
     console.error('Case study search error:', error)
     return []
@@ -306,6 +328,19 @@ export async function GET(request: NextRequest) {
       } satisfies SearchResponse)
     }
 
+    // Test database connection
+    try {
+      await prisma.$queryRaw`SELECT 1`
+    } catch (dbError) {
+      console.error('Database connection failed in search:', dbError)
+      return NextResponse.json({
+        success: false,
+        results: [],
+        totalResults: 0,
+        query
+      } satisfies SearchResponse, { status: 500 })
+    }
+
     // Search across all content types in parallel
     const [blogResults, projectResults, caseStudyResults, experienceResults] = await Promise.all([
       searchBlogPosts(query, Math.ceil(limit * 0.4)), // 40% blogs
@@ -334,11 +369,17 @@ export async function GET(request: NextRequest) {
       .sort((a, b) => b.relevanceScore - a.relevanceScore)
       .slice(0, limit)
 
-    // Log search results for debugging
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`Search for "${query}" returned ${validResults.length} results:`, 
-        validResults.map(r => ({ type: r.type, title: r.title, url: r.url, score: r.relevanceScore.toFixed(2) }))
+    // Log search results for debugging (always log to help troubleshoot 404s)
+    console.log(`🔍 Search Query: "${query}"`);
+    console.log(`📊 Raw Results: Blog(${blogResults.length}), Projects(${projectResults.length}), Case Studies(${caseStudyResults.length}), Experience(${experienceResults.length})`);
+    console.log(`✅ Valid Results After Filtering: ${validResults.length}`);
+    
+    if (validResults.length > 0) {
+      console.log('🔗 Valid URLs Generated:', 
+        validResults.map(r => ({ type: r.type, title: r.title.substring(0, 50), url: r.url, score: r.relevanceScore.toFixed(2) }))
       )
+    } else {
+      console.log('❌ No valid search results found - all results filtered out')
     }
 
     // Generate suggestions
