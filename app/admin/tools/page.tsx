@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { FormInput, FormField, FormSelect } from '@/components/ui/form-field'
 import { ImageUpload } from '@/components/ui/image-upload'
+import { WysiwygEditor } from '@/components/ui/wysiwyg-editor'
 import { 
   Plus,
   Search,
@@ -457,13 +458,14 @@ export default function ToolsManagementPage() {
               </div>
 
               <FormField label="Description" id="description">
-                <textarea
-                  id="description"
+                <WysiwygEditor
                   value={formData.description}
-                  onChange={(e) => setFormData({...formData, description: e.target.value})}
+                  onChange={(description) => setFormData({...formData, description})}
                   placeholder="Brief description of the tool"
-                  rows={3}
-                  className="flex w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  height={150}
+                  showWordCount={true}
+                  maxWords={50}
+                  className="mt-2"
                 />
               </FormField>
 

@@ -7,6 +7,7 @@ import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { WysiwygEditor } from '@/components/ui/wysiwyg-editor'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Badge } from '@/components/ui/badge'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
@@ -438,25 +439,27 @@ export default function CaseStudiesManagementPage() {
 
                 <div>
                   <Label htmlFor="description">Short Description *</Label>
-                  <Textarea
-                    id="description"
+                  <WysiwygEditor
                     value={formData.description}
-                    onChange={(e) => setFormData({...formData, description: e.target.value})}
+                    onChange={(description) => setFormData({...formData, description})}
                     placeholder="Brief description for cards and previews"
-                    rows={3}
-                    required
+                    height={150}
+                    showWordCount={true}
+                    maxWords={50}
+                    className="mt-2"
                   />
                 </div>
 
                 <div>
                   <Label htmlFor="fullDescription">Full Description *</Label>
-                  <Textarea
-                    id="fullDescription"
+                  <WysiwygEditor
                     value={formData.fullDescription}
-                    onChange={(e) => setFormData({...formData, fullDescription: e.target.value})}
+                    onChange={(fullDescription) => setFormData({...formData, fullDescription})}
                     placeholder="Detailed description of the case study"
-                    rows={5}
-                    required
+                    height={200}
+                    showWordCount={true}
+                    maxWords={200}
+                    className="mt-2"
                   />
                 </div>
 
@@ -608,25 +611,27 @@ export default function CaseStudiesManagementPage() {
                 {/* Challenge & Solution */}
                 <div>
                   <Label htmlFor="challenge">Challenge *</Label>
-                  <Textarea
-                    id="challenge"
+                  <WysiwygEditor
                     value={formData.challenge}
-                    onChange={(e) => setFormData({...formData, challenge: e.target.value})}
+                    onChange={(challenge) => setFormData({...formData, challenge})}
                     placeholder="Describe the challenge or problem"
-                    rows={4}
-                    required
+                    height={180}
+                    showWordCount={true}
+                    maxWords={150}
+                    className="mt-2"
                   />
                 </div>
 
                 <div>
                   <Label htmlFor="solution">Solution *</Label>
-                  <Textarea
-                    id="solution"
+                  <WysiwygEditor
                     value={formData.solution}
-                    onChange={(e) => setFormData({...formData, solution: e.target.value})}
+                    onChange={(solution) => setFormData({...formData, solution})}
                     placeholder="Describe the solution implemented"
-                    rows={4}
-                    required
+                    height={180}
+                    showWordCount={true}
+                    maxWords={150}
+                    className="mt-2"
                   />
                 </div>
 
