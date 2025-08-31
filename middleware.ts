@@ -73,11 +73,12 @@ export async function middleware(request: NextRequest) {
   // CSP for enhanced security (adjust based on your needs)
   response.headers.set('Content-Security-Policy', 
     "default-src 'self'; " +
-    "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://vercel.live; " +
+    "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://vercel.live https://subscribe-forms.beehiiv.com; " +
     "style-src 'self' 'unsafe-inline'; " +
     "img-src 'self' data: https:; " +
     "font-src 'self' https:; " +
     "connect-src 'self' https:; " +
+    "frame-src 'self' https://subscribe-forms.beehiiv.com; " +
     "media-src 'self' https:; " +
     "object-src 'none'; " +
     "base-uri 'self'; " +
