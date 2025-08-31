@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { verifyJWT, JWTPayload } from './jwt-auth'
+import { verifySessionToken, SimpleUser } from './simple-auth'
 
-export function withAdminAuth(handler: (request: NextRequest, user: JWTPayload) => Promise<NextResponse>) {
+export function withAdminAuth(handler: (request: NextRequest, user: SimpleUser) => Promise<NextResponse>) {
   return async (request: NextRequest) => {
     try {
       const token = request.cookies.get('admin-session')?.value
@@ -16,7 +16,7 @@ export function withAdminAuth(handler: (request: NextRequest, user: JWTPayload) 
         )
       }
 
-      const user = verifyJWT(token)
+      const user = verifySessionToken(token)
       if (!user) {
         return NextResponse.json(
           { 

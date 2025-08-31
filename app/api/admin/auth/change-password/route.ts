@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { withAdminAuth } from '@/lib/admin-middleware'
-import { verifyPassword, hashPassword } from '@/lib/auth'
+import { verifyPassword, hashPassword } from '@/lib/password-utils'
 import { prisma } from '@/lib/prisma'
 
 const ChangePasswordSchema = z.object({
