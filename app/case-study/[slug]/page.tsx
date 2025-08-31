@@ -536,9 +536,10 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
                 <Card className="p-8">
                   <h2 className="text-2xl font-bold text-foreground mb-6">Overview</h2>
                   <div className="prose prose-lg max-w-none">
-                    <p className="text-muted-foreground leading-relaxed">
-                      {caseStudy.fullDescription || caseStudy.description}
-                    </p>
+                    <div 
+                      className="text-muted-foreground leading-relaxed prose prose-sm max-w-none"
+                      dangerouslySetInnerHTML={{ __html: caseStudy.fullDescription || caseStudy.description }}
+                    />
                   </div>
                 </Card>
 
@@ -550,9 +551,10 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
                       The Challenge
                     </h2>
                     <div className="prose prose-lg max-w-none">
-                      <p className="text-muted-foreground leading-relaxed">
-                        {caseStudy.challenge}
-                      </p>
+                      <div 
+                        className="text-muted-foreground leading-relaxed prose prose-sm max-w-none"
+                        dangerouslySetInnerHTML={{ __html: caseStudy.challenge }}
+                      />
                     </div>
                   </Card>
                 )}
@@ -565,9 +567,10 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
                       The Solution
                     </h2>
                     <div className="prose prose-lg max-w-none">
-                      <p className="text-muted-foreground leading-relaxed">
-                        {caseStudy.solution}
-                      </p>
+                      <div 
+                        className="text-muted-foreground leading-relaxed prose prose-sm max-w-none"
+                        dangerouslySetInnerHTML={{ __html: caseStudy.solution }}
+                      />
                     </div>
                   </Card>
                 )}

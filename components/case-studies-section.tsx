@@ -456,7 +456,10 @@ export function CaseStudiesSection() {
                   </div>
 
                   {/* Description */}
-                  <p className="text-muted-foreground mb-4 leading-relaxed">{study.description}</p>
+                  <div 
+                    className="text-muted-foreground mb-4 leading-relaxed prose prose-sm max-w-none"
+                    dangerouslySetInnerHTML={{ __html: study.description }}
+                  />
 
                   {/* Metrics Row */}
                   <div className="flex items-center gap-6 mb-4">

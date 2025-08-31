@@ -443,7 +443,10 @@ export function SkillsSection() {
                     <div className="text-white">{getSkillIcon(category.skills[0]?.name || '')}</div>
                   </div>
                   <h3 className="text-2xl font-bold text-foreground mb-2">{category.title}</h3>
-                  <p className="text-muted-foreground">{category.description}</p>
+                  <div 
+                    className="text-muted-foreground prose prose-sm max-w-none" 
+                    dangerouslySetInnerHTML={{ __html: category.description }} 
+                  />
                 </div>
 
                 {/* Skills List */}

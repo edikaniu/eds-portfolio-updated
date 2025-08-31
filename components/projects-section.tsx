@@ -128,9 +128,10 @@ export function ProjectsSection({ projects = [] }: ProjectsSectionProps) {
                     <h3 className="text-xl font-semibold text-foreground mb-3 group-hover:text-primary transition-colors">
                       {project.title}
                     </h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed mb-4 flex-grow line-clamp-3">
-                      {project.description}
-                    </p>
+                    <div 
+                      className="text-muted-foreground text-sm leading-relaxed mb-4 flex-grow line-clamp-3 prose prose-sm max-w-none"
+                      dangerouslySetInnerHTML={{ __html: project.description }}
+                    />
                     <div className="flex flex-wrap gap-2 mb-4">
                       {project.technologies.slice(0, 3).map((tech) => (
                         <Badge key={tech} variant="outline" className="text-xs">
