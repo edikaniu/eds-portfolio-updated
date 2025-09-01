@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { BeehiveEmbed } from './beehive-embed'
+import { BeehiivEmbed } from './beehiiv-embed'
 import { Mail, Users, TrendingUp, X } from 'lucide-react'
 
 interface NewsletterCTAProps {
@@ -44,7 +44,7 @@ export function NewsletterCTA({
           >
             <X className="h-4 w-4" />
           </Button>
-          <BeehiveEmbed 
+          <BeehiivEmbed 
             className="w-full" 
             width="100%" 
             height="420px"

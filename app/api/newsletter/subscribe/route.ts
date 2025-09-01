@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
     const params = new URLSearchParams()
     params.append('email', email)
     
-    const beehiveResponse = await fetch(
+    const beehiivResponse = await fetch(
       'https://subscribe-forms.beehiiv.com/d6ed7510-b199-42ed-816a-ef341a71139c',
       {
         method: 'POST',
@@ -32,18 +32,18 @@ export async function POST(request: NextRequest) {
       }
     )
 
-    console.log('Beehive response status:', beehiveResponse.status)
-    console.log('Beehive response headers:', Object.fromEntries(beehiveResponse.headers.entries()))
+    console.log('Beehiiv response status:', beehiivResponse.status)
+    console.log('Beehiiv response headers:', Object.fromEntries(beehiivResponse.headers.entries()))
 
-    // Beehive typically redirects on successful submission
-    if (beehiveResponse.ok || beehiveResponse.status === 302 || beehiveResponse.status === 301) {
+    // Beehiiv typically redirects on successful submission
+    if (beehiivResponse.ok || beehiivResponse.status === 302 || beehiivResponse.status === 301) {
       return NextResponse.json({
         success: true,
         message: 'Successfully subscribed! Please check your email to confirm your subscription.'
       })
     } else {
-      const responseText = await beehiveResponse.text()
-      console.error('Beehive submission failed:', beehiveResponse.status, beehiveResponse.statusText, responseText)
+      const responseText = await beehiivResponse.text()
+      console.error('Beehiiv submission failed:', beehiivResponse.status, beehiivResponse.statusText, responseText)
       
       return NextResponse.json(
         { success: false, error: 'Subscription failed. Please try again.' },

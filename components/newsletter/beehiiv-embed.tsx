@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Mail, X, Loader2 } from 'lucide-react'
 
-interface BeehiveEmbedProps {
+interface BeehiivEmbedProps {
   className?: string
   width?: string
   height?: string
@@ -15,11 +15,11 @@ interface NewsletterEmbedData {
   attributionCode: string
 }
 
-export function BeehiveEmbed({ 
+export function BeehiivEmbed({ 
   className = "", 
   width = "100%", 
   height = "auto"
-}: BeehiveEmbedProps) {
+}: BeehiivEmbedProps) {
   const [showPopup, setShowPopup] = useState(false)
   const [embedData, setEmbedData] = useState<NewsletterEmbedData | null>(null)
   const [isLoading, setIsLoading] = useState(false)

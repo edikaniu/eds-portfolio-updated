@@ -1,12 +1,13 @@
 "use client"
 
 import { useState, useEffect } from 'react'
-import { Card } from '@/components/ui/card'
+import { AdminLayout } from '@/components/admin/admin-layout'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
-import { Save, Mail, Code, AlertCircle } from 'lucide-react'
+import { Save, Mail, Code, AlertCircle, CheckCircle } from 'lucide-react'
 
 interface NewsletterSettings {
   embedCode: string
@@ -18,7 +19,7 @@ export default function NewsletterAdminPage() {
     embedCode: '',
     attributionCode: ''
   })
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
 
   useEffect(() => {
@@ -27,7 +28,6 @@ export default function NewsletterAdminPage() {
 
   const fetchSettings = async () => {
     try {
-      setIsLoading(true)
       const response = await fetch('/api/admin/newsletter')
       if (response.ok) {
         const data = await response.json()
@@ -37,12 +37,18 @@ export default function NewsletterAdminPage() {
       }
     } catch (error) {
       console.error('Failed to fetch newsletter settings:', error)
+      toast.error('Failed to load newsletter settings')
     } finally {
       setIsLoading(false)
     }
   }
 
   const handleSave = async () => {
+    if (!settings.embedCode.trim()) {
+      toast.error('Beehiiv embed code is required')
+      return
+    }
+
     try {
       setIsSaving(true)
       
@@ -62,7 +68,8 @@ export default function NewsletterAdminPage() {
         toast.error(data.error || 'Failed to save settings')
       }
     } catch (error) {
-      toast.error('Error saving newsletter settings')
+      console.error('Save error:', error)
+      toast.error('Network error. Please try again.')
     } finally {
       setIsSaving(false)
     }
@@ -75,131 +82,138 @@ export default function NewsletterAdminPage() {
     }))
   }
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
-    )
-  }
-
   return (
-    <div className="container mx-auto px-6 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-foreground mb-2">Newsletter Settings</h1>
-        <p className="text-muted-foreground">
-          Configure your Beehive newsletter embed code and attribution tracking for the subscription forms.
-        </p>
-      </div>
+    <AdminLayout title="Newsletter Settings">
+      <div className="space-y-6">
+        {/* Header */}
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Newsletter Settings</h1>
+          <p className="mt-2 text-gray-600">
+            Configure your Beehiiv newsletter embed code and attribution tracking for subscription forms.
+          </p>
+        </div>
 
-      <div className="grid gap-6 max-w-4xl">
-        <Card className="p-6">
-          <div className="space-y-6">
-            <div className="flex items-center gap-2 mb-4">
-              <Mail className="h-5 w-5 text-primary" />
-              <h2 className="text-xl font-semibold">Beehive Integration</h2>
-            </div>
-
-            <div className="grid gap-6">
-              {/* Embed Code Section */}
-              <div className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <Code className="h-4 w-4" />
-                  <Label htmlFor="embedCode" className="text-sm font-medium">
-                    Beehive Embed Code
-                  </Label>
-                </div>
-                <Textarea
-                  id="embedCode"
-                  placeholder="Paste your Beehive embed code here..."
-                  value={settings.embedCode}
-                  onChange={(e) => handleInputChange('embedCode', e.target.value)}
-                  className="min-h-[120px] font-mono text-sm"
-                />
-                <p className="text-xs text-muted-foreground">
-                  Copy the complete embed code from your Beehive dashboard. This should include both the script tag and iframe.
-                </p>
-              </div>
-
-              {/* Attribution Code Section */}
-              <div className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <Code className="h-4 w-4" />
-                  <Label htmlFor="attributionCode" className="text-sm font-medium">
-                    Attribution Tracking Code
-                  </Label>
-                </div>
-                <Textarea
-                  id="attributionCode"
-                  placeholder="Paste your Beehive attribution tracking code here..."
-                  value={settings.attributionCode}
-                  onChange={(e) => handleInputChange('attributionCode', e.target.value)}
-                  className="min-h-[80px] font-mono text-sm"
-                />
-                <p className="text-xs text-muted-foreground">
-                  Copy the attribution tracking script from your Beehive dashboard for proper analytics tracking.
-                </p>
-              </div>
-            </div>
-
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <div className="flex items-start gap-2">
-                <AlertCircle className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                <div className="text-sm text-blue-800">
-                  <p className="font-medium mb-1">How this works:</p>
-                  <ul className="space-y-1 text-xs">
-                    <li>• Users click newsletter subscribe buttons across your site</li>
-                    <li>• A popup displays using your Beehive embed code from above</li>
-                    <li>• Users complete subscription directly in Beehive's native form</li>
-                    <li>• Attribution tracking automatically records subscription sources</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex justify-end">
-              <Button 
-                onClick={handleSave} 
-                disabled={isSaving}
-                className="min-w-[120px]"
-              >
-                {isSaving ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Saving...
-                  </>
-                ) : (
-                  <>
-                    <Save className="h-4 w-4 mr-2" />
-                    Save Settings
-                  </>
-                )}
-              </Button>
-            </div>
+        {isLoading ? (
+          <div className="flex items-center justify-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <span className="ml-2 text-gray-600">Loading settings...</span>
           </div>
-        </Card>
-
-        {/* Preview Section */}
-        {settings.embedCode && (
-          <Card className="p-6">
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Preview</h3>
-              <div className="bg-muted/30 rounded-lg p-4">
-                <p className="text-sm text-muted-foreground mb-2">
-                  This is how your newsletter form will appear in popups:
-                </p>
-                <div className="bg-white rounded-lg border p-4 max-w-md">
-                  <div 
-                    dangerouslySetInnerHTML={{ 
-                      __html: settings.embedCode + (settings.attributionCode || '') 
-                    }} 
-                  />
+        ) : (
+          <div className="grid gap-6">
+            {/* Main Configuration Card */}
+            <Card className="shadow-sm border border-gray-200">
+              <CardHeader className="border-b border-gray-100 bg-gray-50">
+                <div className="flex items-center space-x-2">
+                  <Mail className="h-5 w-5 text-blue-600" />
+                  <CardTitle className="text-lg text-gray-900">Beehiiv Integration</CardTitle>
                 </div>
-              </div>
-            </div>
-          </Card>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="space-y-6">
+                  {/* Embed Code Section */}
+                  <div className="space-y-3">
+                    <Label htmlFor="embedCode" className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+                      <Code className="h-4 w-4 text-gray-500" />
+                      Beehiiv Embed Code
+                    </Label>
+                    <Textarea
+                      id="embedCode"
+                      placeholder="Paste your Beehiiv embed code here..."
+                      value={settings.embedCode}
+                      onChange={(e) => handleInputChange('embedCode', e.target.value)}
+                      className="min-h-[140px] font-mono text-sm border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                    />
+                    <p className="text-xs text-gray-500">
+                      Copy the complete embed code from your Beehiiv dashboard. This should include both the script tag and iframe.
+                    </p>
+                  </div>
+
+                  {/* Attribution Code Section */}
+                  <div className="space-y-3">
+                    <Label htmlFor="attributionCode" className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+                      <Code className="h-4 w-4 text-gray-500" />
+                      Attribution Tracking Code
+                    </Label>
+                    <Textarea
+                      id="attributionCode"
+                      placeholder="Paste your Beehiiv attribution tracking code here..."
+                      value={settings.attributionCode}
+                      onChange={(e) => handleInputChange('attributionCode', e.target.value)}
+                      className="min-h-[100px] font-mono text-sm border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                    />
+                    <p className="text-xs text-gray-500">
+                      Copy the attribution tracking script from your Beehiiv dashboard for proper analytics tracking.
+                    </p>
+                  </div>
+
+                  {/* Info Box */}
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div className="flex items-start gap-3">
+                      <AlertCircle className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                      <div className="text-sm text-blue-800">
+                        <p className="font-medium mb-2">How this works:</p>
+                        <ul className="space-y-1 text-sm">
+                          <li>• Users click newsletter subscribe buttons across your site</li>
+                          <li>• A popup displays using your Beehiiv embed code from above</li>
+                          <li>• Users complete subscription directly in Beehiiv's native form</li>
+                          <li>• Attribution tracking automatically records subscription sources</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Save Button */}
+                  <div className="flex justify-end pt-4 border-t border-gray-100">
+                    <Button 
+                      onClick={handleSave} 
+                      disabled={isSaving || !settings.embedCode.trim()}
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2"
+                    >
+                      {isSaving ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                          Saving...
+                        </>
+                      ) : (
+                        <>
+                          <Save className="h-4 w-4 mr-2" />
+                          Save Settings
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Preview Section */}
+            {settings.embedCode && (
+              <Card className="shadow-sm border border-gray-200">
+                <CardHeader className="border-b border-gray-100 bg-gray-50">
+                  <CardTitle className="text-lg text-gray-900 flex items-center gap-2">
+                    <CheckCircle className="h-5 w-5 text-green-600" />
+                    Form Preview
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-6">
+                  <p className="text-sm text-gray-600 mb-4">
+                    This is how your newsletter form will appear in popups across your site:
+                  </p>
+                  <div className="bg-gray-50 rounded-lg p-4 border-2 border-dashed border-gray-300">
+                    <div className="bg-white rounded-lg border border-gray-200 p-4 max-w-lg mx-auto">
+                      <div 
+                        dangerouslySetInnerHTML={{ 
+                          __html: settings.embedCode + (settings.attributionCode || '') 
+                        }} 
+                      />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </div>
         )}
       </div>
-    </div>
+    </AdminLayout>
   )
 }

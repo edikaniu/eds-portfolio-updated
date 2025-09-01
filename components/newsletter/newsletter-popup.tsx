@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import { BeehiveEmbed } from './beehive-embed'
+import { BeehiivEmbed } from './beehiiv-embed'
 import { X, Mail, TrendingUp } from 'lucide-react'
 
 interface NewsletterPopupProps {
@@ -144,7 +144,7 @@ export function NewsletterPopup({
 
         {/* Embed */}
         <div className="p-6">
-          <BeehiveEmbed 
+          <BeehiivEmbed 
             className="w-full"
             width="100%"
             height="380px"

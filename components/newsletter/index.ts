@@ -1,3 +1,3 @@
-export { BeehiveEmbed } from './beehive-embed'
+export { BeehiivEmbed } from './beehiiv-embed'
 export { NewsletterCTA } from './newsletter-cta'
 export { NewsletterPopup, useNewsletterPopup } from './newsletter-popup'
