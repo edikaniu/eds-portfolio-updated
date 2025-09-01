@@ -32,30 +32,27 @@ export function BeehiveEmbed({
     setStatus('loading')
     
     try {
-      // Create a form and submit it to Beehive's endpoint
-      const form = document.createElement('form')
-      form.method = 'POST'
-      form.action = 'https://subscribe-forms.beehiiv.com/d6ed7510-b199-42ed-816a-ef341a71139c'
-      form.target = '_blank'
-      form.style.display = 'none'
+      const response = await fetch('/api/newsletter/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      })
+
+      const data = await response.json()
       
-      const emailInput = document.createElement('input')
-      emailInput.type = 'email'
-      emailInput.name = 'email'
-      emailInput.value = email
-      
-      form.appendChild(emailInput)
-      document.body.appendChild(form)
-      form.submit()
-      document.body.removeChild(form)
-      
-      setStatus('success')
-      setMessage('Thanks! Please check your email to confirm your subscription.')
-      setEmail('')
-      
+      if (data.success) {
+        setStatus('success')
+        setMessage(data.message)
+        setEmail('')
+      } else {
+        setStatus('error')
+        setMessage(data.error || 'Something went wrong. Please try again.')
+      }
     } catch (error) {
       setStatus('error')
-      setMessage('Something went wrong. Please try again.')
+      setMessage('Network error. Please check your connection and try again.')
     }
   }
 
