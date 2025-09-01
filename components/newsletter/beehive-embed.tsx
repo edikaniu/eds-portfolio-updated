@@ -32,27 +32,20 @@ export function BeehiveEmbed({
     setStatus('loading')
     
     try {
-      const response = await fetch('/api/newsletter/subscribe', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      })
-
-      const data = await response.json()
+      // Open Beehive subscription form in new window/tab with email pre-filled
+      const beehiveUrl = `https://subscribe-forms.beehiiv.com/d6ed7510-b199-42ed-816a-ef341a71139c?email=${encodeURIComponent(email)}`
+      window.open(beehiveUrl, '_blank', 'width=600,height=700,scrollbars=yes,resizable=yes')
       
-      if (data.success) {
+      // Show success message
+      setTimeout(() => {
         setStatus('success')
-        setMessage(data.message)
+        setMessage('A subscription window has opened. Please complete your subscription there and check your email for confirmation.')
         setEmail('')
-      } else {
-        setStatus('error')
-        setMessage(data.error || 'Something went wrong. Please try again.')
-      }
+      }, 500)
+      
     } catch (error) {
       setStatus('error')
-      setMessage('Network error. Please check your connection and try again.')
+      setMessage('Something went wrong. Please try again.')
     }
   }
 

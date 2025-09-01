@@ -11,30 +11,40 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Submit to Beehive's form endpoint using server-side fetch
-    const formData = new FormData()
-    formData.append('email', email)
+    // Use URLSearchParams instead of FormData for better compatibility
+    const params = new URLSearchParams()
+    params.append('email', email)
     
     const beehiveResponse = await fetch(
       'https://subscribe-forms.beehiiv.com/d6ed7510-b199-42ed-816a-ef341a71139c',
       {
         method: 'POST',
-        body: formData,
+        body: params.toString(),
         headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-          'Referer': process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000',
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+          'Accept-Language': 'en-US,en;q=0.5',
+          'Accept-Encoding': 'gzip, deflate, br',
+          'Origin': process.env.NEXT_PUBLIC_BASE_URL || 'https://portfolio-main-ten-xi.vercel.app',
+          'Referer': process.env.NEXT_PUBLIC_BASE_URL || 'https://portfolio-main-ten-xi.vercel.app',
         }
       }
     )
 
-    if (beehiveResponse.ok || beehiveResponse.status === 302) {
-      // Success or redirect (which Beehive typically does after successful submission)
+    console.log('Beehive response status:', beehiveResponse.status)
+    console.log('Beehive response headers:', Object.fromEntries(beehiveResponse.headers.entries()))
+
+    // Beehive typically redirects on successful submission
+    if (beehiveResponse.ok || beehiveResponse.status === 302 || beehiveResponse.status === 301) {
       return NextResponse.json({
         success: true,
         message: 'Successfully subscribed! Please check your email to confirm your subscription.'
       })
     } else {
-      console.error('Beehive submission failed:', beehiveResponse.status, beehiveResponse.statusText)
+      const responseText = await beehiveResponse.text()
+      console.error('Beehive submission failed:', beehiveResponse.status, beehiveResponse.statusText, responseText)
+      
       return NextResponse.json(
         { success: false, error: 'Subscription failed. Please try again.' },
         { status: 500 }
