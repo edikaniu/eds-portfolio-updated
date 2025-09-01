@@ -13,7 +13,7 @@ const navItems = [
   { name: "Projects", href: "/projects", isSection: false },
   { name: "Case Studies", href: "/case-studies", isSection: false },
   { name: "Blog", href: "/blog", isSection: false },
-  { name: "Contact", href: "/#contact", isSection: true },
+  { name: "Contact", href: "/contact", isSection: false },
 ]
 
 export function Navigation() {
