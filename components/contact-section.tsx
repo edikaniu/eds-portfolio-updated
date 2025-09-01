@@ -172,31 +172,14 @@ export function ContactSection() {
   ]
 
   return (
-    <section className="py-24 bg-gradient-to-b from-card/30 via-background to-card/20 relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
-      <div className="absolute top-10 right-10 w-32 h-32 bg-primary/10 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-10 left-10 w-40 h-40 bg-accent/10 rounded-full blur-3xl"></div>
-      
-      <div className="container mx-auto px-6 lg:px-12 xl:px-16 relative z-10">
+    <section className="py-16 bg-gradient-to-b from-background to-card/20">
+      <div className="container mx-auto px-6 lg:px-12 xl:px-16">
         <div className="max-w-7xl mx-auto">
-          {/* Section Header */}
-          <div className="text-center mb-20">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary font-medium text-sm mb-6">
-              <Zap className="h-4 w-4" />
-              Let's Build Something Amazing
-            </div>
-            <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-6 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
-              Let's Work Together
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
-              Ready to transform your marketing strategy and accelerate growth? Let's discuss how I can help you achieve your business goals through innovative, data-driven solutions.
-            </p>
-          </div>
 
-          <div className="grid lg:grid-cols-3 gap-8">
+          {/* Main Contact Section */}
+          <div className="grid lg:grid-cols-5 gap-8 mb-12">
             {/* Contact Form */}
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-3">
               <Card className="p-8 bg-background/80 backdrop-blur-sm border border-border/50 shadow-2xl hover:shadow-3xl transition-all duration-300">
                 <div className="mb-8">
                   <div className="flex items-center gap-3 mb-4">
@@ -314,20 +297,20 @@ export function ContactSection() {
             </div>
 
             {/* Contact Information Sidebar */}
-            <div className="space-y-6">
+            <div className="lg:col-span-2 space-y-6">
               {/* Contact Info Card */}
-              <Card className="p-8 bg-background/80 backdrop-blur-sm border border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
+              <Card className="p-6 bg-background/80 backdrop-blur-sm border border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-2 bg-primary/10 rounded-lg">
                     <Mail className="h-5 w-5 text-primary" />
                   </div>
                   <h3 className="text-xl font-bold text-foreground">Contact Info</h3>
                 </div>
-                <div className="space-y-5">
+                <div className="space-y-4">
                   {contactInfo.map((info, index) => (
                     <div key={index} className="group hover:bg-card/50 p-3 rounded-lg transition-colors duration-200">
-                      <div className="flex items-center gap-4">
-                        <div className="p-3 rounded-lg bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors duration-200">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors duration-200">
                           {info.icon}
                         </div>
                         <div className="flex-1">
@@ -337,43 +320,18 @@ export function ContactSection() {
                               href={info.href}
                               target={info.href.startsWith("http") ? "_blank" : undefined}
                               rel={info.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                              className="text-muted-foreground hover:text-primary transition-colors font-medium text-sm"
+                              className="text-muted-foreground hover:text-primary transition-colors text-sm"
                             >
                               {info.value}
                             </a>
                           ) : (
-                            <p className="text-muted-foreground font-medium text-sm">{info.value}</p>
+                            <p className="text-muted-foreground text-sm">{info.value}</p>
                           )}
                         </div>
                       </div>
                     </div>
                   ))}
                 </div>
-              </Card>
-
-              {/* Why Work With Me Card */}
-              <Card className="p-8 bg-gradient-to-br from-primary/10 via-accent/10 to-primary/5 border border-primary/20 shadow-lg">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 bg-primary/20 rounded-lg">
-                    <Target className="h-5 w-5 text-primary" />
-                  </div>
-                  <h3 className="text-xl font-bold text-foreground">Why Work With Me?</h3>
-                </div>
-                <ul className="space-y-4">
-                  {[
-                    { icon: <Users className="h-4 w-4" />, text: "7+ years of proven growth marketing experience" },
-                    { icon: <Zap className="h-4 w-4" />, text: "AI-powered strategies for maximum efficiency" },
-                    { icon: <Target className="h-4 w-4" />, text: "Data-driven approach with measurable results" },
-                    { icon: <CheckCircle className="h-4 w-4" />, text: "Cross-functional leadership and collaboration" },
-                  ].map((benefit, index) => (
-                    <li key={index} className="flex items-start gap-3 group">
-                      <div className="p-1.5 bg-primary/10 rounded-md text-primary group-hover:bg-primary/20 transition-colors duration-200 mt-0.5">
-                        {benefit.icon}
-                      </div>
-                      <span className="text-muted-foreground leading-relaxed">{benefit.text}</span>
-                    </li>
-                  ))}
-                </ul>
               </Card>
 
               {/* Response Time Card */}
@@ -389,6 +347,38 @@ export function ContactSection() {
                 </div>
               </Card>
             </div>
+          </div>
+
+          {/* Why Work With Me Section - Full Width Below */}
+          <div className="mb-8">
+            <Card className="p-8 bg-gradient-to-br from-primary/10 via-accent/10 to-primary/5 border border-primary/20 shadow-lg">
+              <div className="text-center mb-8">
+                <div className="flex items-center justify-center gap-3 mb-4">
+                  <div className="p-3 bg-primary/20 rounded-lg">
+                    <Target className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-foreground">Why Work With Me?</h3>
+                </div>
+                <p className="text-muted-foreground max-w-2xl mx-auto">
+                  Here's what sets me apart and makes our collaboration successful
+                </p>
+              </div>
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {[
+                  { icon: <Users className="h-5 w-5" />, text: "7+ years of proven growth marketing experience" },
+                  { icon: <Zap className="h-5 w-5" />, text: "AI-powered strategies for maximum efficiency" },
+                  { icon: <Target className="h-5 w-5" />, text: "Data-driven approach with measurable results" },
+                  { icon: <CheckCircle className="h-5 w-5" />, text: "Cross-functional leadership and collaboration" },
+                ].map((benefit, index) => (
+                  <div key={index} className="text-center group hover:bg-background/50 p-4 rounded-lg transition-colors duration-200">
+                    <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-lg text-primary group-hover:bg-primary/20 transition-colors duration-200 mb-3">
+                      {benefit.icon}
+                    </div>
+                    <p className="text-muted-foreground text-sm leading-relaxed">{benefit.text}</p>
+                  </div>
+                ))}
+              </div>
+            </Card>
           </div>
         </div>
       </div>
