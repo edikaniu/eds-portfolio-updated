@@ -8,7 +8,7 @@ import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Mail, Linkedin, MapPin, Send, CheckCircle, AlertCircle } from "lucide-react"
+import { Mail, Linkedin, MapPin, Send, CheckCircle, AlertCircle, Clock, Users, Target, Zap } from "lucide-react"
 import { logger } from "@/lib/logger"
 
 interface FormData {
@@ -172,25 +172,44 @@ export function ContactSection() {
   ]
 
   return (
-    <section className="py-24 bg-card/30">
-      <div className="container mx-auto px-6 lg:px-12 xl:px-16">
-        <div className="max-w-6xl mx-auto">
+    <section className="py-24 bg-gradient-to-b from-card/30 via-background to-card/20 relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+      <div className="absolute top-10 right-10 w-32 h-32 bg-primary/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-10 left-10 w-40 h-40 bg-accent/10 rounded-full blur-3xl"></div>
+      
+      <div className="container mx-auto px-6 lg:px-12 xl:px-16 relative z-10">
+        <div className="max-w-7xl mx-auto">
           {/* Section Header */}
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">Let's Work Together</h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Ready to scale your business? Let's discuss how I can help you achieve your growth goals through
-              data-driven marketing strategies.
+          <div className="text-center mb-20">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary font-medium text-sm mb-6">
+              <Zap className="h-4 w-4" />
+              Let's Build Something Amazing
+            </div>
+            <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-6 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
+              Let's Work Together
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+              Ready to transform your marketing strategy and accelerate growth? Let's discuss how I can help you achieve your business goals through innovative, data-driven solutions.
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12">
+          <div className="grid lg:grid-cols-3 gap-8">
             {/* Contact Form */}
-            <Card className="p-8 bg-background/50 border-border/50">
-              <div className="mb-6">
-                <h3 className="text-2xl font-bold text-foreground mb-2">Send a Message</h3>
-                <p className="text-muted-foreground">I typically respond within 24 hours</p>
-              </div>
+            <div className="lg:col-span-2">
+              <Card className="p-8 bg-background/80 backdrop-blur-sm border border-border/50 shadow-2xl hover:shadow-3xl transition-all duration-300">
+                <div className="mb-8">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-2 bg-primary/10 rounded-lg">
+                      <Send className="h-5 w-5 text-primary" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-foreground">Send a Message</h3>
+                  </div>
+                  <p className="text-muted-foreground flex items-center gap-2">
+                    <Clock className="h-4 w-4 text-primary" />
+                    I typically respond within 24 hours
+                  </p>
+                </div>
 
               {submitStatus === "success" && (
                 <div className="mb-6 p-4 bg-green-500/10 border border-green-500/20 rounded-lg flex items-center gap-3">
@@ -276,66 +295,98 @@ export function ContactSection() {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+                  className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 py-3 text-lg font-semibold"
                 >
                   {isSubmitting ? (
                     <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-                      Sending...
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3" />
+                      Sending Message...
                     </>
                   ) : (
                     <>
                       Send Message
-                      <Send className="ml-2 h-4 w-4" />
+                      <Send className="ml-3 h-5 w-5" />
                     </>
                   )}
                 </Button>
               </form>
             </Card>
+            </div>
 
-            {/* Contact Information */}
-            <div className="space-y-8">
-              <Card className="p-8 bg-background/50 border-border/50">
-                <h3 className="text-2xl font-bold text-foreground mb-6">Get in Touch</h3>
-                <div className="space-y-6">
+            {/* Contact Information Sidebar */}
+            <div className="space-y-6">
+              {/* Contact Info Card */}
+              <Card className="p-8 bg-background/80 backdrop-blur-sm border border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-2 bg-primary/10 rounded-lg">
+                    <Mail className="h-5 w-5 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-bold text-foreground">Contact Info</h3>
+                </div>
+                <div className="space-y-5">
                   {contactInfo.map((info, index) => (
-                    <div key={index} className="flex items-center gap-4">
-                      <div className="p-3 rounded-lg bg-primary/10 text-primary">{info.icon}</div>
-                      <div>
-                        <p className="font-medium text-foreground">{info.label}</p>
-                        {info.href ? (
-                          <a
-                            href={info.href}
-                            target={info.href.startsWith("http") ? "_blank" : undefined}
-                            rel={info.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                            className="text-muted-foreground hover:text-primary transition-colors"
-                          >
-                            {info.value}
-                          </a>
-                        ) : (
-                          <p className="text-muted-foreground">{info.value}</p>
-                        )}
+                    <div key={index} className="group hover:bg-card/50 p-3 rounded-lg transition-colors duration-200">
+                      <div className="flex items-center gap-4">
+                        <div className="p-3 rounded-lg bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors duration-200">
+                          {info.icon}
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-medium text-foreground text-sm">{info.label}</p>
+                          {info.href ? (
+                            <a
+                              href={info.href}
+                              target={info.href.startsWith("http") ? "_blank" : undefined}
+                              rel={info.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                              className="text-muted-foreground hover:text-primary transition-colors font-medium text-sm"
+                            >
+                              {info.value}
+                            </a>
+                          ) : (
+                            <p className="text-muted-foreground font-medium text-sm">{info.value}</p>
+                          )}
+                        </div>
                       </div>
                     </div>
                   ))}
                 </div>
               </Card>
 
-              <Card className="p-8 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/20">
-                <h3 className="text-xl font-bold text-foreground mb-4">Why Work With Me?</h3>
-                <ul className="space-y-3">
+              {/* Why Work With Me Card */}
+              <Card className="p-8 bg-gradient-to-br from-primary/10 via-accent/10 to-primary/5 border border-primary/20 shadow-lg">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-2 bg-primary/20 rounded-lg">
+                    <Target className="h-5 w-5 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-bold text-foreground">Why Work With Me?</h3>
+                </div>
+                <ul className="space-y-4">
                   {[
-                    "7+ years of proven growth marketing experience",
-                    "AI-powered strategies for maximum efficiency",
-                    "Data-driven approach with measurable results",
-                    "Cross-functional leadership and collaboration",
+                    { icon: <Users className="h-4 w-4" />, text: "7+ years of proven growth marketing experience" },
+                    { icon: <Zap className="h-4 w-4" />, text: "AI-powered strategies for maximum efficiency" },
+                    { icon: <Target className="h-4 w-4" />, text: "Data-driven approach with measurable results" },
+                    { icon: <CheckCircle className="h-4 w-4" />, text: "Cross-functional leadership and collaboration" },
                   ].map((benefit, index) => (
-                    <li key={index} className="flex items-start gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
-                      <span className="text-muted-foreground">{benefit}</span>
+                    <li key={index} className="flex items-start gap-3 group">
+                      <div className="p-1.5 bg-primary/10 rounded-md text-primary group-hover:bg-primary/20 transition-colors duration-200 mt-0.5">
+                        {benefit.icon}
+                      </div>
+                      <span className="text-muted-foreground leading-relaxed">{benefit.text}</span>
                     </li>
                   ))}
                 </ul>
+              </Card>
+
+              {/* Response Time Card */}
+              <Card className="p-6 bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20">
+                <div className="text-center">
+                  <div className="inline-flex items-center justify-center w-12 h-12 bg-green-500/20 rounded-full mb-4">
+                    <Clock className="h-6 w-6 text-green-600" />
+                  </div>
+                  <h4 className="font-bold text-foreground mb-2">Fast Response</h4>
+                  <p className="text-sm text-muted-foreground">
+                    I typically respond to all inquiries within 24 hours, often much sooner.
+                  </p>
+                </div>
               </Card>
             </div>
           </div>
