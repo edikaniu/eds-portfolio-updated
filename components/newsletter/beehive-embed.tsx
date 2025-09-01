@@ -1,9 +1,8 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Mail, CheckCircle, Loader2 } from 'lucide-react'
+import { Mail, X, Loader2 } from 'lucide-react'
 
 interface BeehiveEmbedProps {
   className?: string
@@ -11,61 +10,97 @@ interface BeehiveEmbedProps {
   height?: string
 }
 
+interface NewsletterEmbedData {
+  embedCode: string
+  attributionCode: string
+}
+
 export function BeehiveEmbed({ 
   className = "", 
   width = "100%", 
   height = "auto"
 }: BeehiveEmbedProps) {
-  const [email, setEmail] = useState('')
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
-  const [message, setMessage] = useState('')
+  const [showPopup, setShowPopup] = useState(false)
+  const [embedData, setEmbedData] = useState<NewsletterEmbedData | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    
-    if (!email || !email.includes('@')) {
-      setStatus('error')
-      setMessage('Please enter a valid email address')
-      return
-    }
-
-    setStatus('loading')
-    
+  const fetchEmbedCode = async () => {
     try {
-      // Open Beehive subscription form in new window/tab with email pre-filled
-      const beehiveUrl = `https://subscribe-forms.beehiiv.com/d6ed7510-b199-42ed-816a-ef341a71139c?email=${encodeURIComponent(email)}`
-      window.open(beehiveUrl, '_blank', 'width=600,height=700,scrollbars=yes,resizable=yes')
+      setIsLoading(true)
+      setError(null)
       
-      // Show success message
-      setTimeout(() => {
-        setStatus('success')
-        setMessage('A subscription window has opened. Please complete your subscription there and check your email for confirmation.')
-        setEmail('')
-      }, 500)
+      const response = await fetch('/api/newsletter/embed')
+      const data = await response.json()
       
+      if (data.success) {
+        setEmbedData(data.data)
+        setShowPopup(true)
+      } else {
+        setError(data.error || 'Newsletter form not configured')
+      }
     } catch (error) {
-      setStatus('error')
-      setMessage('Something went wrong. Please try again.')
+      setError('Failed to load newsletter form')
+    } finally {
+      setIsLoading(false)
     }
   }
 
-  if (status === 'success') {
+  const handleSubscribeClick = () => {
+    fetchEmbedCode()
+  }
+
+  const handleClosePopup = () => {
+    setShowPopup(false)
+    setEmbedData(null)
+    setError(null)
+  }
+
+  // Newsletter popup overlay
+  if (showPopup && embedData) {
     return (
-      <div className={`bg-green-50 border border-green-200 rounded-lg p-6 text-center ${className}`}>
-        <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-green-800 mb-2">Almost there!</h3>
-        <p className="text-green-700">{message}</p>
+      <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden relative">
+          {/* Close button */}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="absolute top-4 right-4 h-8 w-8 p-0 z-10"
+            onClick={handleClosePopup}
+          >
+            <X className="h-4 w-4" />
+          </Button>
+          
+          {/* Embed content */}
+          <div className="p-6">
+            <div 
+              dangerouslySetInnerHTML={{ 
+                __html: embedData.embedCode + (embedData.attributionCode || '') 
+              }} 
+            />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className={`bg-red-50 border border-red-200 rounded-lg p-6 text-center ${className}`}>
+        <p className="text-red-700 text-sm mb-4">{error}</p>
         <Button
-          onClick={() => setStatus('idle')}
+          onClick={handleSubscribeClick}
           variant="outline"
-          className="mt-4"
+          size="sm"
         >
-          Subscribe Another Email
+          Try Again
         </Button>
       </div>
     )
   }
 
+  // Main newsletter CTA
   return (
     <div className={`bg-white border rounded-lg p-6 ${className}`} style={{ width }}>
       <div className="text-center mb-6">
@@ -80,52 +115,27 @@ export function BeehiveEmbed({
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <Input
-            type="email"
-            placeholder="Enter your email address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full"
-            disabled={status === 'loading'}
-            required
-          />
-        </div>
-        
-        {status === 'error' && (
-          <p className="text-red-600 text-sm">{message}</p>
+      <Button
+        onClick={handleSubscribeClick}
+        className="w-full"
+        disabled={isLoading}
+      >
+        {isLoading ? (
+          <>
+            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+            Loading...
+          </>
+        ) : (
+          <>
+            <Mail className="h-4 w-4 mr-2" />
+            Subscribe Free
+          </>
         )}
-        
-        <Button
-          type="submit"
-          className="w-full"
-          disabled={status === 'loading'}
-        >
-          {status === 'loading' ? (
-            <>
-              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Subscribing...
-            </>
-          ) : (
-            <>
-              <Mail className="h-4 w-4 mr-2" />
-              Subscribe Free
-            </>
-          )}
-        </Button>
-      </form>
+      </Button>
       
       <p className="text-xs text-muted-foreground text-center mt-4">
         Free newsletter • Unsubscribe anytime • No spam, ever
       </p>
-      
-      {/* Attribution tracking */}
-      <script 
-        type="text/javascript" 
-        async 
-        src="https://subscribe-forms.beehiiv.com/attribution.js"
-      />
     </div>
   )
 }

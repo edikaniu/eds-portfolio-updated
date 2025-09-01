@@ -27,7 +27,8 @@ import {
   Wrench,
   TrendingUp,
   Database,
-  Bug
+  Bug,
+  Mail
 } from 'lucide-react'
 
 interface AdminUser {
@@ -122,6 +123,7 @@ export function AdminLayout({ children, title = "Dashboard" }: AdminLayoutProps)
     { icon: Users, label: 'Case Studies', href: '/admin/case-studies' },
     { icon: TrendingUp, label: 'Case Studies Stats', href: '/admin/case-studies-stats' },
     { icon: Bot, label: 'Chatbot', href: '/admin/chatbot' },
+    { icon: Mail, label: 'Newsletter', href: '/admin/newsletter' },
     { icon: Navigation, label: 'Navigation & Footer', href: '/admin/navigation' },
     { icon: PieChart, label: 'Analytics', href: '/admin/analytics' },
     { icon: Settings, label: 'Settings', href: '/admin/settings' }
