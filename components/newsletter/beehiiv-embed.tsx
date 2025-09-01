@@ -24,6 +24,28 @@ export function BeehiivEmbed({
   const [embedData, setEmbedData] = useState<NewsletterEmbedData | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [isEnabled, setIsEnabled] = useState<boolean | null>(null) // null = loading, false = disabled, true = enabled
+  
+  // Check if newsletters are enabled when component mounts
+  useEffect(() => {
+    const checkNewsletterStatus = async () => {
+      try {
+        const response = await fetch('/api/newsletter/status')
+        const data = await response.json()
+        
+        if (data.success) {
+          setIsEnabled(data.data.isEnabled)
+        } else {
+          setIsEnabled(false)
+        }
+      } catch (error) {
+        console.error('Failed to check newsletter status:', error)
+        setIsEnabled(false)
+      }
+    }
+    
+    checkNewsletterStatus()
+  }, [])
   
   const fetchEmbedCode = async () => {
     try {
@@ -54,6 +76,16 @@ export function BeehiivEmbed({
     setShowPopup(false)
     setEmbedData(null)
     setError(null)
+  }
+
+  // Don't render anything if newsletters are disabled
+  if (isEnabled === false) {
+    return null
+  }
+
+  // Loading state while checking if newsletters are enabled
+  if (isEnabled === null) {
+    return null // Could also return a skeleton if desired
   }
 
   // Newsletter popup overlay

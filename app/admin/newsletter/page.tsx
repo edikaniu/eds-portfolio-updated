@@ -6,18 +6,21 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
+import { Switch } from '@/components/ui/switch'
 import { toast } from 'sonner'
-import { Save, Mail, Code, AlertCircle, CheckCircle } from 'lucide-react'
+import { Save, Mail, Code, AlertCircle, CheckCircle, Power } from 'lucide-react'
 
 interface NewsletterSettings {
   embedCode: string
   attributionCode: string
+  isEnabled: boolean
 }
 
 export default function NewsletterAdminPage() {
   const [settings, setSettings] = useState<NewsletterSettings>({
     embedCode: '',
-    attributionCode: ''
+    attributionCode: '',
+    isEnabled: false
   })
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
@@ -28,54 +31,92 @@ export default function NewsletterAdminPage() {
 
   const fetchSettings = async () => {
     try {
-      const response = await fetch('/api/admin/newsletter')
+      console.log('Fetching newsletter settings...')
+      const response = await fetch('/api/admin/newsletter', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include' // Include cookies for authentication
+      })
+      
+      console.log('Fetch response status:', response.status)
+      console.log('Fetch response headers:', Object.fromEntries(response.headers.entries()))
+      
       if (response.ok) {
         const data = await response.json()
+        console.log('Fetch response data:', data)
         if (data.success) {
           setSettings(data.data)
+          console.log('Settings loaded successfully:', data.data)
+        } else {
+          console.error('API returned error:', data.error)
+          toast.error(data.error || 'Failed to load newsletter settings')
         }
+      } else {
+        const errorText = await response.text()
+        console.error('Fetch failed with status:', response.status, 'Error:', errorText)
+        toast.error(`Failed to load settings: HTTP ${response.status}`)
       }
     } catch (error) {
       console.error('Failed to fetch newsletter settings:', error)
-      toast.error('Failed to load newsletter settings')
+      toast.error(`Network error: ${error instanceof Error ? error.message : 'Unknown error'}`)
     } finally {
       setIsLoading(false)
     }
   }
 
   const handleSave = async () => {
-    if (!settings.embedCode.trim()) {
-      toast.error('Beehiiv embed code is required')
+    if (settings.isEnabled && !settings.embedCode.trim()) {
+      toast.error('Beehiiv embed code is required when newsletter is enabled')
       return
     }
 
     try {
       setIsSaving(true)
       
+      console.log('Sending save request with data:', {
+        hasEmbedCode: !!settings.embedCode,
+        hasAttributionCode: !!settings.attributionCode
+      })
+      
       const response = await fetch('/api/admin/newsletter', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include', // Include cookies for authentication
         body: JSON.stringify(settings),
       })
 
+      console.log('Response status:', response.status)
+      console.log('Response headers:', Object.fromEntries(response.headers.entries()))
+
+      if (!response.ok) {
+        const errorText = await response.text()
+        console.error('Response error:', errorText)
+        toast.error(`HTTP ${response.status}: ${errorText}`)
+        return
+      }
+
       const data = await response.json()
+      console.log('Response data:', data)
 
       if (data.success) {
         toast.success('Newsletter settings saved successfully!')
       } else {
+        console.error('API returned error:', data.error)
         toast.error(data.error || 'Failed to save settings')
       }
     } catch (error) {
       console.error('Save error:', error)
-      toast.error('Network error. Please try again.')
+      toast.error(`Network error: ${error instanceof Error ? error.message : 'Unknown error'}`)
     } finally {
       setIsSaving(false)
     }
   }
 
-  const handleInputChange = (field: keyof NewsletterSettings, value: string) => {
+  const handleInputChange = (field: keyof NewsletterSettings, value: string | boolean) => {
     setSettings(prev => ({
       ...prev,
       [field]: value
@@ -100,6 +141,47 @@ export default function NewsletterAdminPage() {
           </div>
         ) : (
           <div className="grid gap-6">
+            {/* Newsletter Toggle Card */}
+            <Card className="shadow-sm border border-gray-200">
+              <CardHeader className="border-b border-gray-100 bg-gray-50">
+                <div className="flex items-center space-x-2">
+                  <Power className="h-5 w-5 text-blue-600" />
+                  <CardTitle className="text-lg text-gray-900">Newsletter Control</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-1">
+                    <Label htmlFor="newsletter-toggle" className="text-sm font-semibold text-gray-900">
+                      Enable Newsletter Popups
+                    </Label>
+                    <p className="text-xs text-gray-500">
+                      Toggle this to enable/disable all newsletter subscription popups across your site
+                    </p>
+                  </div>
+                  <Switch
+                    id="newsletter-toggle"
+                    checked={settings.isEnabled}
+                    onCheckedChange={(checked) => handleInputChange('isEnabled', checked)}
+                  />
+                </div>
+                {!settings.isEnabled && (
+                  <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                    <p className="text-sm text-red-800">
+                      ⚠️ Newsletter popups are currently disabled across your entire site
+                    </p>
+                  </div>
+                )}
+                {settings.isEnabled && (
+                  <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                    <p className="text-sm text-green-800">
+                      ✅ Newsletter popups are enabled and will show across your site
+                    </p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
             {/* Main Configuration Card */}
             <Card className="shadow-sm border border-gray-200">
               <CardHeader className="border-b border-gray-100 bg-gray-50">
@@ -166,7 +248,7 @@ export default function NewsletterAdminPage() {
                   <div className="flex justify-end pt-4 border-t border-gray-100">
                     <Button 
                       onClick={handleSave} 
-                      disabled={isSaving || !settings.embedCode.trim()}
+                      disabled={isSaving || (settings.isEnabled && !settings.embedCode.trim())}
                       className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2"
                     >
                       {isSaving ? (
@@ -186,27 +268,36 @@ export default function NewsletterAdminPage() {
               </CardContent>
             </Card>
 
-            {/* Preview Section */}
+            {/* Code Preview Section */}
             {settings.embedCode && (
               <Card className="shadow-sm border border-gray-200">
                 <CardHeader className="border-b border-gray-100 bg-gray-50">
                   <CardTitle className="text-lg text-gray-900 flex items-center gap-2">
                     <CheckCircle className="h-5 w-5 text-green-600" />
-                    Form Preview
+                    Code Preview
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-6">
                   <p className="text-sm text-gray-600 mb-4">
-                    This is how your newsletter form will appear in popups across your site:
+                    Your saved embed code (this will be used for newsletter popups across your site):
                   </p>
                   <div className="bg-gray-50 rounded-lg p-4 border-2 border-dashed border-gray-300">
-                    <div className="bg-white rounded-lg border border-gray-200 p-4 max-w-lg mx-auto">
-                      <div 
-                        dangerouslySetInnerHTML={{ 
-                          __html: settings.embedCode + (settings.attributionCode || '') 
-                        }} 
-                      />
-                    </div>
+                    <pre className="bg-gray-900 text-gray-100 p-4 rounded text-xs overflow-x-auto">
+                      <code>{settings.embedCode}</code>
+                    </pre>
+                    {settings.attributionCode && (
+                      <>
+                        <p className="text-sm text-gray-600 mt-3 mb-2">Attribution tracking code:</p>
+                        <pre className="bg-gray-900 text-gray-100 p-4 rounded text-xs overflow-x-auto">
+                          <code>{settings.attributionCode}</code>
+                        </pre>
+                      </>
+                    )}
+                  </div>
+                  <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                    <p className="text-sm text-green-800">
+                      ✅ Settings saved successfully! The newsletter subscribe buttons across your site will now use this embed code.
+                    </p>
                   </div>
                 </CardContent>
               </Card>
