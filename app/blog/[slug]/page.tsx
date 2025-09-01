@@ -12,7 +12,8 @@ import {
 import { ShareButton } from '@/components/blog/share-button'
 import { Navigation } from '@/components/navigation'
 import { Footer } from '@/components/footer'
-import { NewsletterCTA, NewsletterPopup } from '@/components/newsletter'
+// NEWSLETTER DISABLED - Keeping code for future use
+// import { NewsletterCTA, NewsletterPopup } from '@/components/newsletter'
 
 interface BlogPost {
   id: string
@@ -978,8 +979,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               />
             </div>
 
+            {/* NEWSLETTER DISABLED - Keeping code for future use */}
             {/* Newsletter CTA after content */}
-            <div className="mt-12">
+            {/* <div className="mt-12">
               <NewsletterCTA 
                 variant="inline"
                 title="Get More Marketing Insights Like This"
@@ -987,7 +989,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 showStats={true}
                 className="border-2 border-primary/20"
               />
-            </div>
+            </div> */}
             
             {/* Tags */}
             {post.tags.length > 0 && (
@@ -1018,12 +1020,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   </Button>
                 </Link>
                 
-                <NewsletterCTA 
+                {/* NEWSLETTER DISABLED - Keeping code for future use */}
+                {/* <NewsletterCTA 
                   variant="minimal"
                   title="Join the Newsletter"
                   description="Weekly marketing insights and case studies"
                   showStats={false}
-                />
+                /> */}
               </div>
             </div>
           </div>
@@ -1032,13 +1035,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       
       <Footer />
       
+      {/* NEWSLETTER DISABLED - Keeping code for future use */}
       {/* Newsletter Popup for blog readers */}
-      <NewsletterPopup 
+      {/* <NewsletterPopup 
         trigger="scroll"
         scrollPercentage={70}
         title="Enjoying This Marketing Content?"
         description="Get weekly case studies and growth tactics that helped scale 50+ products. Join 2,000+ marketers."
-      />
+      /> */}
     </div>
   )
 }
