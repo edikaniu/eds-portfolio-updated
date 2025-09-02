@@ -1,8 +1,14 @@
 // Simplified authentication system for quick deployment
 // Cache bust: 2025-08-26T18:45:00Z - Force rebuild to apply .trim() fix
+
+// SECURITY: Admin credentials must be set in environment variables
+if (!process.env.ADMIN_EMAIL || !process.env.ADMIN_PASSWORD) {
+  throw new Error('ADMIN_EMAIL and ADMIN_PASSWORD environment variables are required for security')
+}
+
 export const ADMIN_CREDENTIALS = {
-  email: (process.env.ADMIN_EMAIL || 'admin@edikanudoibuot.com').replace(/[\r\n\t]/g, '').trim(),
-  password: (process.env.ADMIN_PASSWORD || 'admin123456').replace(/[\r\n\t]/g, '').trim()
+  email: (process.env.ADMIN_EMAIL).replace(/[\r\n\t]/g, '').trim(),
+  password: (process.env.ADMIN_PASSWORD).replace(/[\r\n\t]/g, '').trim()
 }
 
 export interface SimpleUser {

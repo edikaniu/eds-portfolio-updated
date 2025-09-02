@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
-import { validateCredentials, createUserSession, generateSessionToken } from '@/lib/simple-auth'
+import { validateCredentials, createUserSession } from '@/lib/simple-auth'
+import { generateJWT } from '@/lib/jwt-auth'
 
 const LoginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -38,9 +39,9 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    // Create user session with simple session token
+    // Create user session with JWT token
     const user = createUserSession()
-    const sessionToken = generateSessionToken(user)
+    const sessionToken = generateJWT(user)
 
     // Create response with session token in cookie
     const response = NextResponse.json({

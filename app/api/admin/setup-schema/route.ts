@@ -153,8 +153,12 @@ export const POST = withAdminAuth(async (request: NextRequest) => {
     `
 
     // Create default admin user if needed
-    const adminEmail = process.env.ADMIN_EMAIL || 'admin@edikanudoibuot.com'
-    const adminPassword = process.env.ADMIN_PASSWORD || 'admin123456'
+    const adminEmail = process.env.ADMIN_EMAIL
+    const adminPassword = process.env.ADMIN_PASSWORD
+    
+    if (!adminEmail || !adminPassword) {
+      throw new Error('ADMIN_EMAIL and ADMIN_PASSWORD environment variables are required')
+    }
 
     try {
       const existingAdmin = await prisma.adminUser.findUnique({

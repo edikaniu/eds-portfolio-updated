@@ -11,7 +11,9 @@
       "Bash(curl:*)",
       "Bash(gh pr create:*)",
       "Bash(npx prisma db seed:*)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(find:*)",
+      "Bash(rg:*)"
     ],
     "deny": [],
     "ask": [],

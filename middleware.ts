@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { verifySessionToken } from '@/lib/simple-auth'
+import { verifyJWT } from '@/lib/jwt-auth'
 
 // Rate limiting store (in production, use Redis or database)
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>()
@@ -96,9 +96,9 @@ export async function middleware(request: NextRequest) {
     }
 
     try {
-      const user = verifySessionToken(sessionToken)
+      const payload = verifyJWT(sessionToken)
       
-      if (!user || user.role !== 'admin') {
+      if (!payload || payload.role !== 'admin') {
         // Invalid session or not admin, clear cookie and redirect
         const redirectResponse = NextResponse.redirect(new URL('/admin/login', request.url))
         redirectResponse.cookies.delete('admin-session')
@@ -106,8 +106,8 @@ export async function middleware(request: NextRequest) {
       }
 
       // Session is valid, add user context to headers
-      response.headers.set('X-User-ID', user.id)
-      response.headers.set('X-User-Role', user.role)
+      response.headers.set('X-User-ID', payload.id)
+      response.headers.set('X-User-Role', payload.role)
     } catch (error) {
       // Session verification failed, clear cookie and redirect
       const redirectResponse = NextResponse.redirect(new URL('/admin/login', request.url))
@@ -134,8 +134,8 @@ export async function middleware(request: NextRequest) {
     const sessionToken = request.cookies.get('admin-session')?.value
     if (sessionToken) {
       try {
-        const user = verifySessionToken(sessionToken)
-        if (user && user.role === 'admin') {
+        const payload = verifyJWT(sessionToken)
+        if (payload && payload.role === 'admin') {
           return NextResponse.redirect(new URL('/admin/dashboard', request.url))
         }
       } catch {

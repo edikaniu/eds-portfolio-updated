@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { withAdminAuth } from '@/lib/admin-middleware'
 
 interface ContactPageContent {
   // Hero Section
@@ -32,7 +33,7 @@ interface ContactPageContent {
 const CONTACT_SECTION_NAME = 'contact_page_content'
 
 // Get contact page content
-export async function GET(request: NextRequest) {
+export const GET = withAdminAuth(async (request: NextRequest) => {
   try {
     console.log('GET contact page content request received')
     
@@ -88,10 +89,10 @@ export async function GET(request: NextRequest) {
       { status: 500 }
     )
   }
-}
+})
 
 // Save contact page content
-export async function POST(request: NextRequest) {
+export const POST = withAdminAuth(async (request: NextRequest) => {
   try {
     console.log('POST contact page content request received')
     
@@ -163,4 +164,4 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     )
   }
-}
+})

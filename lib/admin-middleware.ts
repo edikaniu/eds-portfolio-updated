@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { verifySessionToken, SimpleUser } from './simple-auth'
+import { verifyJWT, JWTPayload } from './jwt-auth'
 
-export function withAdminAuth(handler: (request: NextRequest, user: SimpleUser) => Promise<NextResponse>) {
+export function withAdminAuth(handler: (request: NextRequest, user: JWTPayload) => Promise<NextResponse>) {
   return async (request: NextRequest) => {
     try {
       const token = request.cookies.get('admin-session')?.value
@@ -16,8 +16,8 @@ export function withAdminAuth(handler: (request: NextRequest, user: SimpleUser) 
         )
       }
 
-      const user = verifySessionToken(token)
-      if (!user) {
+      const payload = verifyJWT(token)
+      if (!payload) {
         return NextResponse.json(
           { 
             success: false, 
@@ -28,7 +28,7 @@ export function withAdminAuth(handler: (request: NextRequest, user: SimpleUser) 
       }
 
       // Ensure user has admin role
-      if (user.role !== 'admin') {
+      if (payload.role !== 'admin') {
         return NextResponse.json(
           { 
             success: false, 
@@ -39,7 +39,7 @@ export function withAdminAuth(handler: (request: NextRequest, user: SimpleUser) 
       }
 
       // Pass the authenticated user to the handler
-      return handler(request, user)
+      return handler(request, payload)
 
     } catch (error) {
       console.error('Admin auth middleware error:', error)
