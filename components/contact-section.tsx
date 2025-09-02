@@ -33,7 +33,23 @@ function sanitizeInput(input: string): string {
     .trim()
 }
 
-export function ContactSection() {
+interface ContactSectionProps {
+  dynamicContent?: {
+    email: string
+    phone: string
+    location: string
+    linkedinUrl: string
+    twitterUrl: string
+    whyWorkTitle: string
+    whyWorkDescription: string
+    benefits: Array<{
+      icon: string
+      text: string
+    }>
+  }
+}
+
+export function ContactSection({ dynamicContent }: ContactSectionProps = {}) {
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
@@ -140,13 +156,36 @@ export function ContactSection() {
     }
   }
 
+  // Use dynamic content or fallback to defaults
+  const content = dynamicContent || {
+    email: "edikanudoibuot@gmail.com",
+    phone: "",
+    location: "Nigeria",
+    linkedinUrl: "https://www.linkedin.com/in/edikanudoibuot/",
+    twitterUrl: "https://x.com/edikanudoibuot",
+    whyWorkTitle: "Why Work With Me?",
+    whyWorkDescription: "Here's what sets me apart and makes our collaboration successful",
+    benefits: [
+      { icon: "Users", text: "7+ years of proven growth marketing experience" },
+      { icon: "Zap", text: "AI-powered strategies for maximum efficiency" },
+      { icon: "Target", text: "Data-driven approach with measurable results" },
+      { icon: "CheckCircle", text: "Cross-functional leadership and collaboration" },
+    ]
+  }
+
   const contactInfo = [
     {
       icon: <Mail className="h-5 w-5" />,
       label: "Email",
-      value: "edikanudoibuot@gmail.com",
-      href: "mailto:edikanudoibuot@gmail.com",
+      value: content.email,
+      href: `mailto:${content.email}`,
     },
+    ...(content.phone ? [{
+      icon: <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02L6.62 10.79z"/></svg>,
+      label: "Phone",
+      value: content.phone,
+      href: `tel:${content.phone}`,
+    }] : []),
     {
       icon: (
         <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -154,19 +193,19 @@ export function ContactSection() {
         </svg>
       ),
       label: "X (Twitter)",
-      value: "@edikanudoibuot",
-      href: "https://x.com/edikanudoibuot",
+      value: content.twitterUrl.replace('https://x.com/', '@'),
+      href: content.twitterUrl,
     },
     {
       icon: <Linkedin className="h-5 w-5" />,
-      label: "LinkedIn",
-      value: "linkedin.com/in/edikanudoibuot",
-      href: "https://www.linkedin.com/in/edikanudoibuot/",
+      label: "LinkedIn", 
+      value: content.linkedinUrl.replace('https://www.linkedin.com/in/', '').replace('/', ''),
+      href: content.linkedinUrl,
     },
     {
       icon: <MapPin className="h-5 w-5" />,
       label: "Location",
-      value: "Nigeria",
+      value: content.location,
       href: null,
     },
   ]
@@ -357,26 +396,34 @@ export function ContactSection() {
                   <div className="p-3 bg-primary/20 rounded-lg">
                     <Target className="h-6 w-6 text-primary" />
                   </div>
-                  <h3 className="text-2xl font-bold text-foreground">Why Work With Me?</h3>
+                  <h3 className="text-2xl font-bold text-foreground">{content.whyWorkTitle}</h3>
                 </div>
                 <p className="text-muted-foreground max-w-2xl mx-auto">
-                  Here's what sets me apart and makes our collaboration successful
+                  {content.whyWorkDescription}
                 </p>
               </div>
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {[
-                  { icon: <Users className="h-5 w-5" />, text: "7+ years of proven growth marketing experience" },
-                  { icon: <Zap className="h-5 w-5" />, text: "AI-powered strategies for maximum efficiency" },
-                  { icon: <Target className="h-5 w-5" />, text: "Data-driven approach with measurable results" },
-                  { icon: <CheckCircle className="h-5 w-5" />, text: "Cross-functional leadership and collaboration" },
-                ].map((benefit, index) => (
-                  <div key={index} className="text-center group hover:bg-background/50 p-4 rounded-lg transition-colors duration-200">
-                    <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-lg text-primary group-hover:bg-primary/20 transition-colors duration-200 mb-3">
-                      {benefit.icon}
+                {content.benefits.map((benefit, index) => {
+                  // Map icon strings to actual components
+                  const getIcon = (iconName: string) => {
+                    const iconMap: Record<string, React.JSX.Element> = {
+                      Users: <Users className="h-5 w-5" />,
+                      Zap: <Zap className="h-5 w-5" />,
+                      Target: <Target className="h-5 w-5" />,
+                      CheckCircle: <CheckCircle className="h-5 w-5" />,
+                    }
+                    return iconMap[iconName] || <CheckCircle className="h-5 w-5" />
+                  }
+
+                  return (
+                    <div key={index} className="text-center group hover:bg-background/50 p-4 rounded-lg transition-colors duration-200">
+                      <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-lg text-primary group-hover:bg-primary/20 transition-colors duration-200 mb-3">
+                        {getIcon(benefit.icon)}
+                      </div>
+                      <p className="text-muted-foreground text-sm leading-relaxed">{benefit.text}</p>
                     </div>
-                    <p className="text-muted-foreground text-sm leading-relaxed">{benefit.text}</p>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             </Card>
           </div>
