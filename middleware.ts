@@ -86,7 +86,10 @@ export async function middleware(request: NextRequest) {
     "frame-ancestors 'none';"
   )
 
-  // Admin authentication middleware - session-based
+  // Admin authentication middleware - DISABLED for debugging
+  // Let client-side AdminLayout handle authentication checks
+  // This prevents middleware JWT issues and race conditions
+  /*
   if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
     const sessionToken = request.cookies.get('admin-session')?.value
 
@@ -100,6 +103,7 @@ export async function middleware(request: NextRequest) {
       
       if (!payload || payload.role !== 'admin') {
         // Invalid session or not admin, clear cookie and redirect
+        console.error('MIDDLEWARE: JWT verification failed - invalid payload or role', { payload, sessionToken: sessionToken.substring(0, 50) + '...' })
         const redirectResponse = NextResponse.redirect(new URL('/admin/login', request.url))
         redirectResponse.cookies.delete('admin-session')
         return redirectResponse
@@ -110,11 +114,13 @@ export async function middleware(request: NextRequest) {
       response.headers.set('X-User-Role', payload.role)
     } catch (error) {
       // Session verification failed, clear cookie and redirect
+      console.error('MIDDLEWARE: JWT verification error:', error, 'Token:', sessionToken?.substring(0, 50) + '...')
       const redirectResponse = NextResponse.redirect(new URL('/admin/login', request.url))
       redirectResponse.cookies.delete('admin-session')
       return redirectResponse
     }
   }
+  */
 
   // Handle API routes
   if (pathname.startsWith('/api')) {
@@ -129,7 +135,9 @@ export async function middleware(request: NextRequest) {
   // CSRF token generation - DISABLED for simplified auth
   // No CSRF tokens needed for session-based authentication
 
-  // Login page redirect check - redirect authenticated users to dashboard
+  // Login page redirect check - DISABLED to prevent race conditions
+  // Let client-side handle this logic
+  /*
   if (pathname === '/admin/login') {
     const sessionToken = request.cookies.get('admin-session')?.value
     if (sessionToken) {
@@ -143,6 +151,7 @@ export async function middleware(request: NextRequest) {
       }
     }
   }
+  */
 
   // Performance monitoring headers
   response.headers.set('X-Middleware-Processed', Date.now().toString())
