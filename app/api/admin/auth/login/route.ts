@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
       sameSite: isProduction ? 'lax' as const : 'strict' as const, // Use 'lax' in production for better compatibility
       path: '/',
       maxAge: 7 * 24 * 60 * 60, // 7 days
-      domain: isProduction ? '.vercel.app' : undefined, // Set domain for Vercel deployment
+      domain: undefined, // Let browser handle domain automatically
     }
     
     // Set the session cookie
